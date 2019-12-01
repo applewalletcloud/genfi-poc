@@ -1,19 +1,37 @@
 import React from 'react';
 import './ColorfulSquare.css';
-import { createStore } from 'redux';
+import { connect } from 'react-redux';
+import { changeColor } from './redux/actions/changeColor.js';
 
 class ColorfulSquare extends React.Component {
   constructor(props) {
   	super(props);
-  	this.state = {red: 0, green: 0, blue: 0, color: "#ffffff"}
+  	
+  	this.state = {
+  	  color: 'rgb(' + 255 + ',' + 255 + ',' + 255 + ')'
+  	};
+  	
+  	this.onClick = this.onClick.bind(this);
   }
+  
+  onClick(){
+    this.setState({ color: 'rgb(' + Math.random()*255 + ',' + Math.random()*255 + ',' + Math.random()*255 + ')' });
+  };
+  
   render() {
   	return (
-      <div className="Colorful-Square" style={{background: this.state.color}} onClick={() => {this.setState({color: "#B93D23"});}}>
-      {this.state.green}
+      <div className="Colorful-Square" style={{background: this.state.color}} onClick={this.onClick}>
+      {this.state.color}
       </div>
     );
   }
 }
 
-export default ColorfulSquare;
+export { ColorfulSquare };
+
+export default connect(
+  null,
+  {
+    changeColor: changeColor
+  }
+  )(ColorfulSquare);
