@@ -6,7 +6,7 @@ import SignUpButton from './SignUpButton.js';
 function Header() {
   return (
     <div className="Header">
-      <span> Welcome! This is my placeholder Header The buttons unfortunately do nothing at the moment! </span>
+      <span> Welcome! This is my placeholder Header. It's just me playing around with flexbox. The buttons unfortunately do nothing at the moment! </span>
       <span className="push">
         <LoginButton text="Log in here!" />
         <SignUpButton text="Sign up here!" />
