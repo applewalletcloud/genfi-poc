@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Fragment } from 'react';
 import './App.css';
+import Header from './Header.js';
+import Body from './Body.js';
+import Footer from './Footer.js';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment className="App">
+      <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous"
+      />
+      <Header />
+      <Body />
+      <Footer />
+    </Fragment>
   );
+}
+
+function Test(){
+  return (<></>)
 }
 
 export default App;
