@@ -7,7 +7,7 @@ class Body extends React.Component {
   render() {
   	return (
       <div className="Body">
-        <p> Below is a stateful square which will eventually change as time passes! Currently if you click on it, there's a callback to change the internal color. This is done through redux.</p>
+        <p> Below is a stateful square which randomly changes color as time passes! If you click on it, there's a callback to change the internal color. This is done through redux.</p>
         <MyColorfulSquare />
       </div>
     );
