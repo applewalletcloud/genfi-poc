@@ -10,6 +10,9 @@ function Header() {
       <span className="push">
         <LoginButton text="Log in here!" />
         <SignUpButton text="Sign up here!" />
+        <div class="g-signin2" data-onsuccess="onSignIn">
+          <button id="loginButton">Login with Google</button>
+        </div>
       </span>
     </div>
   );
