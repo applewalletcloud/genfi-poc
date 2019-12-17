@@ -1,16 +1,10 @@
-import { CHANGE_COLOR } from '../actions/changeColor.js';
+import {combineReducers } from 'redux'
+import colorReducer from './colorReducer';
+import questionsReducer from './questionsReducer';
 
-function rootReducer(state = {color: 'rgb(255,255,255)'}, action) {
-	switch(action.type) {
-		case CHANGE_COLOR:
-		  return {
-		  	...state,
-		  	color: action.color
-		  };
-
-		default:
-		  return state; 
-	}; 
-}
+const rootReducer = combineReducers({
+	color: colorReducer,
+	questions: questionsReducer
+})
 
 export default rootReducer;

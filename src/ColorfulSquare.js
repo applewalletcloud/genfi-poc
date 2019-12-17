@@ -35,7 +35,7 @@ class ColorfulSquare extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return {color: state.color};
+  return {color: state.color.color};
 }
 
 const mapDispatchToProps = {
