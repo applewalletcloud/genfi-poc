@@ -6,8 +6,8 @@ export function fetchQuestionsBegin() {
 	return { type: FETCH_QUESTIONS_BEGIN};
 }
 
-export function fetchQuestionsSucess(products) {
-	return { type: FETCH_QUESTIONS_SUCCESS, payload: {products}};
+export function fetchQuestionsSucess(questions) {
+	return { type: FETCH_QUESTIONS_SUCCESS, payload: {questions}};
 }
 
 export function fetchQuestionsFailure(error) {
@@ -21,8 +21,8 @@ export function fetchQuestions(){
 			.then(handleErrors)
 			.then(res => res.json())
 			.then(json => {
-				dispatch(fetchQuestionsSucess(json.products));
-				return json.products;
+				dispatch(fetchQuestionsSucess(json.questions));
+				return json.questions;
 			})
 			.catch(error => dispatch(fetchQuestionsFailure(error)))
 	}
