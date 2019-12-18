@@ -23,7 +23,7 @@ export default function questionReducer(state = initialState, action){
       		return {
       			...state,
       			loading: false,
-      			questions: action.payload.products
+      			questions: action.questions
       		}
 
       	case FETCH_QUESTIONS_FAILURE:

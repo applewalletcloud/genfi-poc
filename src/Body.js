@@ -1,6 +1,7 @@
 import React from 'react';
 import './Body.css';
 import MyColorfulSquare from './ColorfulSquare.js';
+import QuestionBankTest from './QuestionBankTest.js'  
 
 const API_HOST = 'http://localhost:8000/quizbank'
 let _csrfToken = null;
@@ -40,6 +41,25 @@ async function myTestQuery(){
 	return data.question;
 }
 
+
+async function testMyReduxThunk(){
+  const response = await fetch('http://localhost:8000/quizbank/api/v1/questions/2/?format=json', {
+    credentials: 'include',
+  });
+  const data = await response.json();
+  return data.question_text;
+}
+
+async function myTestToDelete(){
+  const dummyVar = await fetch('http://localhost:8000/quizbank/api/v1/questions/?format=json')
+      .then(res => res.json())
+      .then(json => {
+          return json;
+  })
+  console.log(dummyVar);
+  return dummyVar[1].question_text;
+}
+
 class Body extends React.Component {
 
   constructor(props) {
@@ -49,6 +69,8 @@ class Body extends React.Component {
       testPost: 'no value yet',
       testArg: 'no value yet',
       testQuery: 'no value yet',
+      testReduxThunk: 'no value uet',
+      nothingworks: 'no value',
     };
   }
 
@@ -58,6 +80,8 @@ class Body extends React.Component {
       testPost: await testRequest(),
       testArg: await getTestArg(),
       testQuery: await myTestQuery(),
+      testReduxThunk: await testMyReduxThunk(),
+      nothingworks: await myTestToDelete(),
     })
   }
 
@@ -74,7 +98,10 @@ class Body extends React.Component {
           <p>Test POST Request: {this.state.testPost}</p>
           <p>Test Request w/ argument: {this.state.testArg}</p>
           <p>Test query w/ db: {this.state.testQuery}</p>
+          <p> test redux w/ "thunk": {this.state.testReduxThunk}</p>
+          <p> why does it appear here?: {this.state.nothingworks}</p>
         </div>
+        <QuestionBankTest />
       </React.Fragment>
     );
   }

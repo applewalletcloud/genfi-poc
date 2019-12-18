@@ -1,13 +1,16 @@
-export const FETCH_QUESTIONS_BEGIN = 'FETCH_PRODUCTS_BEGIN';
-export const FETCH_QUESTIONS_SUCCESS = 'FETCH_PRODUCTS_SUCESS';
-export const FETCH_QUESTIONS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
+export const FETCH_QUESTIONS_BEGIN = 'FETCH_QUESTIONS_BEGIN';
+export const FETCH_QUESTIONS_SUCCESS = 'FETCH_QUESTIONS_SUCCESS';
+export const FETCH_QUESTIONS_FAILURE = 'FETCH_QUESTIONS_FAILURE';
 
-export function fetchQuestionsBegin() {
-	return { type: FETCH_QUESTIONS_BEGIN};
-}
+export const fetchQuestionsBegin = () => ({
+	type: FETCH_QUESTIONS_BEGIN
+});
 
-export function fetchQuestionsSucess(questions) {
-	return { type: FETCH_QUESTIONS_SUCCESS, payload: {questions}};
+export function fetchQuestionsSuccess(questions){
+	console.log('inside the action itself');
+	console.log(questions);
+	console.log(typeof questions);
+	return {type: FETCH_QUESTIONS_SUCCESS, questions}
 }
 
 export function fetchQuestionsFailure(error) {
@@ -17,14 +20,15 @@ export function fetchQuestionsFailure(error) {
 export function fetchQuestions(){
 	return dispatch => {
 		dispatch(fetchQuestionsBegin());
+		// REMEMBER TO CHANGE THIS URL!!! TODO
 		return fetch('http://localhost:8000/quizbank/api/v1/questions/?format=json')
-			.then(handleErrors)
-			.then(res => res.json())
-			.then(json => {
-				dispatch(fetchQuestionsSucess(json.questions));
-				return json.questions;
-			})
-			.catch(error => dispatch(fetchQuestionsFailure(error)))
+		  .then(handleErrors)
+		  .then(res => res.json())
+		  .then(json => {
+	        dispatch(fetchQuestionsSuccess(json));
+	        return json;
+	      })
+		  .catch(error => dispatch(fetchQuestionsFailure(error)))
 	}
 }
 
