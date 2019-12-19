@@ -17,11 +17,11 @@ export function fetchQuestionsFailure(error) {
 	return { type: FETCH_QUESTIONS_FAILURE, payload: {error}};
 }
 
-export function fetchQuestions(){
+export function fetchQuestions(api_endpoint){
 	return dispatch => {
 		dispatch(fetchQuestionsBegin());
 		// REMEMBER TO CHANGE THIS URL!!! TODO
-		return fetch('http://localhost:8000/quizbank/api/v1/questions/?format=json')
+		return fetch(api_endpoint)
 		  .then(handleErrors)
 		  .then(res => res.json())
 		  .then(json => {

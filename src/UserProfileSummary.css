@@ -1,0 +1,16 @@
+.profile-summary-container {
+	border: 0px solid black;
+	display: flex;
+	justify-content: flex-start;
+	flex-flow: row;
+	height: 50px;
+	width: 200px;
+	align-items: center;
+}
+
+.avatar {
+	height: 48px;
+}
+
+.profile-summary-text {
+}

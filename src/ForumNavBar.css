@@ -1,0 +1,27 @@
+.nav-bar {
+	border: 1px solid lightgrey;
+	border-left: 0px;
+	border-right: 0px;
+	margin: 5px;
+    padding: 5px;
+ 	text-align: center;
+	display: flex;
+	justify-content: flex-start;
+	flex-flow: row;
+	align-items: center;
+}
+
+.nav-child {
+	padding: 5px;
+	font-size: 17px;
+	color: grey;
+}
+
+.nav-child:hover {
+	color: black;
+	cursor: pointer;
+}
+
+.push-right {
+	margin-left: auto;
+}

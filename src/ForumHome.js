@@ -1,9 +1,11 @@
 import React from 'react';
-
+import Thread from './Thread.js';
 
 function ForumHome(props) {
   return (
-      <h1> test routing </h1>
+  	<>
+      <Thread />
+    </>
   );
 }
 
