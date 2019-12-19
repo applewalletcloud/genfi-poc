@@ -1,0 +1,20 @@
+.thread-board {
+	border: 1px solid black;
+	margin: 5px;
+    padding: 0px;
+    font-size: 25px;
+ 	text-align: center;
+	display: flex;
+	justify-content: space-between;
+	flex-flow: column;
+}
+
+.thread-board-title {
+	padding: 0px;
+	margin: 5px;
+}
+
+.thread-board-child {
+	border-top: 1px solid black;
+	margin: 0px;
+}

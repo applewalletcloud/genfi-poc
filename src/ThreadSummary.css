@@ -1,0 +1,14 @@
+.thread-summary {
+	border-top: 1px solid black;
+	margin: 0px;
+    padding: 0px;
+    font-size: 25px;
+ 	text-align: center;
+	display: flex;
+	justify-content: space-between;
+	flex-flow: column;
+}
+
+.thread-summary-child {
+
+}
