@@ -1,7 +1,7 @@
 import React from 'react';
 import './Body.css';
 import MyColorfulSquare from './ColorfulSquare.js';
-import QuestionBankTest from './QuestionBankTest.js'  
+import QuestionBankTest from './QuestionBankTest.js';  
 
 const API_HOST = 'http://localhost:8000/quizbank'
 let _csrfToken = null;

@@ -1,19 +1,73 @@
 import React from "react";
 import './ThreadBoard.css';
 import ThreadSummary from "./ThreadSummary.js";
+import PropTypes from 'prop-types';
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
+import Thread from './Thread.js'
+import { fetchThreadTopics } from "./redux/actions/threadTopicActions.js";
+import { connect } from "react-redux";
 
-function ThreadBoard(props) {
-	return (
-		<>
-			<div className="thread-board">
-				<p className="thread-board-title">DISCUSSIONS (this should be a prop)</p>
-				<ThreadSummary className="thread-board-child">topic1</ThreadSummary>
-				<ThreadSummary className="thread-board-child">topic2</ThreadSummary>
-				<ThreadSummary className="thread-board-child">topic3</ThreadSummary>
-			</div>
-		</>
-	);
+class ThreadBoard extends React.Component {
+	componentDidMount(){
+    	this.props.dispatch(fetchThreadTopics('http://localhost:8000/quizbank/api/v1/threadtopics/?format=json'));
+  	}
+	render() {
+		if(this.props.error){
+  			return <div>Error! {this.props.error.message}</div>;
+	  	}
+	  	if(this.props.loading){
+	  		return <div>Loading...</div>;
+	  	}
+	  	let topics = this.props.threadTopics
+	  	if (topics.length > 0 ){
+	  		console.log(topics)
+	  		let moop = topics[0]["topic_text"]
+	  	
+		
+			return (
+				<>
+					<div className="thread-board">
+						<p className="thread-board-title">{this.props.title}</p>
+						<ThreadSummary className="thread-board-child" title={"Why Naruto is Amazing"} summary={"blah blah blah blah blah blah blah blah"} creator={"Senior Genfi"} numComments={455} lastUpdated={"2019-12-16"}></ThreadSummary>
+						<ThreadSummary className="thread-board-child" title={"Static Thread"} summary={"summary 2"} creator={"mr2"} numComments={77} lastUpdated={"2019-12-16"}></ThreadSummary>
+						<ThreadSummary className="thread-board-child" title={"title3"} summary={"summary 3"} creator={"mr3"} numComments={66} lastUpdated={"2019-12-16"}></ThreadSummary>
+					</div>
+					<p> Hellow! this is mah threadtopic test! title: {moop}</p>
+					
+				</>
+			);
+		}
+		else{
+			return (
+				<>
+					<div className="thread-board">
+						<p className="thread-board-title">{this.props.title}</p>
+						<ThreadSummary className="thread-board-child" title={"Why Naruto is Amazing"} summary={"blah blah blah blah blah blah blah blah"} creator={"Senior Genfi"} numComments={455} lastUpdated={"2019-12-16"}></ThreadSummary>
+						<ThreadSummary className="thread-board-child" title={"Static Thread"} summary={"summary 2"} creator={"mr2"} numComments={77} lastUpdated={"2019-12-16"}></ThreadSummary>
+						<ThreadSummary className="thread-board-child" title={"title3"} summary={"summary 3"} creator={"mr3"} numComments={66} lastUpdated={"2019-12-16"}></ThreadSummary>
+					</div>
+					
+				</>
+			);
+		}
+	}
 
 }
 
-export default ThreadBoard;
+const mapStateToProps = state => ({
+	threadTopics: state.threadTopics.threadTopics,
+	loading: state.threadTopics.loading,
+	error: state.threadTopics.error
+})
+
+export default connect(mapStateToProps)(ThreadBoard);
+
+
+ThreadSummary.propTypes = {
+	title: PropTypes.string.isRequired,
+	summary: PropTypes.string.isRequired,
+	creator: PropTypes.string.isRequired,
+	numComments: PropTypes.number.isRequired,
+	lastUpdated: PropTypes.instanceOf(Date).isRequired
+};
+

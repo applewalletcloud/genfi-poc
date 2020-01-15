@@ -1,14 +1,46 @@
 .thread-summary {
 	border-top: 1px solid black;
 	margin: 0px;
-    padding: 0px;
+    padding: 7px;
     font-size: 25px;
- 	text-align: center;
+ 	text-align: left;
 	display: flex;
 	justify-content: space-between;
 	flex-flow: column;
 }
 
+.title {
+	font-size: 15px;
+	font-weight: bold;
+	color: black;
+}
+
+.title:hover {
+	cursor: pointer;
+}
+
 .thread-summary-child {
 
+}
+
+.creator {
+	font-size: 12px;
+	font-weight: bold;
+	color: grey;
+}
+
+.creator:hover {
+	cursor: pointer;
+}
+
+.summary {
+	font-size: 15px;
+	color: grey;
+}
+
+.meta-data {
+	font-size: 10px;
+	margin-left: auto;
+	color: grey;
+	font-weight: bold;
 }

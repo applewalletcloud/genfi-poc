@@ -8,4 +8,8 @@ function ThreadPost(props){
 	);
 }
 
+ThreadPost.propTypes = {
+	
+}
+
 export default ThreadPost;

@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import ForumHome from './ForumHome';
+import Thread from './Thread.js';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import store from './redux/store/store.js'
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
+import { Route, Link, Switch, BrowserRouter as Router } from 'react-router-dom';
 
 const routing = (
   <Router>
@@ -20,10 +21,10 @@ const routing = (
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <div>
+      <Switch>
         <Route exact path="/" component={App} />
-        <Route exact path="/forum" component={ForumHome} />
-      </div>
+        <Route path="/forum" component={ForumHome} />
+      </Switch>
     </Router>
   </Provider>, 
   document.getElementById('root')

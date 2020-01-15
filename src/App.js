@@ -3,6 +3,7 @@ import './App.css';
 import Header from './Header.js';
 import Body from './Body.js';
 import Footer from './Footer.js';
+import Thread from './Thread.js';
 
 function App() {
   return (
@@ -16,12 +17,9 @@ function App() {
       <Header />
       <Body />
       <Footer />
+      <Thread />
     </Fragment>
   );
-}
-
-function Test(){
-  return (<></>)
 }
 
 export default App;

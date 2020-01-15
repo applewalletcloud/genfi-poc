@@ -6,6 +6,8 @@ class QuestionBankTest extends React.Component {
 
   componentDidMount(){
     this.props.dispatch(fetchQuestions('http://localhost:8000/quizbank/api/v1/questions/?format=json'));
+    console.log("inside questionbank test")
+    console.log(this.props.questions)
   }
 
   render() {
