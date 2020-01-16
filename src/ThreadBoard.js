@@ -21,8 +21,12 @@ class ThreadBoard extends React.Component {
 	  	let topics = this.props.threadTopics
 	  	if (topics.length > 0 ){
 	  		console.log(topics)
-	  		let moop = topics[0]["topic_text"]
-	  	
+	  		let threadArray = []
+	  		let threadSummary
+	  		for (let i = 0; i < topics.length; i++) {
+	  			threadSummary = <ThreadSummary className="thread-board-child" title={topics[i]["topic_text"]} summary={topics[i]["summary_text"]} creator={topics[i]["creator"]} numComments={topics[i]["num_comments"]} lastUpdated={topics[i]["last_update"]}></ThreadSummary>
+	  			threadArray.push(threadSummary)
+	  		}
 		
 			return (
 				<>
@@ -32,7 +36,12 @@ class ThreadBoard extends React.Component {
 						<ThreadSummary className="thread-board-child" title={"Static Thread"} summary={"summary 2"} creator={"mr2"} numComments={77} lastUpdated={"2019-12-16"}></ThreadSummary>
 						<ThreadSummary className="thread-board-child" title={"title3"} summary={"summary 3"} creator={"mr3"} numComments={66} lastUpdated={"2019-12-16"}></ThreadSummary>
 					</div>
-					<p> Hellow! this is mah threadtopic test! title: {moop}</p>
+					{console.log(threadSummary)}
+					<p> Hellow! this is mah threadtopic test! title:</p>
+					<div className="thread-board">
+						<p className="thread-board-title">{this.props.title}</p>
+						{threadArray}
+					</div>
 					
 				</>
 			);
