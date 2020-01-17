@@ -8,17 +8,16 @@ import Thread from './Thread.js';
 function ThreadSummary(props){
 	return (
 		<>
-		<Switch>
-        	<Route path="/static-thread2" component={Thread} />
-
-        </Switch>
         
 		<div className="thread-summary">
-			<div className="thread-summary-child title"><Link to={"/static-thread2"} style={{ textDecoration: 'none' }}>{props.title}</Link></div>
+			<div className="thread-summary-child title"><Link to={"/forum/thread-poc"} style={{ textDecoration: 'none' }}>{props.title}</Link></div>
 			<div className="thread-summary-child summary">{props.summary}</div>
 			<Link to={""} style={{ textDecoration: 'none' }}><div className="thread-summary-child creator">{props.creator}</div></Link>
 			<div className="thread-summary-child meta-data">{props.numComments} comments, last updated: {props.lastUpdated}</div>
 		</div>
+		<Switch>
+        	<Route path="/forum/:threadName" />
+        </Switch>
 		</>
 	);
 }

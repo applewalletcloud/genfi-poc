@@ -5,13 +5,16 @@ import ThreadForm from './ThreadForm.js';
 import ForumNavBar from './ForumNavBar.js';
 
 function Thread(props){
+
+	let i;
+	let threadPosts = [];
+	for (i = 0; i < props.posts.length; i++){
+		threadPosts.push(<ThreadPost data={props.posts[i]} />)
+	}
 	return (
 		<>
-			<ForumNavBar />
-			<h1 className="header"> This is my static thread! </h1>
-			<ThreadPost />
-			<ThreadPost />
-			<ThreadPost />
+			<h1 className="header"> {props.title} </h1>
+			{threadPosts}
 			<ThreadForm />
 		</>
 	);
