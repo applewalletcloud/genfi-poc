@@ -10,14 +10,11 @@ function ThreadSummary(props){
 		<>
         
 		<div className="thread-summary">
-			<div className="thread-summary-child title"><Link to={"/forum/thread-poc"} style={{ textDecoration: 'none' }}>{props.title}</Link></div>
+			<div className="thread-summary-child title"><Link to={"/forum/" + props.url} style={{ textDecoration: 'none' }}><span className="hover">{props.title}</span>  </Link></div>
 			<div className="thread-summary-child summary">{props.summary}</div>
-			<Link to={""} style={{ textDecoration: 'none' }}><div className="thread-summary-child creator">{props.creator}</div></Link>
+			<div className="thread-summary-child creator"><Link to={""} style={{ textDecoration: 'none' }}><span className="hover">{props.creator}</span></Link></div>
 			<div className="thread-summary-child meta-data">{props.numComments} comments, last updated: {props.lastUpdated}</div>
 		</div>
-		<Switch>
-        	<Route path="/forum/:threadName" />
-        </Switch>
 		</>
 	);
 }

@@ -22,7 +22,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router>
       <Switch>
-        <Route exact path="/" component={App} />
+        <Route exact path="/old" component={App} />
         <Route path="/forum" component={ForumHome} />
       </Switch>
     </Router>

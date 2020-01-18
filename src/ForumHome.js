@@ -21,6 +21,7 @@ class ForumHome extends React.Component {
 
 	  	let allPosts = this.props.threadPosts;
 	  	let topicToPosts = Object.create(null);
+	  	let topicToThreadPosts = [];
 	  	if (allPosts.length > 0 ) {
 	  		allPosts.forEach(function (post) {
 	  			topicToPosts[post["thread_topic"]] = topicToPosts[post["thread_topic"]] || [];
@@ -30,15 +31,15 @@ class ForumHome extends React.Component {
 	  		// TODO change this later, i don't like it appended to the end of the array :(
 	  		for (i=1;i<=Object.keys(topicToPosts).length;i++){
 	  			console.log("do we do anything here?")
-	  			topicToPosts[i].push(<Thread posts={topicToPosts[i]} title={"Temp Title"}/>);
+	  			//topicToPosts[i].push(<Thread posts={topicToPosts[i]} title={"Temp Title"}/>);
+	  			topicToThreadPosts.push(<Thread posts={topicToPosts[i]} title={"Temp Title"}/>);
 	  		}
-	  		console.log(topicToPosts)
 	  		return (
 	  			<>
 			  	  <ForumNavBar />
-			  	  <ThreadBoard title={"DISCUSSION TOPICS"} posts={topicToPosts[1]} />
 			  	  <Switch>
-        			<Route path="/forum/:threadName" render={() => topicToPosts[1][4]}/>
+			  	    <Route exact path="/forum" render={() => <ThreadBoard title={"DYNAMIC DISCUSSION TOPICS"} posts={topicToPosts[1]} />}/>
+        		  	<Route path="/forum/:threadID" render={(props) => topicToThreadPosts[props.match.params.threadID]} />
         		  </Switch>
 			    </>
 	  		);

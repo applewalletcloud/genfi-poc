@@ -15,7 +15,12 @@
 	color: black;
 }
 
-.title:hover {
+.hover {
+	text-decoration: none;
+	color: black;
+}
+
+.hover:hover {
 	cursor: pointer;
 }
 
@@ -29,9 +34,6 @@
 	color: grey;
 }
 
-.creator:hover {
-	cursor: pointer;
-}
 
 .summary {
 	font-size: 15px;
