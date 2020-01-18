@@ -2,28 +2,54 @@ import React from "react";
 import "./ThreadForm.css";
 import { Form } from 'react-bootstrap';
 
-function test(){
-	console.log("is historia dumb?")
-}
+class ThreadForm extends React.Component{
+	constructor(props) {
+	    super(props);
+	    this.state = {textValue: ''};
 
-function test2(e){
-	e.preventDefault();
-	console.log("success?")
-}
+	    this.handleChange = this.handleChange.bind(this);
+	    this.handleSubmit = this.handleSubmit.bind(this);
+  	}
+	
+	handleChange(e) {
+		this.setState({textValue: e.target.value})
+	}
 
-function ThreadForm(props){
-	return (
-		<>
-			<div className="text-area-border">
-			<Form onSubmit={test2}>
-			  <Form.Control as="textarea" className="text-form" placeholder="Input your thoughts here!" rows="6" />
-			  
-			  <input className="text-area-button"type="submit" value="Submit" onSubmit={test2} />
-			  
-			</Form>
-			</div>
-		</>
-	);
+	handleSubmit(e) {
+		e.preventDefault();
+		fetch("http://localhost:8000/quizbank/api/v1/threadposts/post/?format=json",{
+			method: 'POST',
+			headers: new Headers({
+				'Content-Type': 'application/json',
+			}),
+			body: JSON.stringify({"text": this.state.textValue})
+		})
+		.then((response) => response.text())
+		.then((responseText) => {
+		  console.log(responseText);
+		})
+		.catch((error) => {
+		    console.error(error);
+		});
+	}
+
+
+	
+	render() {
+		return (
+			<>
+				<div className="text-area-border">
+				<Form onSubmit={this.handleSubmit}>
+				  <Form.Control as="textarea" className="text-form" placeholder="Input your thoughts here!" rows="6" onChange={this.handleChange}/>
+				  
+				  <input className="text-area-button"type="submit" value="Submit" />
+				  
+				</Form>
+				</div>
+			</>
+		);
+	}
+	
 }
 
 export default ThreadForm;
