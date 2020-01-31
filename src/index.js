@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import ForumHome from './ForumHome';
+import Login from './Login.js';
+import SignUp from './SignUp.js';
 import Thread from './Thread.js';
 import * as serviceWorker from './serviceWorker';
+import { compose } from 'redux'
 import { Provider } from 'react-redux';
 import store from './redux/store/store.js'
 import { Route, Link, Switch, BrowserRouter as Router } from 'react-router-dom';
+//import '~antd/dist/antd.css';
 
 const routing = (
   <Router>
@@ -18,12 +22,17 @@ const routing = (
   </Router>
 )
 
+const composeEnhances = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
 ReactDOM.render(
   <Provider store={store}>
     <Router>
       <Switch>
         <Route exact path="/old" component={App} />
         <Route path="/forum" component={ForumHome} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/signup" component={SignUp} />
+
       </Switch>
     </Router>
   </Provider>, 

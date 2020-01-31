@@ -2,9 +2,9 @@ export const FETCH_POSTS_BEGIN = 'FETCH_POSTS_BEGIN';
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
 export const FETCH_POSTS_FAILURE = 'FETCH_POSTS_FAILURE';
 
-export const fetchPostsBegin = () => ({
-	type: FETCH_POSTS_BEGIN
-});
+export function fetchPostsBegin(){
+	return {type: FETCH_POSTS_BEGIN}
+};
 
 export function fetchPostsSuccess(threadPosts){
 	return {type: FETCH_POSTS_SUCCESS, threadPosts}
@@ -18,6 +18,7 @@ export function fetchThreadPosts(api_endpoint){
 	return dispatch => {
 		dispatch(fetchPostsBegin());
 		// REMEMBER TO CHANGE THIS URL!!! TODO
+		console.log(api_endpoint)
 		return fetch(api_endpoint)
 		  .then(handleErrors)
 		  .then(res => res.json())

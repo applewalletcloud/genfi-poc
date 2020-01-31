@@ -6,9 +6,6 @@ import GoogleLogin from 'react-google-login';
 import GoogleLogout from 'react-google-login';
 
 
-
-
-
 class Header extends React.Component {
   constructor(props) {
   	super(props);
@@ -56,6 +53,8 @@ class Header extends React.Component {
 		          buttonText="LOGIN WITH GOOGLE"
 		          onSuccess={(response) => {
 		              this.login(response);
+		              console.log(response)
+		              console.log("response for google login above")
 
 		  		}}// need to store this login data somewhere
 		          onFailure={(response) => {

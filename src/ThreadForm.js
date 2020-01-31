@@ -5,8 +5,7 @@ import { Form } from 'react-bootstrap';
 class ThreadForm extends React.Component{
 	constructor(props) {
 	    super(props);
-	    this.state = {textValue: ''};
-
+	    this.state = {textValue: '', id: props.threadID}; // need to change this to allow multiple ids
 	    this.handleChange = this.handleChange.bind(this);
 	    this.handleSubmit = this.handleSubmit.bind(this);
   	}
@@ -22,7 +21,7 @@ class ThreadForm extends React.Component{
 			headers: new Headers({
 				'Content-Type': 'application/json',
 			}),
-			body: JSON.stringify({"text": this.state.textValue})
+			body: JSON.stringify({"text": this.state.textValue, "id": this.state.id})
 		})
 		.then((response) => response.text())
 		.then((responseText) => {
@@ -31,6 +30,9 @@ class ThreadForm extends React.Component{
 		.catch((error) => {
 		    console.error(error);
 		});
+
+
+		window.location.reload()
 	}
 
 

@@ -14,7 +14,7 @@ function Thread(props){
 		<>
 			<h1 className="header"> {props.title} </h1>
 			{threadPosts}
-			<ThreadForm />
+			<ThreadForm threadID={props.threadID} />
 		</>
 	);
 }
