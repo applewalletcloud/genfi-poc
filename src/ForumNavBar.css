@@ -1,5 +1,6 @@
 .nav-bar {
 	border: 1px solid lightgrey;
+	border-top: 0px;
 	border-left: 0px;
 	border-right: 0px;
 	margin: 5px;

@@ -9,9 +9,6 @@ export const fetchForumUsersBegin = () => ({
 });
 
 export function fetchForumUsersSuccess(forumUsers){
-	console.log('inside the action itself');
-	console.log(forumUsers);
-	console.log(typeof questions);
 	return {type: FETCH_FORUM_USERS_SUCCESS, forumUsers}
 }
 

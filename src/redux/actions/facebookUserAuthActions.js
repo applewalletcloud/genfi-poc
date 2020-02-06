@@ -2,6 +2,7 @@ export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAIL = 'AUTH_FAIL';
 export const AUTH_LOGOUT = 'AUTH_LOGOUT';
+export const GET_TOKEN = 'GET_TOKEN';
 
 export const authStart = () => {
 	return {
@@ -69,7 +70,41 @@ export const authLogin = (username, password) => {
 	}
 }
 
+export const setSessionToken = (token) => {
+	return {
+		type: GET_TOKEN,
+		token: token
+	}
+}
 
+
+export const getSessionToken = () => {
+
+	return dispatch => {
+		dispatch(authStart())
+		fetch("http://localhost:8000/quizbank/getUserSession/")
+		.then(res => res.json())
+		.then(json => {
+			console.log("we entered the getsessiontoken for facebook login")
+			console.log("here is the token!")
+			console.log(json)
+			console.log(json.data)
+			const token = json.data.token;
+			
+			console.log(token)
+			const expirationDate = new Date(new Date().getTime() + 3600*1000);
+			localStorage.setItem('token', token);
+			localStorage.setItem('expirationDate', expirationDate);
+			dispatch(setSessionToken(token));
+			dispatch(setAuthTimeout(3600*24));
+		})
+		.catch(err => {
+			console.log("the error is coming from facebook authactions!!")
+			dispatch(authFail(err));
+		})
+
+	}
+}
 
 export const authSignUp = (username, email, password1, password2) => {
 	return dispatch => {
@@ -95,6 +130,7 @@ export const authSignUp = (username, email, password1, password2) => {
 			dispatch(setAuthTimeout(3600*24));
 		})
 		.catch(err => {
+			console.log("the error is coming from forumuserauthactions!!")
 			dispatch(authFail(err));
 		})
 
@@ -117,4 +153,5 @@ export const authCheckState = () => {
 		}
 	}
 }
+
 

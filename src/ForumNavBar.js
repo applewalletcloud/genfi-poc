@@ -1,10 +1,10 @@
 import React from "react";
 import "./ForumNavBar.css";
 import Button from 'react-bootstrap/Button';
-
+import * as actions from './redux/actions/facebookUserAuthActions.js'
 import GoogleLogin from 'react-google-login';
-
-
+import { connect } from 'react-redux';
+import { Breadcrumb } from 'antd';
 
 class ForumNavBar extends React.Component {
 	constructor(props) {
@@ -17,6 +17,15 @@ class ForumNavBar extends React.Component {
 
 	componentDidMount(){
 
+	}
+
+	async loginWithGoogle(){
+
+	}
+
+	async loginWithFacebook(){
+
+		this.dispatch(actions.getSessionToken)
 	}
 	
 	async completeLoginWithDjango(profile){
@@ -31,8 +40,6 @@ class ForumNavBar extends React.Component {
 			// now we need to make a post request to create a new user
 
 		}
-
-		
 		
 		console.log("result is above")
 		return result
@@ -42,30 +49,41 @@ class ForumNavBar extends React.Component {
 		return (
 			
 			<div className="nav-bar">
-				<div className="nav-child">Main</div>
-				<div className="nav-child">My Profile</div>
-				<div className="nav-child">Etc</div>
-				<div> {this.props.isAuthenticated}</div>
+				
+				  <div className="nav-child">Main</div>
+				  <div className="nav-child">My Profile</div>
+				  <div className="nav-child">Etc</div>
+				
+
+				
 				{
 					this.props.isAuthenticated ?
-					<div> "we are authenticated" </div>
+					<>
+						<p>"is authenticated " + {this.props.token}</p>
+						<span className="push-right">
+							<Button className="LoginButton" variant="outline-primary">{"Logout"}</Button>
+							<GoogleLogin className="push-right"
+						          clientId="608003919007-o4s5bgjmms2hm378fdnatj15qhcsa15g.apps.googleusercontent.com"
+						          buttonText="LOGOUT"
+						          onSuccess={(response) => {
+						              	this.completeLoginWithDjango(response.profileObj)
+						  		}}// need to store this login data somewhere
+						          onFailure={(response) => {
+						      console.log(response);}}
+						        />
+					    </span>
+					</>
 					:
 					<>
-					<div> "we are not authenticated" </div>
-					<div> {this.props.test2}</div>
+						<p>{"not authenticated " + this.props.token}</p>
+						<span className="push-right">
+						<Button className="LoginButton" type="google" variant="outline-primary" >{"Login with Google"}</Button>
+						<Button className="LoginButton" type="facebook" variant="outline-primary" >{"Login with Facebook"}</Button>
+					    </span>
 					</>
 				}
 				
-				<div> "test" </div>
-				<GoogleLogin className="push-right"
-			          clientId="608003919007-o4s5bgjmms2hm378fdnatj15qhcsa15g.apps.googleusercontent.com"
-			          buttonText="LOGIN WITH GOOGLE"
-			          onSuccess={(response) => {
-			              	this.completeLoginWithDjango(response.profileObj)
-			  		}}// need to store this login data somewhere
-			          onFailure={(response) => {
-			      console.log(response);}}
-			        />
+
 		    </div>
 			
 		);
@@ -73,4 +91,14 @@ class ForumNavBar extends React.Component {
 
 }
 
-export default ForumNavBar;
+
+const mapStateToProps = state => ({
+	token: state.facebookUserAuth.token,
+	
+})
+
+
+
+export default connect(mapStateToProps)(ForumNavBar);
+
+

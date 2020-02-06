@@ -2,8 +2,9 @@ import {
   AUTH_START,
   AUTH_SUCCESS,
   AUTH_FAIL,
-  AUTH_LOGOUT
-} from '../actions/forumUserAuthActions.js';
+  AUTH_LOGOUT,
+  GET_TOKEN,
+} from '../actions/facebookUserAuthActions.js';
 
 const initialState = {
 	token: null,
@@ -14,6 +15,7 @@ const initialState = {
 
 
 export default function forumUserAuthReducer(state = initialState, action){
+	console.log(action)
 	switch(action.type){
 
 		case AUTH_START:
@@ -39,6 +41,11 @@ export default function forumUserAuthReducer(state = initialState, action){
 			return {
 				...state,
 				token: null
+			}
+		case GET_TOKEN:
+			return {
+				...state,
+				token: action.token
 			}
 		default:
 			return state

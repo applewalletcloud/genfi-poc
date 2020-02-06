@@ -1,0 +1,32 @@
+TODO:
+
+make google app with email ngoy.apps@gmail.com
+add it to django admin page
+create log in with google button and link it properly
+
+create log in with facebook button and link it properly
+
+figure out social logout
+allauth.facebook.logout() should do the trick for facebook?
+accounts/logout is an api endpoint as well i think
+
+----
+once we have login and logout, the next thing to do is to make a customer user info and tie it to our default django users
+
+def get_by_natural_key(self):
+       return self.username
+class UserManager(models.Manager):
+   def get_by_natural_key(self):
+       return self.username
+
+ is a place to start looking for that
+
+ ----
+
+ once we have custom user info (that should probably be stored in state)
+ we can start to work on making our tables nice 
+ (ant table)
+
+
+ -------------------
+ when a user logs in, they get redirected to the main page. have the main page call the get user session token!! then pass it over to the navbar!!
