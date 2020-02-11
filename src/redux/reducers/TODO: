@@ -30,3 +30,28 @@ class UserManager(models.Manager):
 
  -------------------
  when a user logs in, they get redirected to the main page. have the main page call the get user session token!! then pass it over to the navbar!!
+
+ just use login with google and login with facebook react buttons to get some id and 
+ then use that id to map it to a user account in django
+ and if there isn't one, then create one...
+
+ ----
+ we now need to create users when people login with google or facebook
+do it by email so that if they log in through google iwth the same email, that works too!
+after that we need to make the pages pretty
+----
+Set up JWT with the links genfi sent
+1. https://pypi.org/project/django-rest-framework-social-oauth2/
+https://www.youtube.com/watch?v=kjp8jYJhujA
+Python Social Auth
+1. https://yeti.co/blog/client-vs-server-oauth-flows-with-rest-apis/
+2. https://yeti.co/blog/social-auth-with-django-rest-framework/
+
+he wants something where the token has to be sent every time to make a request on the backend
+
+AFTER
+clean up the code
+place comments
+make notes for what you learned for people in the future
+after you clean the code, make commits more frequently 
+make the commit messages say everything you added to the code

@@ -78,6 +78,20 @@ class ForumHome extends React.Component {
 		 }(document, 'script', 'facebook-jssdk'));
     }
 
+    getServerUser() {
+		console.log("getserveruser button results below!!!!!")
+		if (this.props.token !== undefined){
+			console.log("we enter since forumtoken isn't undefined")
+			console.log(this.props.token)
+			console.log("the fb jwt is above")
+			this.props.setServerUser(this.props.token);
+		} else{
+			console.log("looks like the token is undefined, so we aren't calling the action we need")
+		}
+		
+
+	}
+
     testLogin() {
     	console.log("WE HAVE ENTERED THE TEST LOGIN FUNCTION")
 	    FB.getLoginStatus(function(response) {
@@ -87,6 +101,7 @@ class ForumHome extends React.Component {
 			    
 
 			    console.log(accessToken);
+			   
 			} else{
 			console.log("looks like there's no connection")
 
@@ -122,19 +137,7 @@ class ForumHome extends React.Component {
 	  console.log(response);
 	}
 	 
-	getServerUser() {
-		console.log("getserveruser button results below!!!!!")
-		if (this.props.forumToken !== undefined){
-			console.log("we enter since forumtoken isn't undefined")
-			console.log(this.props.forumToken)
-			console.log("the jwt is above")
-			this.props.setServerUser(this.props.forumToken);
-		} else{
-			console.log("looks like the token is undefined, so we aren't calling the action we need")
-		}
-		
-
-	}
+	
 
 	render() {
 		if(this.props.error){
@@ -162,7 +165,7 @@ class ForumHome extends React.Component {
 	  		}
 	  		return (
 	  			<>
-	  			  <p>{"HELLO! forum token:" + this.props.forumToken}</p>
+	  			  <p>{"HELLO! forum token:" + this.props.forumToken + ' facebook token: ' + this.props.token} </p>
 	  			  <FacebookLogin
 	    appId="186492402430643"
 	    autoLoad={true}

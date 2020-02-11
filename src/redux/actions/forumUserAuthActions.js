@@ -13,7 +13,7 @@ export const setUser = (token) => {
 		fetch('http://localhost:8000/quizbank/getUserAuthentication/?format=json', {
 			method: 'GET',
 			headers: new Headers({
-				Authorization: 'JWT ' + token, 
+				'Authorization': 'JWT ' + token, 
 				'Content-Type': 'application/json'
 			}),
 		})
