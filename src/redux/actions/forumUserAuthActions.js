@@ -2,6 +2,49 @@ export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAIL = 'AUTH_FAIL';
 export const AUTH_LOGOUT = 'AUTH_LOGOUT';
+export const SET_USER = 'SET_USER';
+
+
+
+export const setUser = (token) => {
+	console.log("setUser is being called from the forumUserAuthAction")
+	console.log(token)
+	return dispatch => {
+		fetch('http://localhost:8000/quizbank/getUserAuthentication/?format=json', {
+			method: 'GET',
+			headers: new Headers({
+				Authorization: 'JWT ' + token, 
+				'Content-Type': 'application/json'
+			}),
+		})
+		.then(res => res.json())
+		.then(json => {
+			console.log("json token is below!")
+			console.log(json.token)
+			dispatch(setUserHelper(json.token))
+		})
+	}
+}
+
+
+export const setUserHelper = (token) => {
+	return {
+		type: SET_USER,
+		user: token
+	}
+}
+
+
+// Handle HTTP errors since fetch won't.
+function handleErrors(response) {
+console.log("WE ARE ENTERING THE HANDLE ERRORS IN FORUM USER AUTH ACTION")
+  if (!response.ok) {
+  	console.log("WE ARE ENTERING THE HANDLE ERRORS IN FORUM USER AUTH ACTION")
+    throw Error(response.statusText);
+  }
+  return response;
+}
+
 
 export const authStart = () => {
 	return {
@@ -55,12 +98,22 @@ export const authLogin = (username, password) => {
 		})
 		.then(res => res.json())
 		.then(json => {
-			const token = json["key"];
+			//const token = json["token"];
+			const token = json;
+			console.log("inside forumuserauthactions, printing json and token below!")
+			console.log(json)
+			console.log(token)
 			const expirationDate = new Date(new Date().getTime() + 3600*1000);
-			localStorage.setItem('token', token);
+			console.log(token)
+			console.log("what is above should be getting set in local storage")
+			localStorage.setItem('token', token["token"]);
 			localStorage.setItem('expirationDate', expirationDate);
-			dispatch(authSuccess(token));
+			console.log("what is being set in redux should be blelow")
+			console.log(token["token"])
+			dispatch(authSuccess(token["token"]));
 			dispatch(setAuthTimeout(3600*24));
+
+			dispatch(setUser(json))
 		})
 		.catch(err => {
 			dispatch(authFail(err));

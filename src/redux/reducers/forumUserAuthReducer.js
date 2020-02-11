@@ -2,14 +2,16 @@ import {
   AUTH_START,
   AUTH_SUCCESS,
   AUTH_FAIL,
-  AUTH_LOGOUT
+  AUTH_LOGOUT,
+  SET_USER
 } from '../actions/forumUserAuthActions.js';
 
 const initialState = {
 	token: null,
 	error: null,
 	loading: false,
-	testState: "harro"
+	testState: "harro",
+	user: null,
 }
 
 
@@ -39,6 +41,12 @@ export default function forumUserAuthReducer(state = initialState, action){
 			return {
 				...state,
 				token: null
+			}
+		case SET_USER:
+			return {
+				...state,
+				user: action.user
+
 			}
 		default:
 			return state

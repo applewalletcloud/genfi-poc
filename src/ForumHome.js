@@ -6,6 +6,7 @@ import { fetchThreadPosts } from "./redux/actions/threadPostActions.js";
 import { connect } from "react-redux";
 import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
 import * as actions from './redux/actions/facebookUserAuthActions.js';
+import * as forumUserAuthActions from './redux/actions//forumUserAuthActions.js'
 import FacebookLogin from 'react-facebook-login';
 /*global FB*/
 /* global gapi */
@@ -29,6 +30,7 @@ class ForumHome extends React.Component {
 	    this.state = {
 	    	googleUser: undefined
 	    };
+	    this.getServerUser = this.getServerUser.bind(this);
 	}
 
 	
@@ -120,6 +122,19 @@ class ForumHome extends React.Component {
 	  console.log(response);
 	}
 	 
+	getServerUser() {
+		console.log("getserveruser button results below!!!!!")
+		if (this.props.forumToken !== undefined){
+			console.log("we enter since forumtoken isn't undefined")
+			console.log(this.props.forumToken)
+			console.log("the jwt is above")
+			this.props.setServerUser(this.props.forumToken);
+		} else{
+			console.log("looks like the token is undefined, so we aren't calling the action we need")
+		}
+		
+
+	}
 
 	render() {
 		if(this.props.error){
@@ -147,7 +162,7 @@ class ForumHome extends React.Component {
 	  		}
 	  		return (
 	  			<>
-	  			  <p>{"HELLO!" + this.props.token}</p>
+	  			  <p>{"HELLO! forum token:" + this.props.forumToken}</p>
 	  			  <FacebookLogin
 	    appId="186492402430643"
 	    autoLoad={true}
@@ -170,6 +185,7 @@ class ForumHome extends React.Component {
 		        />
 		        <button onClick={this.testGoogleLogin}> PRINT GOOGLE TOKEN </button>
 		        <button onClick={this.testGoogleLogout}> Test Google Signout </button>
+		        <button onClick={this.getServerUser}> Get SErver User </button>
 			  	  <ForumNavBar isAuthenticated={this.props.isAuthenticated} />
 			  	  {/**<AntTable />**/}
 			  	  <Switch>
@@ -196,13 +212,15 @@ const mapStateToProps = state => ({
 	threadPosts: state.threadPosts.threadPosts,
 	loading: state.threadPosts.loading,
 	error: state.threadPosts.error,
-	token: state.facebookUserAuth.token
+	token: state.facebookUserAuth.token,
+	forumToken: state.forumUserAuth.token
 })
 
 const mapDispatchToProps = dispatch => {
 	return {
 		onTryAutoSignUp: () => dispatch(actions.authCheckState()),
 		getSocialToken: () => dispatch(actions.getSessionToken()),
+		setServerUser: (myarg) => dispatch(forumUserAuthActions.setUser(myarg)),
 		dispatch
 	}
 }
