@@ -1,8 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Form, Icon, Input, Button, Spin } from 'antd';
 import { NavLink } from 'react-router-dom';
+
+// redux imports
+import { connect } from 'react-redux';
 import * as actions from './redux//actions/forumUserAuthActions.js';
+
+// UI imports
+import { Form, Icon, Input, Button, Spin } from 'antd';
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 

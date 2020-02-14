@@ -1,22 +1,33 @@
 import React from 'react';
+
+// Components for the Forum SPA
+import AntThread from './AntThread.js';
 import Thread from './Thread.js';
 import ThreadBoard from './ThreadBoard.js';
 import ForumNavBar from './ForumNavBar.js';
-import { fetchThreadPosts } from "./redux/actions/threadPostActions.js";
+
+// connect allows mapping between react props and redux
 import { connect } from "react-redux";
+
+// components for react routing
 import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
+
+// import actions from redux states
+import { fetchThreadPosts } from "./redux/actions/threadPostActions.js";
 import * as actions from './redux/actions/facebookUserAuthActions.js';
 import * as forumUserAuthActions from './redux/actions//forumUserAuthActions.js'
-import FacebookLogin from 'react-facebook-login';
-/*global FB*/
+
+// The two lines below aren't comments, but global variables for the use of social login
+/* global FB */
 /* global gapi */
 import { GoogleLogin } from 'react-google-login';
 import { GoogleAuthorize } from 'react-google-authorize';
+import FacebookLogin from 'react-facebook-login';
 
 
 
 
-//import AntTable from './AntTable.js'
+import AntForumBoard from './AntForumBoard.js'
 
 class ForumHome extends React.Component {
 	constructor(props) {
@@ -27,22 +38,8 @@ class ForumHome extends React.Component {
 	    this.responseFacebook = this.responseFacebook.bind(this);
 	    this.testGoogleLogin = this.testGoogleLogin.bind(this);
 	    this.loadGoogleApi = this.loadGoogleApi.bind(this);
-	    this.state = {
-	    	googleUser: undefined
-	    };
 	    this.getServerUser = this.getServerUser.bind(this);
 	}
-
-	
-
-
-
-    loadGoogleApi() {
-        const script = document.createElement("script");
-	    script.src = "https://apis.google.com/js/platform.js";
-	    script.async = true;
-	    document.body.appendChild(script);
-    }
 
 
 	componentDidMount() {
@@ -55,6 +52,9 @@ class ForumHome extends React.Component {
     	this.loadGoogleApi();
     }
 
+    /*
+    Necessary function to load Facebook SDK for social login. called on component did mount 
+    */
 	loadFbLoginApi() {
 
 		window.fbAsyncInit = function() {
@@ -78,6 +78,17 @@ class ForumHome extends React.Component {
 		 }(document, 'script', 'facebook-jssdk'));
     }
 
+    /** 
+	Necessary function that loads google script for social login. called on component did mount
+    **/
+    loadGoogleApi() {
+        const script = document.createElement("script");
+	    script.src = "https://apis.google.com/js/platform.js";
+	    script.async = true;
+	    document.body.appendChild(script);
+    }
+
+    // TODO: DELETE AFTER DONE TESTING
     getServerUser() {
 		console.log("getserveruser button results below!!!!!")
 		if (this.props.token !== undefined){
@@ -91,7 +102,7 @@ class ForumHome extends React.Component {
 		
 
 	}
-
+	// TODO: DELETE AFTER DONE TESTING
     testLogin() {
     	console.log("WE HAVE ENTERED THE TEST LOGIN FUNCTION")
 	    FB.getLoginStatus(function(response) {
@@ -110,7 +121,7 @@ class ForumHome extends React.Component {
 		} );
 
     }
-
+    // TODO: DELETE AFTER DONE TESTING
     testGoogleLogin(googleUser) {
     	this.setState({
 	      googleUser: googleUser
@@ -132,7 +143,7 @@ class ForumHome extends React.Component {
     testLogout() {
     	FB.logout()
     }
-
+    // TODO: DELETE AFTER DONE TESTING
     responseFacebook = (response) => {
 	  console.log(response);
 	}
@@ -150,6 +161,8 @@ class ForumHome extends React.Component {
 	  	let allPosts = this.props.threadPosts;
 	  	let topicToPosts = Object.create(null);
 	  	let topicToThreadPosts = [];
+	  	console.log("TOPIC TO POSTS HEREEE")
+	  	console.log(topicToPosts)
 	  	if (allPosts.length > 0 ) {
 	  		allPosts.forEach(function (post) {
 	  			topicToPosts[post["thread_topic"]] = topicToPosts[post["thread_topic"]] || [];
@@ -167,11 +180,12 @@ class ForumHome extends React.Component {
 	  			<>
 	  			  <p>{"HELLO! forum token:" + this.props.forumToken + ' facebook token: ' + this.props.token} </p>
 	  			  <FacebookLogin
-	    appId="186492402430643"
-	    autoLoad={true}
-	    fields="name,email,picture"
-	    onClick={this.componentClicked}
-	    callback={this.responseFacebook} />
+				    appId="186492402430643"
+				    autoLoad={true}
+				    fields="name,email,picture"
+				    onClick={this.componentClicked}
+				    callback={this.responseFacebook} 
+				  />
 	  			  <button onClick={this.testLogin}> THIS IS THE BUTTON TO PRINT THE TOKEN </button>
 	  			  <button onClick={this.testLogout}> THIS IS THE BUTTON TO LOGOUT </button>
 			  	  <GoogleLogin
@@ -190,11 +204,12 @@ class ForumHome extends React.Component {
 		        <button onClick={this.testGoogleLogout}> Test Google Signout </button>
 		        <button onClick={this.getServerUser}> Get SErver User </button>
 			  	  <ForumNavBar isAuthenticated={this.props.isAuthenticated} />
-			  	  {/**<AntTable />**/}
 			  	  <Switch>
-			  	    <Route exact path="/forum" render={() => <ThreadBoard title={"DYNAMIC DISCUSSION TOPICS"} posts={topicToPosts[1]} />}/>
-        		  	<Route path="/forum/:threadID" render={(props) => topicToThreadPosts[props.match.params.threadID]} />
+			  	    <Route exact path="/forum" render={() => <AntForumBoard />}/>
+        		  	<Route path="/forum/:threadID" render={(props) => <AntThread threadID={props.match.params.threadID} />} />
+
         		  </Switch>
+
 			    </>
 	  		);
 	  	}

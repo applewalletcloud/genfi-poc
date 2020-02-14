@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 import * as actions from './redux/actions/facebookUserAuthActions.js'
 import GoogleLogin from 'react-google-login';
 import { connect } from 'react-redux';
-import { Breadcrumb } from 'antd';
 
 class ForumNavBar extends React.Component {
 	constructor(props) {
@@ -25,7 +24,6 @@ class ForumNavBar extends React.Component {
 
 	async loginWithFacebook(){
 
-		this.dispatch(actions.getSessionToken)
 	}
 	
 	async completeLoginWithDjango(profile){
@@ -57,7 +55,8 @@ class ForumNavBar extends React.Component {
 
 				
 				{
-					this.props.isAuthenticated ?
+					this.props.isAuthenticated 
+					?
 					<>
 						<p>"is authenticated " + {this.props.token}</p>
 						<span className="push-right">

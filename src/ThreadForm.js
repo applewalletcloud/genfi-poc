@@ -41,7 +41,7 @@ class ThreadForm extends React.Component{
 		return (
 			<>
 				<div className="text-area-border">
-				<Form onSubmit={this.handleSubmit}>
+				<Form onSubmit={this.handleSubmit} className = "ant-table">
 				  <Form.Control as="textarea" className="text-form" placeholder="Input your thoughts here!" rows="6" onChange={this.handleChange}/>
 				  
 				  <input className="text-area-button"type="submit" value="Submit" />

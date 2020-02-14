@@ -55,3 +55,6 @@ place comments
 make notes for what you learned for people in the future
 after you clean the code, make commits more frequently 
 make the commit messages say everything you added to the code
+
+MAKE SURE THAT THE FORUM IS MADE SO THAT WE CAN EASILY ADD THEM ANYWHERE (like in the middle of a blog post)
+and make it s.t. there's a prop which tells it which db to pull from and if the db doesn't exist make it's own table
