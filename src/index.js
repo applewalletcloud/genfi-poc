@@ -4,6 +4,7 @@ import './index.css';
 import ForumHome from './ForumHome';
 import Login from './Login.js';
 import SignUp from './SignUp.js';
+import EditProfileForm from './EditProfileAntForm.js';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import store from './redux/store/store.js'
@@ -12,7 +13,6 @@ import { Route, Link, Switch, BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
   <Provider store={store}>
-    // bootstrap link
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -24,6 +24,7 @@ ReactDOM.render(
         <Route path="/forum" component={ForumHome} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={SignUp} />
+        <Route exact path="/testForm" component={EditProfileForm} />
       </Switch>
     </Router>
   </Provider>, 
