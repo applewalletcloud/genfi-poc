@@ -8,7 +8,7 @@ const initialState = {
 	error: null,
 	loading: false,
 	user: null,
-	profilePic: null,
+	userNameToProfilePic: {},
 }
 
 export default function forumUserAuthReducer(state = initialState, action){
@@ -22,11 +22,14 @@ export default function forumUserAuthReducer(state = initialState, action){
 			}
 		case FETCH_FORUM_USER_DATA_SUCCESS:
 		console.log("the success action gets called properly")
+		console.log("#######################################")
 		console.log(action)
-		console.log(action.profilePic)
+		console.log(action.forumUserData)
+		let temp = {...state.userNameToProfilePic, [action.forumUserData.username]: action.forumUserData.url}
+		console.log(temp)
 			return {
 				...state,
-				profilePic: action.forumUserData,
+				userNameToProfilePic: {...state.userNameToProfilePic, [action.forumUserData.username]: action.forumUserData.url},
 				error: null,
 				loading: false
 			}

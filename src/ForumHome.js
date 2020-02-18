@@ -53,7 +53,8 @@ class ForumHome extends React.Component {
     	this.props.getSocialToken();
     	this.loadGoogleApi();
     	//this.props.getUserData("https://upload.wikimedia.org/wikipedia/commons/0/0c/Scarlett_Johansson_Césars_2014.jpg");
-    	this.props.getUserData("http://localhost:8000/quizbank/getForumUserProfilePic/");
+    	this.props.getUserData("http://localhost:8000/quizbank/getForumUserProfilePic/user3/", "user3");
+    	this.props.getUserData("http://localhost:8000/quizbank/getForumUserProfilePic/user2/", "user2");
     }
 
     /*
@@ -181,14 +182,14 @@ class ForumHome extends React.Component {
 	  			topicToThreadPosts.push(<Thread posts={topicToPosts[i]} title={"Temp Title"} threadID={i-1}/>);
 	  		}
 	  		console.log("the profile pic props should be below +++++++++++++++++++++++++++")
-	  		console.log(this.props.profilePic)
+	  		console.log(this.props.profilePicDict)
 	  		console.log(this.props.threadPosts)
-	  		console.log(this.props.profilePicReduxTest)
 	  		return (
 	  			<>
 	  			<p> "below should be a bulbasaur" </p>
 	  		
-	  			  <img src={this.props.profilePic} alt="new"></img>
+	  			  <img src={this.props.profilePicDict.user3} alt="new"></img>
+	  			  <img src={this.props.profilePicDict.user2} alt="new"></img>
 	  			  <p>{"HELLO! forum token:" + this.props.forumToken + ' facebook token: ' + this.props.token} </p>
 	  			  <FacebookLogin
 				    appId="186492402430643"
@@ -243,8 +244,7 @@ const mapStateToProps = state => ({
 	error: state.threadPosts.error,
 	token: state.facebookUserAuth.token,
 	forumToken: state.forumUserAuth.token,
-	profilePic: state.forumUserData.profilePic,
-	profilePicReduxTest: state.forumUserData.testRedux
+	profilePicDict: state.forumUserData.userNameToProfilePic,
 })
 
 const mapDispatchToProps = dispatch => {
@@ -252,7 +252,7 @@ const mapDispatchToProps = dispatch => {
 		onTryAutoSignUp: () => dispatch(actions.authCheckState()),
 		getSocialToken: () => dispatch(actions.getSessionToken()),
 		setServerUser: (myarg) => dispatch(forumUserAuthActions.setUser(myarg)),
-		getUserData: (url) => dispatch(forumUserDataActions.fetchForumUserProfilePic(url)),
+		getUserData: (url,username) => dispatch(forumUserDataActions.fetchForumUserProfilePic(url,username)),
 		dispatch
 	}
 }

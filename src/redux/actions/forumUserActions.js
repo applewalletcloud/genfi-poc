@@ -17,7 +17,7 @@ export function fetchForumUserDataFailure(error) {
 	return { type: FETCH_FORUM_USER_DATA_FAILURE, payload: {error}};
 }
 
-export function fetchForumUserProfilePic(api_endpoint){
+export function fetchForumUserProfilePic(api_endpoint, username){
 	return dispatch => {
 		dispatch(fetchForumUserDataBegin());
 		// REMEMBER TO CHANGE THIS URL!!! TODO
@@ -30,8 +30,13 @@ export function fetchForumUserProfilePic(api_endpoint){
 	        let url = URL.createObjectURL(blob)
 	        console.log("@)#$(@)#*$&(@#$&@#)$&@#*$)@##")
 	        console.log(url)
-	        dispatch(fetchForumUserDataSuccess(url));
-	        return url;
+	        let temp = {
+	        	username: username,
+	        	url: url
+	        }
+	        console.log(temp)
+	        dispatch(fetchForumUserDataSuccess(temp));
+	        return temp;
 	      })
 		  .catch(error => dispatch(fetchForumUserDataFailure(error)))
 	}
