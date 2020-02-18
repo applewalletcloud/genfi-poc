@@ -26,10 +26,6 @@ const { TextArea } = Input;
 /**
 probably make it so that the first post is much larger than the rest, maybe even formatted differently
 also still need to add the form at the bottom
-
-**/
-/**
-have the query be specific to the id!
 **/
 
 // Here we define all the columns to be in the table
@@ -49,30 +45,11 @@ const columns = [
   },
   
 ];
-/**
-      let allPosts = this.props.threadPosts;
-      let topicToPosts = Object.create(null);
-      let topicToThreadPosts = [];
-      console.log("TOPIC TO POSTS HEREEE")
-      console.log(topicToPosts)
-      if (allPosts.length > 0 ) {
-        allPosts.forEach(function (post) {
-          topicToPosts[post["thread_topic"]] = topicToPosts[post["thread_topic"]] || [];
-          topicToPosts[post["thread_topic"]].push(post)
-        });
-        let i;
-        // TODO change this later, i don't like it appended to the end of the array :(
-        for (i=1;i<=Object.keys(topicToPosts).length;i++){
-          console.log("do we do anything here?")
-          //topicToPosts[i].push(<Thread posts={topicToPosts[i]} title={"Temp Title"}/>);
-          console.log(this.props.match.params.threadID)
-          topicToThreadPosts.push(<Thread posts={topicToPosts[i]} title={"Temp Title"} threadID={i-1}/>);
-        }
-**/
 
 class AntThread extends React.Component {
   componentDidMount(){
     //this.props.dispatch(fetchThreadPosts('http://localhost:8000/quizbank/api/v1/threadposts/?format=json'));
+    // need to get current user logged in info
   }
   render (){
     /** 
@@ -96,6 +73,9 @@ class AntThread extends React.Component {
       console.log(post.thread_topic)
     })
     allPosts = allPosts.filter(post => post.thread_topic-1 == this.props.threadID); // the threadID is 0 indexed while the thread_topics start at 1
+    if (allPosts.length == 0){
+      // TODO: make it so we assign a new threadID somehow
+    }
 
     allPosts.forEach(function (post) {
       let tempObj = {

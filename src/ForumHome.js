@@ -15,7 +15,9 @@ import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
 // import actions from redux states
 import { fetchThreadPosts } from "./redux/actions/threadPostActions.js";
 import * as actions from './redux/actions/facebookUserAuthActions.js';
-import * as forumUserAuthActions from './redux/actions//forumUserAuthActions.js'
+import * as forumUserAuthActions from './redux/actions//forumUserAuthActions.js';
+
+import * as forumUserDataActions from './redux/actions/forumUserActions.js';
 
 // The two lines below aren't comments, but global variables for the use of social login
 /* global FB */
@@ -50,6 +52,8 @@ class ForumHome extends React.Component {
     	this.props.onTryAutoSignUp();
     	this.props.getSocialToken();
     	this.loadGoogleApi();
+    	//this.props.getUserData("https://upload.wikimedia.org/wikipedia/commons/0/0c/Scarlett_Johansson_Césars_2014.jpg");
+    	this.props.getUserData("http://localhost:8000/quizbank/getForumUserProfilePic/");
     }
 
     /*
@@ -176,8 +180,15 @@ class ForumHome extends React.Component {
 	  			console.log(this.props.match.params.threadID)
 	  			topicToThreadPosts.push(<Thread posts={topicToPosts[i]} title={"Temp Title"} threadID={i-1}/>);
 	  		}
+	  		console.log("the profile pic props should be below +++++++++++++++++++++++++++")
+	  		console.log(this.props.profilePic)
+	  		console.log(this.props.threadPosts)
+	  		console.log(this.props.profilePicReduxTest)
 	  		return (
 	  			<>
+	  			<p> "below should be a bulbasaur" </p>
+	  		
+	  			  <img src={this.props.profilePic} alt="new"></img>
 	  			  <p>{"HELLO! forum token:" + this.props.forumToken + ' facebook token: ' + this.props.token} </p>
 	  			  <FacebookLogin
 				    appId="186492402430643"
@@ -231,7 +242,9 @@ const mapStateToProps = state => ({
 	loading: state.threadPosts.loading,
 	error: state.threadPosts.error,
 	token: state.facebookUserAuth.token,
-	forumToken: state.forumUserAuth.token
+	forumToken: state.forumUserAuth.token,
+	profilePic: state.forumUserData.profilePic,
+	profilePicReduxTest: state.forumUserData.testRedux
 })
 
 const mapDispatchToProps = dispatch => {
@@ -239,6 +252,7 @@ const mapDispatchToProps = dispatch => {
 		onTryAutoSignUp: () => dispatch(actions.authCheckState()),
 		getSocialToken: () => dispatch(actions.getSessionToken()),
 		setServerUser: (myarg) => dispatch(forumUserAuthActions.setUser(myarg)),
+		getUserData: (url) => dispatch(forumUserDataActions.fetchForumUserProfilePic(url)),
 		dispatch
 	}
 }

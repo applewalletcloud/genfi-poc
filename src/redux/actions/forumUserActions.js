@@ -1,33 +1,39 @@
 // maybe we don't need any of this and it can all be handled with the jwt
 
-export const FETCH_FORUM_USERS_BEGIN = 'FETCH_FORUM_USERS_BEGIN';
-export const FETCH_FORUM_USERS_SUCCESS = 'FETCH_FORUM_USERS_SUCCESS';
-export const FETCH_FORUM_USERS_FAILURE = 'FETCH_FORUM_USERS_FAILURE';
+export const FETCH_FORUM_USER_DATA_BEGIN = 'FETCH_FORUM_USER_DATA_BEGIN';
+export const FETCH_FORUM_USER_DATA_SUCCESS = 'FETCH_FORUM_USER_DATA_SUCCESS';
+export const FETCH_FORUM_USER_DATA_FAILURE = 'FETCH_FORUM_USER_DATA_FAILURE';
 
-export const fetchForumUsersBegin = () => ({
-	type: FETCH_FORUM_USERS_BEGIN
+export const fetchForumUserDataBegin = () => ({
+	type: FETCH_FORUM_USER_DATA_BEGIN
 });
 
-export function fetchForumUsersSuccess(forumUsers){
-	return {type: FETCH_FORUM_USERS_SUCCESS, forumUsers}
+export function fetchForumUserDataSuccess(forumUserData){
+	console.log("in the user data success action. below is the argument passed")
+	return {type: FETCH_FORUM_USER_DATA_SUCCESS, forumUserData}
 }
 
-export function fetchForumUsersFailure(error) {
-	return { type: FETCH_FORUM_USERS_FAILURE, payload: {error}};
+export function fetchForumUserDataFailure(error) {
+	return { type: FETCH_FORUM_USER_DATA_FAILURE, payload: {error}};
 }
 
-export function fetchForumUsers(api_endpoint){
+export function fetchForumUserProfilePic(api_endpoint){
 	return dispatch => {
-		dispatch(fetchForumUsersBegin());
+		dispatch(fetchForumUserDataBegin());
 		// REMEMBER TO CHANGE THIS URL!!! TODO
 		return fetch(api_endpoint)
 		  .then(handleErrors)
-		  .then(res => res.json())
-		  .then(json => {
-	        dispatch(fetchForumUsersSuccess(json));
-	        return json;
+		  .then(res => res.blob())
+		  .then(blob => {
+	        //dispatch(fetchForumUserDataSuccess(blob));
+	        console.log(blob)
+	        let url = URL.createObjectURL(blob)
+	        console.log("@)#$(@)#*$&(@#$&@#)$&@#*$)@##")
+	        console.log(url)
+	        dispatch(fetchForumUserDataSuccess(url));
+	        return url;
 	      })
-		  .catch(error => dispatch(fetchForumUsersFailure(error)))
+		  .catch(error => dispatch(fetchForumUserDataFailure(error)))
 	}
 }
 
