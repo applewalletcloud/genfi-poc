@@ -27,6 +27,13 @@ import { GoogleAuthorize } from 'react-google-authorize';
 import FacebookLogin from 'react-facebook-login';
 
 
+import Popup from "reactjs-popup";
+import './Popup.css'
+
+import Login from './Login.js';
+
+
+
 
 
 import AntForumBoard from './AntForumBoard.js'
@@ -188,10 +195,11 @@ class ForumHome extends React.Component {
 	  		return (
 	  			<>
 	  			<p> "below should be a bulbasaur" </p>
-	  		
-	  			  <img src={this.props.profilePicDict.user3} alt="new"></img>
 	  			  <img src={this.props.profilePicDict.user2} alt="new"></img>
-	  			  <img src={this.props.profilePicDict.user4} alt="new"></img>
+	  			  
+	  			  <Popup modal style={{borderRadius: '5px'}}trigger={<button> Click Me! </button>}>
+				    <Login />
+				  </Popup>
 	  			  <p>{"HELLO! forum token:" + this.props.forumToken + ' facebook token: ' + this.props.token} </p>
 	  			  <FacebookLogin
 				    appId="186492402430643"

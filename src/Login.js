@@ -20,7 +20,10 @@ class NormalLoginForm extends React.Component {
       	this.props.onAuth(values.username, values.password);
       }
     });
-    this.props.history.push('/forum');
+    if (this.props.history !== undefined) {
+		this.props.history.push('/forum');
+    }
+    
   };
 
   render() {
@@ -34,7 +37,6 @@ class NormalLoginForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     return (
     	<div>
-    	{errorMessage}
     	{
 
     		this.props.loading ?
