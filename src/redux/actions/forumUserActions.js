@@ -42,6 +42,44 @@ export function fetchForumUserProfilePic(api_endpoint, username){
 	}
 }
 
+
+
+export function setForumUserProfilePic(api_endpoint, data){
+	console.log(data)
+	//console.log(data.dragger[0])
+	console.log(api_endpoint)
+	console.log("in teh action, we are printing the data and api endpoints above")
+	let formData = new FormData();
+	//fromData.append
+
+	formData.append('user_name', data.username)
+	console.log(data.dragger[0].originFileObj)
+	formData.append('profile_pic', data.dragger[0].originFileObj, data.dragger[0].name)
+	
+	console.log(formData)
+	console.log("FORM DATA ABOVE")
+	return dispatch => {
+		dispatch(fetchForumUserDataBegin());
+		// REMEMBER TO CHANGE THIS URL!!! TODO
+		return fetch(api_endpoint, {
+			method: 'POST',
+			body: formData, // not sure if we should have json stringify
+		}
+	  )
+	  .then(handleErrors)
+	  .then(res => res.json())
+	  .then(json => {
+	    //dispatch(fetchForumUserDataSuccess(blob));
+	    console.log(json)
+	    console.log("22222222222@)#$(@)#*$&(@#$&@#)$&@#*$)@##")
+	    // probably need to change this later. shouldn't be the json variable being passed
+	    //dispatch(fetchForumUserDataSuccess(data));
+	    return json;
+	  })
+	  .catch(error => dispatch(fetchForumUserDataFailure(error)))
+	}
+}
+
 // Handle HTTP errors since fetch won't.
 function handleErrors(response) {
   if (!response.ok) {

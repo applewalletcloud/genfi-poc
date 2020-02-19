@@ -1,30 +1,34 @@
 import React from 'react';
 
+import { setForumUserProfilePic } from './redux/actions/forumUserActions.js'; 
+
+import { connect } from "react-redux";
+
 import {
   Form,
   Select,
-  InputNumber,
-  Switch,
-  Radio,
-  Slider,
   Button,
   Upload,
   Icon,
   Input,
-  Rate,
-  Checkbox,
-  Row,
-  Col,
 } from 'antd';
 
 const { Option } = Select;
 
+/** 
+the params in the form get passed through the values variable
+the object's keys are the field decorators (e.g. "username" and "dragger")
+**/
 class EditProfileForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        console.log("we hit submit?");
+        console.log(values);
+        console.log(values.username);
+        this.props.setUserData("http://localhost:8000/quizbank/postForumUserProfileData/", values)
       }
     });
   };
@@ -47,21 +51,30 @@ class EditProfileForm extends React.Component {
 
     return (
       <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-        <Form.Item label="Field A" {...formItemLayout}>
-          <Input placeholder="input placeholder" />
+
+        <Form.Item label="Username" {...formItemLayout}>
+            {getFieldDecorator('username', {
+              rules: [{ required: true, message: 'Please input your username!' }],
+            })(
+              <Input
+                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                placeholder="Username"
+              />,
+            )}
         </Form.Item>
 
         <Form.Item label="Dragger">
           {getFieldDecorator('dragger', {
             valuePropName: 'fileList',
             getValueFromEvent: this.normFile,
+            rules: [{ required: true, message: 'Please upload your desired profile picture!' }],
           })(
             <Upload.Dragger name="files" action="/upload.do" accept="image/png, image/jpeg" multiple={false}>
               <p className="ant-upload-drag-icon">
                 <Icon type="inbox" />
               </p>
               <p className="ant-upload-text">Click or drag file to this area to upload</p>
-              <p className="ant-upload-hint">Support for a single or bulk upload.</p>
+              <p className="ant-upload-hint">Upload your desired profile picture here!</p>
             </Upload.Dragger>,
           )}
         </Form.Item>
@@ -77,4 +90,16 @@ class EditProfileForm extends React.Component {
 }
 
 const WrappedEditProfileForm = Form.create({ name: 'validate_other' })(EditProfileForm);
-export default WrappedEditProfileForm;
+
+const mapStateToProps = state => ({
+})
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setUserData: (url, data) => dispatch(setForumUserProfilePic(url, data)),
+    dispatch
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedEditProfileForm);
+

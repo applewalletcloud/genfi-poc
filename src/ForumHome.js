@@ -55,6 +55,7 @@ class ForumHome extends React.Component {
     	//this.props.getUserData("https://upload.wikimedia.org/wikipedia/commons/0/0c/Scarlett_Johansson_Césars_2014.jpg");
     	this.props.getUserData("http://localhost:8000/quizbank/getForumUserProfilePic/user3/", "user3");
     	this.props.getUserData("http://localhost:8000/quizbank/getForumUserProfilePic/user2/", "user2");
+    	this.props.getUserData("http://localhost:8000/quizbank/getForumUserProfilePic/user4/", "user4");
     }
 
     /*
@@ -190,6 +191,7 @@ class ForumHome extends React.Component {
 	  		
 	  			  <img src={this.props.profilePicDict.user3} alt="new"></img>
 	  			  <img src={this.props.profilePicDict.user2} alt="new"></img>
+	  			  <img src={this.props.profilePicDict.user4} alt="new"></img>
 	  			  <p>{"HELLO! forum token:" + this.props.forumToken + ' facebook token: ' + this.props.token} </p>
 	  			  <FacebookLogin
 				    appId="186492402430643"
