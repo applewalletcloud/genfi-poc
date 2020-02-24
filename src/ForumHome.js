@@ -32,6 +32,7 @@ import './Popup.css'
 
 import Login from './Login.js';
 
+import Avatar from 'react-avatar';
 
 
 
@@ -194,11 +195,15 @@ class ForumHome extends React.Component {
 	  		console.log(this.props.threadPosts)
 	  		return (
 	  			<>
-	  			<p> "below should be a bulbasaur" </p>
-	  			  <img src={this.props.profilePicDict.user2} alt="new"></img>
+	  			<Avatar name="Ryan Bar" src={this.props.profilePicDict.user3} />
+	  			<p> "below should be a chikorita" </p>
+	  			  <img src={this.props.profilePicDict["user2"]} alt="new"></img>
 	  			  
-	  			  <Popup modal style={{borderRadius: '5px'}}trigger={<button> Click Me! </button>}>
+	  			  <Popup modal style={{borderRadius: '5px'}}trigger={<button> Click Me to login! </button>}>
 				    <Login />
+				  </Popup>
+				  <Popup modal style={{borderRadius: '5px'}}trigger={<button> Click Me For a bulbasaur! </button>}>
+				    <img src={this.props.profilePicDict.user3} alt="new"></img>
 				  </Popup>
 	  			  <p>{"HELLO! forum token:" + this.props.forumToken + ' facebook token: ' + this.props.token} </p>
 	  			  <FacebookLogin

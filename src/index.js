@@ -9,6 +9,7 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import store from './redux/store/store.js'
 import { Route, Link, Switch, BrowserRouter as Router } from 'react-router-dom';
+import StripeHome from './StripeHome.js'
 
 
 ReactDOM.render(
@@ -25,6 +26,8 @@ ReactDOM.render(
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/testForm" component={EditProfileForm} />
+        <Route exact path="/stripe" component={StripeHome} />
+
       </Switch>
     </Router>
   </Provider>, 
