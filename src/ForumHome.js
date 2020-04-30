@@ -35,10 +35,10 @@ class ForumHome extends React.Component {
 	    this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
 	    this.testLogin = this.testLogin.bind(this);
 	    this.testLogout = this.testLogout.bind(this);
-	    this.responseFacebook = this.responseFacebook.bind(this);
+	    //this.responseFacebook = this.responseFacebook.bind(this);
 	    this.testGoogleLogin = this.testGoogleLogin.bind(this);
 	    this.loadGoogleApi = this.loadGoogleApi.bind(this);
-	    this.getServerUser = this.getServerUser.bind(this);
+	    //this.getServerUser = this.getServerUser.bind(this); // PROBABLY NEED TO UNCOMMENT THIS LATER, TODO
 	}
 
 
@@ -86,6 +86,7 @@ class ForumHome extends React.Component {
 	    script.src = "https://apis.google.com/js/platform.js";
 	    script.async = true;
 	    document.body.appendChild(script);
+	    return document.body // may need to delete this line
     }
 
     // TODO: DELETE AFTER DONE TESTING
@@ -144,9 +145,9 @@ class ForumHome extends React.Component {
     	FB.logout()
     }
     // TODO: DELETE AFTER DONE TESTING
-    responseFacebook = (response) => {
-	  console.log(response);
-	}
+ //    responseFacebook = (response) => {
+	//   console.log(response);
+	// }
 	 
 	
 
