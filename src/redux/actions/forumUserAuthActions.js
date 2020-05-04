@@ -7,13 +7,14 @@ export const SET_USER = 'SET_USER';
 
 
 export const setUser = (token) => {
-	console.log("setUser is being called from the forumUserAuthAction")
-	console.log(token)
+	console.log("setUser is being called from the forumUserAuthAction");
+	console.log(token);
+	console.log(token["token"]);
 	return dispatch => {
 		fetch('http://localhost:8000/quizbank/getUserAuthentication/?format=json', {
 			method: 'GET',
 			headers: new Headers({
-				'Authorization': 'JWT ' + token, 
+				'Authorization': 'JWT ' + token["token"], // editing this line from '+ token' to '+ token["token"]' this fixed it!
 				'Content-Type': 'application/json'
 			}),
 		})
@@ -85,7 +86,7 @@ export const setAuthTimeout = expirationTime => {
 
 export const authLogin = (username, password) => {
 	return dispatch => {
-		dispatch(authStart())
+		dispatch(authStart());
 		fetch("http://localhost:8000/rest-auth/login/", {
 			method: 'POST',
 			headers: new Headers({
