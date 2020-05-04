@@ -5,6 +5,9 @@ import * as actions from './redux/actions/facebookUserAuthActions.js'
 import GoogleLogin from 'react-google-login';
 import { connect } from 'react-redux';
 
+require("regenerator-runtime/runtime"); // put this here for jest
+
+
 class ForumNavBar extends React.Component {
 	constructor(props) {
 		super(props);

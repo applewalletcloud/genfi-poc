@@ -5,9 +5,14 @@
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "antd": "^3.26.7",
+    "babel-plugin-transform-export-extensions": "^6.22.0",
     "bootstrap": "^4.4.1",
     "enzyme-adapter-react-16.1": "^1.6.2",
+    "jest-cli": "^25.5.3",
+    "jest-transform-css": "^2.0.0",
+    "jquery": "^3.5.0",
     "openssl": "^1.1.0",
+    "puppeteer": "^3.0.2",
     "react": "^16.12.0",
     "react-avatar": "^3.9.1",
     "react-bootstrap": "^1.0.0-beta.16",
@@ -29,6 +34,42 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "jest_test": "jest"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "presets": [
+          "@babel/preset-env",
+          "@babel/preset-react"
+        ],
+        "plugins": [
+          "transform-export-extensions"
+        ],
+        "only": [
+          "./**/*.js",
+          "node_modules/jest-runtime"
+        ]
+      }
+    }
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/index.js"
+    ],
+    "coverageReporters": [
+      "text"
+    ],
+    "transform": {
+      "^.+\\.js$": "babel-jest",
+      ".+\\.(css|styl|less|sass|scss)$": "jest-transform-css"
+    },
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "../src/__mocks__/fileMock.js"
+    }
   },
   "plugins": [
     [
@@ -52,6 +93,9 @@
   },
   "proxy": "http://localhost:8000",
   "devDependencies": {
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-to-json": "^3.4.4",
     "react-test-renderer": "^16.13.1"
   }
 }

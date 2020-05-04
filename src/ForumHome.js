@@ -29,7 +29,7 @@ import FacebookLogin from 'react-facebook-login';
 
 import AntForumBoard from './AntForumBoard.js'
 
-class ForumHome extends React.Component {
+export class ForumHome extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
@@ -38,18 +38,30 @@ class ForumHome extends React.Component {
 	    //this.responseFacebook = this.responseFacebook.bind(this);
 	    this.testGoogleLogin = this.testGoogleLogin.bind(this);
 	    this.loadGoogleApi = this.loadGoogleApi.bind(this);
-	    //this.getServerUser = this.getServerUser.bind(this); // PROBABLY NEED TO UNCOMMENT THIS LATER, TODO
+	    this.getServerUser = this.getServerUser.bind(this); // PROBABLY NEED TO UNCOMMENT THIS LATER, TODO
 	}
 
 
 	componentDidMount() {
-    	console.log("about to try loading the facebook api")
-    	console.log("ARE WE GETTING HERE?!?!?")
+        
+        this.loadGoogleApi();
         this.loadFbLoginApi();
-        this.props.dispatch(fetchThreadPosts('http://localhost:8000/quizbank/api/v1/threadposts/?format=json'));
-    	this.props.onTryAutoSignUp();
-    	this.props.getSocialToken();
-    	this.loadGoogleApi();
+    	if (this.props.dispatch) {
+        	this.props.dispatch(fetchThreadPosts('http://localhost:8000/quizbank/api/v1/threadposts/?format=json'));
+    	
+        } else {
+        	console.log("props is undefined for dispatch in ForumHome")
+        }
+        if (this.props.onTryAutoSignUp){
+        	this.props.onTryAutoSignUp();
+        } else {
+        	console.log("props is undefined for tryautosignup in forumhome")
+        }
+        if (this.props.getSocialToken){
+        	this.props.getSocialToken();
+        } else {
+        	console.log("props is undefined for getsocialtoken")
+        }
     }
 
     /*
@@ -71,10 +83,15 @@ class ForumHome extends React.Component {
 
 		(function(d, s, id){
 		   var js, fjs = d.getElementsByTagName(s)[0];
+		   console.log(s);
+		   console.log("get element bytag name in fb above");
 		   if (d.getElementById(id)) {return;}
 		   js = d.createElement(s); js.id = id;
 		   js.src = "https://connect.facebook.net/en_US/sdk.js";
-		   fjs.parentNode.insertBefore(js, fjs);
+		   if (fjs != undefined){
+		   	  fjs.parentNode.insertBefore(js, fjs);
+		   }
+		   
 		 }(document, 'script', 'facebook-jssdk'));
     }
 
@@ -149,7 +166,27 @@ class ForumHome extends React.Component {
 	//   console.log(response);
 	// }
 	 
-	
+	createTopicToPostsObject(allPosts) {
+		let topicToPosts = Object.create(null);
+		allPosts.forEach(function (post) {
+  			topicToPosts[post["thread_topic"]] = topicToPosts[post["thread_topic"]] || [];
+  			topicToPosts[post["thread_topic"]].push(post)
+  		});
+  		return topicToPosts;
+	}
+
+	createTopicToThreadPosts(topicToPosts) {
+		let i;
+		let topicToThreadPosts = [];
+  		// TODO change this later, i don't like it appended to the end of the array :(
+  		for (i=1;i<=Object.keys(topicToPosts).length;i++){
+  			console.log("do we do anything here?")
+  			//topicToPosts[i].push(<Thread posts={topicToPosts[i]} title={"Temp Title"}/>);
+  			console.log(this.props.match.params.threadID)
+  			topicToThreadPosts.push(<Thread posts={topicToPosts[i]} title={"Temp Title"} threadID={i-1}/>);
+  		}
+  		return topicToThreadPosts;
+	}
 
 	render() {
 		if(this.props.error){
@@ -160,23 +197,15 @@ class ForumHome extends React.Component {
 	  	}
 
 	  	let allPosts = this.props.threadPosts;
-	  	let topicToPosts = Object.create(null);
-	  	let topicToThreadPosts = [];
-	  	console.log("TOPIC TO POSTS HEREEE")
-	  	console.log(topicToPosts)
-	  	if (allPosts.length > 0 ) {
-	  		allPosts.forEach(function (post) {
-	  			topicToPosts[post["thread_topic"]] = topicToPosts[post["thread_topic"]] || [];
-	  			topicToPosts[post["thread_topic"]].push(post)
-	  		});
-	  		let i;
-	  		// TODO change this later, i don't like it appended to the end of the array :(
-	  		for (i=1;i<=Object.keys(topicToPosts).length;i++){
-	  			console.log("do we do anything here?")
-	  			//topicToPosts[i].push(<Thread posts={topicToPosts[i]} title={"Temp Title"}/>);
-	  			console.log(this.props.match.params.threadID)
-	  			topicToThreadPosts.push(<Thread posts={topicToPosts[i]} title={"Temp Title"} threadID={i-1}/>);
-	  		}
+	  	
+	  	
+	  	if (allPosts == undefined) {
+	  		console.log("error, seems we're getting empty props for posts");
+	  	}
+	  	if (allPosts != undefined && allPosts.length > 0 ) {
+	  		// CREATE TOPIC TO POSTS OBJECT FUNCTUON CALL SHOULD GO HERE
+	  		let topicToPosts = this.createTopicToPostsObject(allPosts);
+	  		let topicToThreadPosts = this.createTopicToThreadPosts(topicToPosts);
 	  		return (
 	  			<>
 	  			  <p>{"HELLO! forum token:" + this.props.forumToken + ' facebook token: ' + this.props.token} </p>
