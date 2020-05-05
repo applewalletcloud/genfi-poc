@@ -1,4 +1,4 @@
-import {combineReducers } from 'redux'
+import { combineReducers } from 'redux'
 import threadTopicReducer from './threadTopicReducer.js'
 import threadPostReducer from './threadPostReducer.js'
 import forumUserAuthReducer from './forumUserAuthReducer.js'

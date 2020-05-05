@@ -62,6 +62,7 @@ export const authSuccess = (token) => {
 }
 
 export const authFail = (error) => {
+	console.log(error);
 	return {
 		type: AUTH_FAIL,
 		error: error
@@ -103,18 +104,27 @@ export const authLogin = (username, password) => {
 			const token = json;
 			console.log("inside forumuserauthactions, printing json and token below!")
 			console.log(json)
-			console.log(token)
-			const expirationDate = new Date(new Date().getTime() + 3600*1000);
-			console.log(token)
-			console.log("what is above should be getting set in local storage")
-			localStorage.setItem('token', token["token"]);
-			localStorage.setItem('expirationDate', expirationDate);
-			console.log("what is being set in redux should be blelow")
-			console.log(token["token"])
-			dispatch(authSuccess(token["token"]));
-			dispatch(setAuthTimeout(3600*24));
+			console.log(json["non_field_errors"])
+			if(json["non_field_errors"] && json["non_field_errors"][0] == "Unable to log in with provided credentials."){
+				console.log("we entered the error case")
+				dispatch(authFail("unable to log in with credentials"));
+			} else {
+				console.log("we entered the success case");
+				console.log(token);
+				const expirationDate = new Date(new Date().getTime() + 3600*1000);
+				console.log(token);
+				console.log("what is above should be getting set in local storage");
+				localStorage.setItem('token', token["token"]);
+				localStorage.setItem('expirationDate', expirationDate);
+				console.log("what is being set in redux should be blelow");
+				console.log(token["token"]);
+				dispatch(authSuccess(token["token"]));
+				dispatch(setAuthTimeout(3600*24));
 
-			dispatch(setUser(json))
+				dispatch(setUser(json));
+
+			}
+			
 		})
 		.catch(err => {
 			dispatch(authFail(err));

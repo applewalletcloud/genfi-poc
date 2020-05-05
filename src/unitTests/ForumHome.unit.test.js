@@ -14,7 +14,6 @@ test('<ForumHome />', () => {
 	expect($('script[src]')["1"].outerHTML).toEqual('<script src="https://apis.google.com/js/platform.js"></script>');
 	// check that dom was edited for facebook api
 	expect($('script[src]')["0"].outerHTML).toEqual('<script id="facebook-jssdk" src="https://connect.facebook.net/en_US/sdk.js"></script>');
-
 });
 
 

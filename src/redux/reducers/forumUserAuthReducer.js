@@ -32,6 +32,8 @@ export default function forumUserAuthReducer(state = initialState, action){
 				loading: false
 			}
 		case AUTH_FAIL:
+			console.log(action);
+			console.log("enter auth fail reducer");
 			return {
 				...state,
 				error: action.error,

@@ -14,27 +14,27 @@ const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 class NormalLoginForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields(async (err, values) => {
       if (!err) {
         console.log('Need to delete: Received values of form: ', values);
-      	this.props.onAuth(values.username, values.password);
-      }
+      	const result = await this.props.onAuth(values.username, values.password);
+      } 
     });
-    this.props.history.push('/forum');
+   
   };
 
   render() {
-  	let errorMessage = null;
-  	if (this.props.error) {
-  		errorMessage = (
-  			<p>{this.props.error.message}</p>
-  		)
-  	}
-
     const { getFieldDecorator } = this.props.form;
+    console.log("we re-render the login component");
+    console.log(this.props.token);
+    if (this.props.token){
+    	console.log("we enter here and our token is: ");
+    	console.log(this.props.token);
+    	this.props.history.push('/forum');
+    }
     return (
     	<div>
-    	{errorMessage}
+    	{this.props.error}
     	{
 
     		this.props.loading ?
@@ -82,7 +82,8 @@ class NormalLoginForm extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		loading: state.forumUserAuth.loading,
-		error: state.forumUserAuth.error
+		error: state.forumUserAuth.error,
+		token: state.forumUserAuth.token,
 	}
 }
 
