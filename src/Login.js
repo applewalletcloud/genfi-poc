@@ -14,10 +14,12 @@ const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 class NormalLoginForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields(async (err, values) => {
+    this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Need to delete: Received values of form: ', values);
-      	const result = await this.props.onAuth(values.username, values.password);
+      	const result = this.props.onAuth(values.username, values.password);
+      	// TODO: can try a try-catch block to see if a promise is being rejected
+      	// ^ note that there's a workaround for this that's currently implemented
       } 
     });
    

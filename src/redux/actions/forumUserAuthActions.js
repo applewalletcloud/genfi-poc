@@ -88,7 +88,8 @@ export const setAuthTimeout = expirationTime => {
 export const authLogin = (username, password) => {
 	return dispatch => {
 		dispatch(authStart());
-		fetch("http://localhost:8000/rest-auth/login/", {
+		//fetch("http://localhost:8000/rest-auth/login/", {
+		fetch("http://localhost:8000/api-token-auth/", {
 			method: 'POST',
 			headers: new Headers({
 				'Content-Type': 'application/json',
@@ -100,29 +101,16 @@ export const authLogin = (username, password) => {
 		})
 		.then(res => res.json())
 		.then(json => {
-			//const token = json["token"];
 			const token = json;
-			console.log("inside forumuserauthactions, printing json and token below!")
-			console.log(json)
-			console.log(json["non_field_errors"])
 			if(json["non_field_errors"] && json["non_field_errors"][0] == "Unable to log in with provided credentials."){
-				console.log("we entered the error case")
 				dispatch(authFail("unable to log in with credentials"));
 			} else {
-				console.log("we entered the success case");
-				console.log(token);
 				const expirationDate = new Date(new Date().getTime() + 3600*1000);
-				console.log(token);
-				console.log("what is above should be getting set in local storage");
 				localStorage.setItem('token', token["token"]);
 				localStorage.setItem('expirationDate', expirationDate);
-				console.log("what is being set in redux should be blelow");
-				console.log(token["token"]);
 				dispatch(authSuccess(token["token"]));
 				dispatch(setAuthTimeout(3600*24));
-
 				dispatch(setUser(json));
-
 			}
 			
 		})
@@ -137,7 +125,7 @@ export const authLogin = (username, password) => {
 
 export const authSignUp = (username, email, password1, password2) => {
 	return dispatch => {
-		dispatch(authStart())
+		dispatch(authStart());
 		fetch("http://localhost:8000/rest-auth/registration/", {
 			method: 'POST',
 			headers: new Headers({
@@ -151,12 +139,15 @@ export const authSignUp = (username, email, password1, password2) => {
 			})
 		})
 		.then(res => {
-			const token = res.data.key;
-			const expirationDate = new Date(new Date().getTime() + 3600*1000);
-			localStorage.setItem('token', token);
-			localStorage.setItem('expirationDate', expirationDate);
-			dispatch(authSuccess(token));
-			dispatch(setAuthTimeout(3600*24));
+			if(res['status'] == 201) { // 201 is a successful create code
+				// temporarily make the token prop equal to success until we log in.
+				// the success value in the token prop tells our website to log in, so don't change this.
+				dispatch(authSuccess('success'));
+				dispatch(authLogin(username, password1));
+			} else {
+				dispatch(authFail("Please use different account credentials."));
+			}
+			
 		})
 		.catch(err => {
 			dispatch(authFail(err));

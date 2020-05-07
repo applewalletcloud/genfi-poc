@@ -39,7 +39,6 @@ class RegistrationForm extends React.Component {
         	values.confirm
         )
       }
-    this.props.history.push("/forum")
     });
   };
 
@@ -68,9 +67,15 @@ class RegistrationForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-
+    if (this.props.token == "success"){
+      console.log("we enter our sign up page's success state and our token is: ");
+      console.log(this.props.token);
+      this.props.history.push('/forum');
+    }
 
     return (
+      <>
+      {this.props.error}
       <Form onSubmit={this.handleSubmit}>
 
       	<Form.Item>
@@ -120,6 +125,7 @@ class RegistrationForm extends React.Component {
             ],
           })(<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" onBlur={this.handleConfirmBlur} />)}
         </Form.Item>
+    }
         
 		<Form.Item>
           <Button type="primary" htmlType="submit">
@@ -130,6 +136,7 @@ class RegistrationForm extends React.Component {
         </Form.Item>
 
       </Form>
+      </>
     );
   }
 }
@@ -138,7 +145,8 @@ const WrappedRegistrationForm = Form.create({ name: 'register' })(RegistrationFo
 const mapStateToProps = (state) => {
 	return {
 		loading: state.forumUserAuth.loading,
-		error: state.forumUserAuth.error
+		error: state.forumUserAuth.error,
+    token: state.forumUserAuth.token
 	}
 }
 

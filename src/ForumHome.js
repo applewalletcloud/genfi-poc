@@ -35,7 +35,7 @@ export class ForumHome extends React.Component {
 	    this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
 	    this.testLogin = this.testLogin.bind(this);
 	    this.testLogout = this.testLogout.bind(this);
-	    //this.responseFacebook = this.responseFacebook.bind(this);
+	    this.responseFacebook = this.responseFacebook.bind(this);
 	    this.testGoogleLogin = this.testGoogleLogin.bind(this);
 	    this.loadGoogleApi = this.loadGoogleApi.bind(this);
 	    this.getServerUser = this.getServerUser.bind(this); // PROBABLY NEED TO UNCOMMENT THIS LATER, TODO
@@ -66,12 +66,13 @@ export class ForumHome extends React.Component {
 
     /*
     Necessary function to load Facebook SDK for social login. called on component did mount 
+    taken from the fb developer website
     */
 	loadFbLoginApi() {
 
 		window.fbAsyncInit = function() {
 		  FB.init({
-		    appId      : '186492402430643',
+		    appId      : '186492402430643', // TODO: Put your app ID here
 		    cookie     : true,
 		    xfbml      : true,
 		    version    : 'v6.0'
@@ -93,6 +94,13 @@ export class ForumHome extends React.Component {
 		   }
 		   
 		 }(document, 'script', 'facebook-jssdk'));
+    }
+
+    responseFacebook = response => {
+    	console.log(response);
+    	console.log("we just completed the facebook login and this is the callback");
+    	// now we want to see if we can check a django token from the backend
+    	
     }
 
     /** 
@@ -210,7 +218,7 @@ export class ForumHome extends React.Component {
 	  			<>
 	  			  <p>{"HELLO! forum token:" + this.props.forumToken + ' facebook token: ' + this.props.token} </p>
 	  			  <FacebookLogin
-				    appId="186492402430643"
+				    appId="186492402430643" 
 				    autoLoad={true}
 				    fields="name,email,picture"
 				    onClick={this.componentClicked}
