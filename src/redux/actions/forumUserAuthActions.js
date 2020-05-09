@@ -20,18 +20,23 @@ export const setUser = (token) => {
 		})
 		.then(res => res.json())
 		.then(json => {
+			console.log(json)
 			console.log("json token is below!")
 			console.log(json.token)
-			dispatch(setUserHelper(json.token))
+			console.log(json.user)
+			console.log("json user is in the line above")
+			console.log("KAHFLKJHDKSJFHSKJHSDKFJHKSDJHFKDJHK")
+			dispatch(setUserHelper(json.user, json.token))
 		})
 	}
 }
 
-
-export const setUserHelper = (token) => {
+// helper action for the set user async action above!
+export const setUserHelper = (user, token) => {
 	return {
 		type: SET_USER,
-		user: token
+		user: user,
+		token: token
 	}
 }
 
@@ -85,10 +90,12 @@ export const setAuthTimeout = expirationTime => {
 	}
 }
 
+/**
+Logs the user into our django backend given a username and password.
+**/
 export const authLogin = (username, password) => {
 	return dispatch => {
 		dispatch(authStart());
-		//fetch("http://localhost:8000/rest-auth/login/", {
 		fetch("http://localhost:8000/api-token-auth/", {
 			method: 'POST',
 			headers: new Headers({
@@ -106,6 +113,8 @@ export const authLogin = (username, password) => {
 				dispatch(authFail("unable to log in with credentials"));
 			} else {
 				const expirationDate = new Date(new Date().getTime() + 3600*1000);
+				console.log("INSIDE THE AUTHLOGIN FUNCTION, OUR TOKEN IS BELOW")
+				console.log(token["token"]);
 				localStorage.setItem('token', token["token"]);
 				localStorage.setItem('expirationDate', expirationDate);
 				dispatch(authSuccess(token["token"]));
@@ -121,7 +130,57 @@ export const authLogin = (username, password) => {
 	}
 }
 
+/**
+Action that logs the user into our django backend once they log in via a social network. 
+If the user doesn't have an account already, one will be created for that individual.
+**/
+export const authSocialLogin = (socialProvider, accessToken) => {
+	return dispatch => {
+		// tell redux state that we're starting the social login process
+		dispatch(authStart());
 
+		// construct api endpoint for social login
+		const api_endpoint = "http://localhost:8000/quizbank/rest-auth/" + socialProvider + "/";
+		
+		// query django backend for user JWT
+		fetch(api_endpoint, {
+			method: 'POST',
+			headers: new Headers({
+				'Content-Type': 'application/json',
+			}),
+			body: JSON.stringify({
+				"access_token": accessToken,
+			})
+		})
+		.then(res => {
+			// if the query is successful
+		    if (res.ok){
+		        res.json().then((json) => {
+				const token = json.token;
+				const expirationDate = new Date(new Date().getTime() + 3600*1000);
+
+
+				console.log(json)
+				console.log("json result from auth social login")
+				console.log("INSIDE THE SOCIAL AUTHLOGIN FUNCTION, OUR TOKEN IS BELOW")
+				console.log(json["token"]);
+				localStorage.setItem('token', json["token"]);
+				localStorage.setItem('expirationDate', expirationDate);
+				dispatch(authSuccess(token["token"]));
+				dispatch(setAuthTimeout(3600*24));
+				dispatch(setUser(json))
+		      });
+		    }else{
+		      console.log("social login response NOT ok");
+		    }
+		}).catch(err => {
+			console.log("we have an error when social login is being dispatched");
+			console.log(err);
+			dispatch(authFail(err));
+		})
+
+	}
+}
 
 export const authSignUp = (username, email, password1, password2) => {
 	return dispatch => {

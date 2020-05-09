@@ -17,13 +17,6 @@ import { fetchThreadPosts } from "./redux/actions/threadPostActions.js";
 import * as actions from './redux/actions/facebookUserAuthActions.js';
 import * as forumUserAuthActions from './redux/actions//forumUserAuthActions.js'
 
-// The two lines below aren't comments, but global variables for the use of social login
-/* global FB */
-/* global gapi */
-import { GoogleLogin } from 'react-google-login';
-import { GoogleAuthorize } from 'react-google-authorize';
-import FacebookLogin from 'react-facebook-login';
-
 
 
 
@@ -32,20 +25,20 @@ import AntForumBoard from './AntForumBoard.js'
 export class ForumHome extends React.Component {
 	constructor(props) {
 	    super(props);
-	    this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
-	    this.testLogin = this.testLogin.bind(this);
-	    this.testLogout = this.testLogout.bind(this);
-	    this.responseFacebook = this.responseFacebook.bind(this);
-	    this.testGoogleLogin = this.testGoogleLogin.bind(this);
-	    this.loadGoogleApi = this.loadGoogleApi.bind(this);
+	    // this.testLogin = this.testLogin.bind(this);
+	    // this.testLogout = this.testLogout.bind(this);
+	    // this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
+	    // this.responseFacebook = this.responseFacebook.bind(this);
+	    // this.testGoogleLogin = this.testGoogleLogin.bind(this);
+	    // this.loadGoogleApi = this.loadGoogleApi.bind(this);
 	    this.getServerUser = this.getServerUser.bind(this); // PROBABLY NEED TO UNCOMMENT THIS LATER, TODO
 	}
 
 
 	componentDidMount() {
         
-        this.loadGoogleApi();
-        this.loadFbLoginApi();
+        // this.loadGoogleApi();
+        // this.loadFbLoginApi();
     	if (this.props.dispatch) {
         	this.props.dispatch(fetchThreadPosts('http://localhost:8000/quizbank/api/v1/threadposts/?format=json'));
     	
@@ -68,51 +61,54 @@ export class ForumHome extends React.Component {
     Necessary function to load Facebook SDK for social login. called on component did mount 
     taken from the fb developer website
     */
-	loadFbLoginApi() {
+	// loadFbLoginApi() {
 
-		window.fbAsyncInit = function() {
-		  FB.init({
-		    appId      : '186492402430643', // TODO: Put your app ID here
-		    cookie     : true,
-		    xfbml      : true,
-		    version    : 'v6.0'
-		  });
+	// 	window.fbAsyncInit = function() {
+	// 	  FB.init({
+	// 	    appId      : '186492402430643', // TODO: Put your app ID here
+	// 	    cookie     : true,
+	// 	    xfbml      : true,
+	// 	    version    : 'v6.0'
+	// 	  });
 		    
-		  FB.AppEvents.logPageView();   
+	// 	  FB.AppEvents.logPageView();   
 		    
-		};
+	// 	};
 
-		(function(d, s, id){
-		   var js, fjs = d.getElementsByTagName(s)[0];
-		   console.log(s);
-		   console.log("get element bytag name in fb above");
-		   if (d.getElementById(id)) {return;}
-		   js = d.createElement(s); js.id = id;
-		   js.src = "https://connect.facebook.net/en_US/sdk.js";
-		   if (fjs != undefined){
-		   	  fjs.parentNode.insertBefore(js, fjs);
-		   }
+	// 	(function(d, s, id){
+	// 	   var js, fjs = d.getElementsByTagName(s)[0];
+	// 	   console.log(s);
+	// 	   console.log("get element bytag name in fb above");
+	// 	   if (d.getElementById(id)) {return;}
+	// 	   js = d.createElement(s); js.id = id;
+	// 	   js.src = "https://connect.facebook.net/en_US/sdk.js";
+	// 	   if (fjs != undefined){
+	// 	   	  fjs.parentNode.insertBefore(js, fjs);
+	// 	   }
 		   
-		 }(document, 'script', 'facebook-jssdk'));
-    }
+	// 	 }(document, 'script', 'facebook-jssdk'));
+ //    }
 
-    responseFacebook = response => {
-    	console.log(response);
-    	console.log("we just completed the facebook login and this is the callback");
-    	// now we want to see if we can check a django token from the backend
-    	
-    }
+ //    responseFacebook(response) {
+ //    	console.log(response);
+ //    	console.log("we just completed the facebook login and this is the callback");
+ //    	console.log(response["accessToken"]);
+ //    	console.log("access token is above");
+ //    	// now we want to see if we can check a django token from the backend
+ //    	this.props.socialLogin("facebook", response["accessToken"]);
+ //    	console.log("just finished social login call")
+ //    }
 
-    /** 
-	Necessary function that loads google script for social login. called on component did mount
-    **/
-    loadGoogleApi() {
-        const script = document.createElement("script");
-	    script.src = "https://apis.google.com/js/platform.js";
-	    script.async = true;
-	    document.body.appendChild(script);
-	    return document.body // may need to delete this line
-    }
+ //    /** 
+	// Necessary function that loads google script for social login. called on component did mount
+ //    **/
+ //    loadGoogleApi() {
+ //        const script = document.createElement("script");
+	//     script.src = "https://apis.google.com/js/platform.js";
+	//     script.async = true;
+	//     document.body.appendChild(script);
+	//     return document.body // may need to delete this line
+ //    }
 
     // TODO: DELETE AFTER DONE TESTING
     getServerUser() {
@@ -129,46 +125,46 @@ export class ForumHome extends React.Component {
 
 	}
 	// TODO: DELETE AFTER DONE TESTING
-    testLogin() {
-    	console.log("WE HAVE ENTERED THE TEST LOGIN FUNCTION")
-	    FB.getLoginStatus(function(response) {
-			if (response.status === 'connected') {
-			    var accessToken = response.authResponse.accessToken;
-			    console.log("THE ACCESS TOKEN IS HERE!!! HAVE WE FOUND IT ?!?!?! -------");
+  //   testLogin() {
+  //   	console.log("WE HAVE ENTERED THE TEST LOGIN FUNCTION")
+	 //    FB.getLoginStatus(function(response) {
+		// 	if (response.status === 'connected') {
+		// 	    var accessToken = response.authResponse.accessToken;
+		// 	    console.log("THE ACCESS TOKEN IS HERE!!! HAVE WE FOUND IT ?!?!?! -------");
 			    
 
-			    console.log(accessToken);
+		// 	    console.log(accessToken);
 			   
-			} else{
-			console.log("looks like there's no connection")
+		// 	} else{
+		// 	console.log("looks like there's no connection")
 
-			}
+		// 	}
 
-		} );
+		// } );
 
-    }
+  //   }
     // TODO: DELETE AFTER DONE TESTING
-    testGoogleLogin(googleUser) {
-    	this.setState({
-	      googleUser: googleUser
-    	})
-    	console.log("printing the google user!")
-    	console.log(this.state.googleUser);
-    	console.log("why is it empty?");
-    	console.log("printing gapi stuff right below");
-    	let instance = gapi.auth2.getAuthInstance();
-    	console.log(instance.isSignedIn.get());
+    // testGoogleLogin(googleUser) {
+    // 	this.setState({
+	   //    googleUser: googleUser
+    // 	})
+    // 	console.log("printing the google user!")
+    // 	console.log(this.state.googleUser);
+    // 	console.log("why is it empty?");
+    // 	console.log("printing gapi stuff right below");
+    // 	let instance = gapi.auth2.getAuthInstance();
+    // 	console.log(instance.isSignedIn.get());
 
-    }
+    // }
 
-    testGoogleLogout(){
-    	let instance = gapi.auth2.getAuthInstance();
-    	instance.signOut();
-    }
+    // testGoogleLogout(){
+    // 	let instance = gapi.auth2.getAuthInstance();
+    // 	instance.signOut();
+    // }
 
-    testLogout() {
-    	FB.logout()
-    }
+    // testLogout() {
+    // 	FB.logout()
+    // }
     // TODO: DELETE AFTER DONE TESTING
  //    responseFacebook = (response) => {
 	//   console.log(response);
@@ -216,32 +212,10 @@ export class ForumHome extends React.Component {
 	  		let topicToThreadPosts = this.createTopicToThreadPosts(topicToPosts);
 	  		return (
 	  			<>
-	  			  <p>{"HELLO! forum token:" + this.props.forumToken + ' facebook token: ' + this.props.token} </p>
-	  			  <FacebookLogin
-				    appId="186492402430643" 
-				    autoLoad={true}
-				    fields="name,email,picture"
-				    onClick={this.componentClicked}
-				    callback={this.responseFacebook} 
-				  />
-	  			  <button onClick={this.testLogin}> THIS IS THE BUTTON TO PRINT THE TOKEN </button>
-	  			  <button onClick={this.testLogout}> THIS IS THE BUTTON TO LOGOUT </button>
-			  	  <GoogleLogin
-		          clientId="243107404278-152ffjsf5nh5niktchl60vol4i2rg7k6.apps.googleusercontent.com"
-		          buttonText="LOGIN WITH GOOGLE"
-		          onSuccess={(response) => {
-		              console.log(response)
-		              this.testGoogleLogin(response)
-		              console.log("response for google login above")
-
-		  		}}// need to store this login data somewhere
-		          onFailure={(response) => {
-		      console.log(response);}}
-		        />
+	  			  
 		        <button onClick={this.testGoogleLogin}> PRINT GOOGLE TOKEN </button>
 		        <button onClick={this.testGoogleLogout}> Test Google Signout </button>
 		        <button onClick={this.getServerUser}> Get SErver User </button>
-			  	  <ForumNavBar isAuthenticated={this.props.isAuthenticated} />
 			  	  <Switch>
 			  	    <Route exact path="/forum" render={() => <AntForumBoard />}/>
         		  	<Route path="/forum/:threadID" render={(props) => <AntThread threadID={props.match.params.threadID} />} />
@@ -277,6 +251,7 @@ const mapDispatchToProps = dispatch => {
 		onTryAutoSignUp: () => dispatch(actions.authCheckState()),
 		getSocialToken: () => dispatch(actions.getSessionToken()),
 		setServerUser: (myarg) => dispatch(forumUserAuthActions.setUser(myarg)),
+		socialLogin: (socialProvider, accessToken) => dispatch(forumUserAuthActions.authSocialLogin(socialProvider, accessToken)),
 		dispatch
 	}
 }

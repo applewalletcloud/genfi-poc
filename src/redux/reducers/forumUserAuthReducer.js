@@ -47,8 +47,8 @@ export default function forumUserAuthReducer(state = initialState, action){
 		case SET_USER:
 			return {
 				...state,
-				user: action.user
-
+				user: action.user,
+				token: action.token
 			}
 		default:
 			return state
