@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 // styles
-import "./Login.css"
+import "./Login.css";
 
 // The two lines below aren't comments, but global variables for the use of social login
 /* global FB */
@@ -43,7 +43,6 @@ export class NormalLoginForm extends React.Component {
 	    this.fbLogout = this.fbLogout.bind(this);
         this.loadFbLoginApi();
         if (window.localStorage["token"]) {
-        	console.log("are we going into this stupid line in login?")
         	this.props.loginViaLocalStorage(this.props);
         }
 	}

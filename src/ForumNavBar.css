@@ -10,7 +10,11 @@
 	justify-content: flex-start;
 	flex-flow: row;
 	align-items: center;
+	width: 80%;
+	max-width: 750px;
 	min-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .nav-child {

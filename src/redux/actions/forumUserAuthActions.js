@@ -5,7 +5,9 @@ export const AUTH_LOGOUT = 'AUTH_LOGOUT';
 export const SET_USER = 'SET_USER';
 
 
-
+/**
+refreshes/sets our redux state to reflect the user that is logged in or just logged in
+**/
 export const setUser = (token) => {
 	console.log("setUser is being called from the forumUserAuthAction");
 	console.log(token);
@@ -75,7 +77,8 @@ export const authFail = (error) => {
 }
 
 export const logout = () => {
-	localStorage.removeItem('user');
+	console.log("we entered the logout action")
+	localStorage.removeItem('token');
 	localStorage.removeItem('expirationDate');
 	return {
 		type: AUTH_LOGOUT

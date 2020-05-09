@@ -1,13 +1,16 @@
 import React from 'react';
 import './ForumNavBar.css';
 import Button from 'react-bootstrap/Button';
-import * as forumAuthActions from './redux/actions/forumUserAuthActions.js';
 import { connect } from 'react-redux';
 import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
+import * as forumAuthActions from './redux/actions/forumUserAuthActions';
 
 // The two lines below aren't comments, but global variables for the use of social login
 /* global FB */
 /* global gapi */
+
+import { loadAuth2 } from 'gapi-script'
+
 
 // needed for jest tests
 require("regenerator-runtime/runtime"); 
@@ -47,9 +50,25 @@ export class ForumNavBar extends React.Component {
     }
 
 
+    // callback function to log the user out
+    async logoutCallback() {
+      // resets local storage and redux state
+      this.props.logout();
+
+      // log out of google if the user logged in with google
+      let instance = await loadAuth2("243107404278-152ffjsf5nh5niktchl60vol4i2rg7k6.apps.googleusercontent.com", 'profile email');
+      instance.signOut();
+      
+      // logout of fb if the user logged in with facebook
+      FB.getLoginStatus(response => {
+        if (response.status === 'connected') {
+          FB.logout();
+        }
+      });
+      
+    }
+
   render() {
-    console.log(this.props.user)
-    console.log("user props inside forum nav bar is above!")
     return (
       <div className="nav-bar">
           {/** navigation buttons **/}
@@ -58,14 +77,14 @@ export class ForumNavBar extends React.Component {
         {
           window.localStorage["token"]
           ?
-          /** render when we have a user logged in**/
+          /** render logout when we have a user logged in **/
           <>
             <span className="push-right">
-              <Button className="LoginButton" variant="outline-primary">{"Logout"}</Button>
+              <Button className="LoginButton" variant="outline-primary" onClick={() => this.logoutCallback()} >{"Logout"}</Button>
             </span>
           </>
           :
-          /** render when we DO NOT have a user logged in **/
+          /** render login and signup buttons when we DO NOT have a user logged in **/
           <>
             <span className="push-right">
               <Link to="/login"><Button className="LoginButton" variant="outline-primary" >{"Login"}</Button></Link>
@@ -84,4 +103,10 @@ const mapStateToProps = state => ({
   user: state.forumUserAuth.user,
 });
 
-export default connect(mapStateToProps)(ForumNavBar);
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(forumAuthActions.logout()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ForumNavBar);

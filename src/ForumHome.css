@@ -1,0 +1,6 @@
+div.horizontal-gap {
+  float: left;
+  overflow: hidden;
+  height: 15px;
+  width: 0px;
+}

@@ -1,10 +1,12 @@
 import React from 'react';
 
+import "./ForumHome.css";
+
+
 // Components for the Forum SPA
 import AntThread from './AntThread.js';
 import Thread from './Thread.js';
 import ThreadBoard from './ThreadBoard.js';
-import ForumNavBar from './ForumNavBar.js';
 
 // connect allows mapping between react props and redux
 import { connect } from "react-redux";
@@ -41,7 +43,6 @@ export class ForumHome extends React.Component {
       console.log("props is undefined for getsocialtoken");
     }
     if (window.localStorage["token"]) {
-      console.log("are we going into this stupid line in forumhome?")
       this.props.loginViaLocalStorage(window.localStorage);
     }
   }
@@ -130,9 +131,10 @@ export class ForumHome extends React.Component {
     if(this.props.error) {
         return <div>Error! {this.props.error.message}</div>;
       }
-      if(this.props.loading) {
-        return <div>Loading...</div>;
-      }
+    {/** TODO: replace with an image of some sort**/}
+    if(this.props.loading) {
+      return <div>Loading...</div>;
+    }
 
       let allPosts = this.props.threadPosts;
       
@@ -145,9 +147,7 @@ export class ForumHome extends React.Component {
         let topicToThreadPosts = this.createTopicToThreadPosts(topicToPosts);
         return (
           <>
-            <button onClick={this.testGoogleLogin}> PRINT GOOGLE TOKEN </button>
-            <button onClick={this.testGoogleLogout}> Test Google Signout </button>
-            <button onClick={this.getServerUser}> Get SErver User </button>
+            <div class="horizontal-gap"></div>
             <Switch>
               <Route exact path="/forum" render={() => <AntForumBoard />} />
               <Route path="/forum/:threadID" render={(props) => <AntThread threadID={props.match.params.threadID} />} />
