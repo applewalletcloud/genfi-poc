@@ -115,8 +115,8 @@ export const authLogin = (username, password) => {
 				const expirationDate = new Date(new Date().getTime() + 3600*1000);
 				console.log("INSIDE THE AUTHLOGIN FUNCTION, OUR TOKEN IS BELOW")
 				console.log(token["token"]);
-				localStorage.setItem('token', token["token"]);
-				localStorage.setItem('expirationDate', expirationDate);
+				window.localStorage.setItem('token', token["token"]);
+				window.localStorage.setItem('expirationDate', expirationDate);
 				dispatch(authSuccess(token["token"]));
 				dispatch(setAuthTimeout(3600*24));
 				dispatch(setUser(json));
@@ -164,8 +164,10 @@ export const authSocialLogin = (socialProvider, accessToken) => {
 				console.log("json result from auth social login")
 				console.log("INSIDE THE SOCIAL AUTHLOGIN FUNCTION, OUR TOKEN IS BELOW")
 				console.log(json["token"]);
-				localStorage.setItem('token', json["token"]);
-				localStorage.setItem('expirationDate', expirationDate);
+				console.log("ARE WE GETTING TO THIS LINE?! THE LINES BELOW SHOULD BE UPDATING LOCAL STORAGE")
+				window.localStorage.setItem('token', json["token"]);
+				window.localStorage.setItem('expirationDate', expirationDate);
+
 				dispatch(authSuccess(token["token"]));
 				dispatch(setAuthTimeout(3600*24));
 				dispatch(setUser(json))

@@ -28,13 +28,11 @@ const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 
 export class NormalLoginForm extends React.Component {
-
-
 	constructor(props) {
 		super(props);
 		this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
 	    this.responseFacebook = this.responseFacebook.bind(this);
-	    this.testGoogleLogin = this.testGoogleLogin.bind(this);
+	    this.responseGoogle = this.responseGoogle.bind(this);
 		this.state = {
 			user: "not yet updated",
 		}
@@ -44,6 +42,10 @@ export class NormalLoginForm extends React.Component {
 		this.testLogin = this.testLogin.bind(this);
 	    this.fbLogout = this.fbLogout.bind(this);
         this.loadFbLoginApi();
+        if (window.localStorage["token"]) {
+        	console.log("are we going into this stupid line in login?")
+        	this.props.loginViaLocalStorage(this.props);
+        }
 	}
 
   handleSubmit = e => {
@@ -52,6 +54,7 @@ export class NormalLoginForm extends React.Component {
       if (!err) {
         console.log('Need to delete: Received values of form: ', values);
       	const result = this.props.onAuth(values.username, values.password);
+      	window.top.location.href="https://localhost:3000/forum";
       	// TODO: can try a try-catch block to see if a promise is being rejected
       	// ^ note that there's a workaround for this that's currently implemented
       } 
@@ -87,30 +90,24 @@ export class NormalLoginForm extends React.Component {
 		 }(document, 'script', 'facebook-jssdk'));
     }
 
-    responseFacebook(response) {
-    	console.log(response);
-    	console.log("we just completed the facebook login and this is the callback");
-    	console.log(response["accessToken"]);
-    	console.log("access token is above");
+
+    /** 
+	Callback function for when facebook login succeeds
+    **/
+    async responseFacebook(accessToken) {
     	// now we want to see if we can check a django token from the backend
-    	this.props.socialLogin("facebook", response["accessToken"]);
-    	console.log("just finished social login call")
+    	await this.props.socialLogin("facebook", accessToken);
+    	//window.top.location.href="https://localhost:3000/forum";
     }
 
-
-
-        // TODO: DELETE AFTER DONE TESTING
-    testGoogleLogin(googleUser) {
-    	this.setState({
-	      googleUser: googleUser
-    	})
-    	console.log("printing the google user!")
-    	console.log(this.state.googleUser);
-    	console.log("why is it empty?");
-    	console.log("printing gapi stuff right below");
-    	let instance = gapi.auth2.getAuthInstance();
-    	console.log(instance.isSignedIn.get());
-
+    /** 
+	Callback function for when google login succeeds
+    **/
+    async responseGoogle(accessToken) {
+    	console.log(accessToken)
+    	// now we want to see if we can check a django token from the backend
+    	await this.props.socialLogin("google", accessToken);
+    	//window.top.location.href="https://localhost:3000/forum";
     }
 
     testLogin() {
@@ -141,7 +138,7 @@ export class NormalLoginForm extends React.Component {
     /**
 	Calls the FB api to create a window for social login
     **/
-    facebookLogin(){
+    facebookLogin(successCallback){
 
     	// call the fb login function
     	// if the user is already logged in, they will log in with the current account
@@ -149,9 +146,8 @@ export class NormalLoginForm extends React.Component {
 
     		// if the user logs in via fb
 		    if (response.authResponse) {
-		     	// redirect to the forum home page
-                window.top.location.href="https://localhost:3000/forum";
-                   
+		    	// sign in with social action
+		    	successCallback(response.authResponse["accessToken"])
 		    } else {
 		    	// I believe the else case is covered gracefully by the api
 		     	console.log('User cancelled login or did not fully authorize.');
@@ -170,7 +166,7 @@ export class NormalLoginForm extends React.Component {
     /**
     Loads the google api then prompts the user to log in
     **/
-    async googleLogin() {
+    async googleLogin(successCallback) {
     	// load the google api to call sign in
     	// we use the await approach to avoid getting a null object for gapi 
 		let instance = await loadAuth2("243107404278-152ffjsf5nh5niktchl60vol4i2rg7k6.apps.googleusercontent.com", 'profile email');
@@ -179,7 +175,7 @@ export class NormalLoginForm extends React.Component {
 		instance.signIn()
 		.then((res) => {
 			// in this case we've logged in, we want to redirect to the main forum page
-			window.top.location.href="https://localhost:3000/forum";
+			successCallback(res["uc"]["access_token"])
 		})
 
 		// i believe the api handles the failure cases and we don't want to change webpages should the sign in fail
@@ -243,11 +239,11 @@ export class NormalLoginForm extends React.Component {
 	      </Form>
 	      <div className="center-items"> OR </div>
 	      <div className="social-login-div center-items" >
-		        <Button type="primary" htmlType="submit" id="test" onClick={this.facebookLogin}>
+		        <Button type="primary" htmlType="submit" id="test" onClick={() => this.facebookLogin(this.responseFacebook)}>
 			      	ENTER WITH FACEBOOK!
 			    </Button>
 			    <span class="divider"/>
-		        <Button type="primary" htmlType="submit" onClick={this.googleLogin}>
+		        <Button type="primary" htmlType="submit" onClick={() => this.googleLogin(this.responseGoogle)}>
 			      	ENTER WITH GOOGLE!
 			    </Button>
 		    </div>
@@ -274,7 +270,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onAuth: (username, password) => dispatch(actions.authLogin(username,password))
+		onAuth: (username, password) => dispatch(actions.authLogin(username,password)),
+		socialLogin: (socialProvider, accessToken) => dispatch(actions.authSocialLogin(socialProvider, accessToken)),
+		loginViaLocalStorage: (token) => dispatch(actions.setUser(token)),
 	}
 }
 

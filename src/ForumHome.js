@@ -14,246 +14,174 @@ import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
 
 // import actions from redux states
 import { fetchThreadPosts } from "./redux/actions/threadPostActions.js";
-import * as actions from './redux/actions/facebookUserAuthActions.js';
 import * as forumUserAuthActions from './redux/actions//forumUserAuthActions.js'
-
-
-
 
 import AntForumBoard from './AntForumBoard.js'
 
 export class ForumHome extends React.Component {
-	constructor(props) {
-	    super(props);
-	    // this.testLogin = this.testLogin.bind(this);
-	    // this.testLogout = this.testLogout.bind(this);
-	    // this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
-	    // this.responseFacebook = this.responseFacebook.bind(this);
-	    // this.testGoogleLogin = this.testGoogleLogin.bind(this);
-	    // this.loadGoogleApi = this.loadGoogleApi.bind(this);
-	    this.getServerUser = this.getServerUser.bind(this); // PROBABLY NEED TO UNCOMMENT THIS LATER, TODO
-	}
+  constructor(props) {
+    super(props);
+    this.getServerUser = this.getServerUser.bind(this); // PROBABLY NEED TO UNCOMMENT THIS LATER, TODO
+  }
 
-
-	componentDidMount() {
-        
-        // this.loadGoogleApi();
-        // this.loadFbLoginApi();
-    	if (this.props.dispatch) {
-        	this.props.dispatch(fetchThreadPosts('http://localhost:8000/quizbank/api/v1/threadposts/?format=json'));
-    	
-        } else {
-        	console.log("props is undefined for dispatch in ForumHome")
-        }
-        if (this.props.onTryAutoSignUp){
-        	this.props.onTryAutoSignUp();
-        } else {
-        	console.log("props is undefined for tryautosignup in forumhome")
-        }
-        if (this.props.getSocialToken){
-        	this.props.getSocialToken();
-        } else {
-        	console.log("props is undefined for getsocialtoken")
-        }
+  componentDidMount() {
+    if (this.props.dispatch) {
+      this.props.dispatch(fetchThreadPosts('http://localhost:8000/quizbank/api/v1/threadposts/?format=json'));
+    } else {
+      console.log("props is undefined for dispatch in ForumHome");
     }
+    if (this.props.onTryAutoSignUp) {
+      this.props.onTryAutoSignUp();
+    } else {
+      console.log("props is undefined for tryautosignup in forumhome");
+    }
+    if (this.props.getSocialToken) {
+      this.props.getSocialToken();
+    } else {
+      console.log("props is undefined for getsocialtoken");
+    }
+    if (window.localStorage["token"]) {
+      console.log("are we going into this stupid line in forumhome?")
+      this.props.loginViaLocalStorage(window.localStorage);
+    }
+  }
 
-    /*
-    Necessary function to load Facebook SDK for social login. called on component did mount 
-    taken from the fb developer website
-    */
-	// loadFbLoginApi() {
-
-	// 	window.fbAsyncInit = function() {
-	// 	  FB.init({
-	// 	    appId      : '186492402430643', // TODO: Put your app ID here
-	// 	    cookie     : true,
-	// 	    xfbml      : true,
-	// 	    version    : 'v6.0'
-	// 	  });
-		    
-	// 	  FB.AppEvents.logPageView();   
-		    
-	// 	};
-
-	// 	(function(d, s, id){
-	// 	   var js, fjs = d.getElementsByTagName(s)[0];
-	// 	   console.log(s);
-	// 	   console.log("get element bytag name in fb above");
-	// 	   if (d.getElementById(id)) {return;}
-	// 	   js = d.createElement(s); js.id = id;
-	// 	   js.src = "https://connect.facebook.net/en_US/sdk.js";
-	// 	   if (fjs != undefined){
-	// 	   	  fjs.parentNode.insertBefore(js, fjs);
-	// 	   }
-		   
-	// 	 }(document, 'script', 'facebook-jssdk'));
- //    }
-
- //    responseFacebook(response) {
- //    	console.log(response);
- //    	console.log("we just completed the facebook login and this is the callback");
- //    	console.log(response["accessToken"]);
- //    	console.log("access token is above");
- //    	// now we want to see if we can check a django token from the backend
- //    	this.props.socialLogin("facebook", response["accessToken"]);
- //    	console.log("just finished social login call")
- //    }
-
- //    /** 
-	// Necessary function that loads google script for social login. called on component did mount
- //    **/
- //    loadGoogleApi() {
- //        const script = document.createElement("script");
-	//     script.src = "https://apis.google.com/js/platform.js";
-	//     script.async = true;
-	//     document.body.appendChild(script);
-	//     return document.body // may need to delete this line
- //    }
-
-    // TODO: DELETE AFTER DONE TESTING
-    getServerUser() {
-		console.log("getserveruser button results below!!!!!")
-		if (this.props.token !== undefined){
-			console.log("we enter since forumtoken isn't undefined")
-			console.log(this.props.token)
-			console.log("the fb jwt is above")
-			this.props.setServerUser(this.props.token);
-		} else{
-			console.log("looks like the token is undefined, so we aren't calling the action we need")
-		}
-		
-
-	}
-	// TODO: DELETE AFTER DONE TESTING
+  // TODO: DELETE AFTER DONE TESTING
+  getServerUser() {
+    console.log("getserveruser button results below!!!!!");
+    if (this.props.token !== undefined){
+      console.log("we enter since forumtoken isn't undefined");
+      console.log(this.props.token);
+      console.log("the fb jwt is above");
+      this.props.setServerUser(this.props.token);
+    } else{
+      console.log("looks like the token is undefined, so we aren't calling the action we need");
+    }
+  }
+  // TODO: DELETE AFTER DONE TESTING
   //   testLogin() {
-  //   	console.log("WE HAVE ENTERED THE TEST LOGIN FUNCTION")
-	 //    FB.getLoginStatus(function(response) {
-		// 	if (response.status === 'connected') {
-		// 	    var accessToken = response.authResponse.accessToken;
-		// 	    console.log("THE ACCESS TOKEN IS HERE!!! HAVE WE FOUND IT ?!?!?! -------");
-			    
+  //    console.log("WE HAVE ENTERED THE TEST LOGIN FUNCTION")
+   //    FB.getLoginStatus(function(response) {
+    //  if (response.status === 'connected') {
+    //      var accessToken = response.authResponse.accessToken;
+    //      console.log("THE ACCESS TOKEN IS HERE!!! HAVE WE FOUND IT ?!?!?! -------");
+          
 
-		// 	    console.log(accessToken);
-			   
-		// 	} else{
-		// 	console.log("looks like there's no connection")
+    //      console.log(accessToken);
+         
+    //  } else{
+    //  console.log("looks like there's no connection")
 
-		// 	}
+    //  }
 
-		// } );
+    // } );
 
   //   }
     // TODO: DELETE AFTER DONE TESTING
     // testGoogleLogin(googleUser) {
-    // 	this.setState({
-	   //    googleUser: googleUser
-    // 	})
-    // 	console.log("printing the google user!")
-    // 	console.log(this.state.googleUser);
-    // 	console.log("why is it empty?");
-    // 	console.log("printing gapi stuff right below");
-    // 	let instance = gapi.auth2.getAuthInstance();
-    // 	console.log(instance.isSignedIn.get());
+    //  this.setState({
+     //    googleUser: googleUser
+    //  })
+    //  console.log("printing the google user!")
+    //  console.log(this.state.googleUser);
+    //  console.log("why is it empty?");
+    //  console.log("printing gapi stuff right below");
+    //  let instance = gapi.auth2.getAuthInstance();
+    //  console.log(instance.isSignedIn.get());
 
     // }
 
     // testGoogleLogout(){
-    // 	let instance = gapi.auth2.getAuthInstance();
-    // 	instance.signOut();
+    //  let instance = gapi.auth2.getAuthInstance();
+    //  instance.signOut();
     // }
 
     // testLogout() {
-    // 	FB.logout()
+    //  FB.logout()
     // }
     // TODO: DELETE AFTER DONE TESTING
  //    responseFacebook = (response) => {
-	//   console.log(response);
-	// }
-	 
-	createTopicToPostsObject(allPosts) {
-		let topicToPosts = Object.create(null);
-		allPosts.forEach(function (post) {
-  			topicToPosts[post["thread_topic"]] = topicToPosts[post["thread_topic"]] || [];
-  			topicToPosts[post["thread_topic"]].push(post)
-  		});
-  		return topicToPosts;
-	}
+  //   console.log(response);
+  // }
+   
+  createTopicToPostsObject(allPosts) {
+    let topicToPosts = Object.create(null);
+    allPosts.forEach(function (post) {
+      topicToPosts[post["thread_topic"]] = topicToPosts[post["thread_topic"]] || [];
+      topicToPosts[post["thread_topic"]].push(post)
+    });
+    return topicToPosts;
+  }
 
-	createTopicToThreadPosts(topicToPosts) {
-		let i;
-		let topicToThreadPosts = [];
-  		// TODO change this later, i don't like it appended to the end of the array :(
-  		for (i=1;i<=Object.keys(topicToPosts).length;i++){
-  			console.log("do we do anything here?")
-  			//topicToPosts[i].push(<Thread posts={topicToPosts[i]} title={"Temp Title"}/>);
-  			console.log(this.props.match.params.threadID)
-  			topicToThreadPosts.push(<Thread posts={topicToPosts[i]} title={"Temp Title"} threadID={i-1}/>);
-  		}
-  		return topicToThreadPosts;
-	}
+  createTopicToThreadPosts(topicToPosts) {
+    let i;
+    let topicToThreadPosts = [];
+      // TODO change this later, i don't like it appended to the end of the array :(
+      for (i=1;i<=Object.keys(topicToPosts).length;i++){
+        console.log("do we do anything here?")
+        //topicToPosts[i].push(<Thread posts={topicToPosts[i]} title={"Temp Title"}/>);
+        console.log(this.props.match.params.threadID)
+        topicToThreadPosts.push(<Thread posts={topicToPosts[i]} title={"Temp Title"} threadID={i-1}/>);
+      }
+      return topicToThreadPosts;
+  }
 
-	render() {
-		if(this.props.error){
-  			return <div>Error! {this.props.error.message}</div>;
-	  	}
-	  	if(this.props.loading){
-	  		return <div>Loading...</div>;
-	  	}
+  render() {
+    if(this.props.error) {
+        return <div>Error! {this.props.error.message}</div>;
+      }
+      if(this.props.loading) {
+        return <div>Loading...</div>;
+      }
 
-	  	let allPosts = this.props.threadPosts;
-	  	
-	  	
-	  	if (allPosts == undefined) {
-	  		console.log("error, seems we're getting empty props for posts");
-	  	}
-	  	if (allPosts != undefined && allPosts.length > 0 ) {
-	  		// CREATE TOPIC TO POSTS OBJECT FUNCTUON CALL SHOULD GO HERE
-	  		let topicToPosts = this.createTopicToPostsObject(allPosts);
-	  		let topicToThreadPosts = this.createTopicToThreadPosts(topicToPosts);
-	  		return (
-	  			<>
-	  			  
-		        <button onClick={this.testGoogleLogin}> PRINT GOOGLE TOKEN </button>
-		        <button onClick={this.testGoogleLogout}> Test Google Signout </button>
-		        <button onClick={this.getServerUser}> Get SErver User </button>
-			  	  <Switch>
-			  	    <Route exact path="/forum" render={() => <AntForumBoard />}/>
-        		  	<Route path="/forum/:threadID" render={(props) => <AntThread threadID={props.match.params.threadID} />} />
-
-        		  </Switch>
-
-			    </>
-	  		);
-	  	}
-	  	else {
-	  		return (
-			  	<>
-			  	  <h1> Data wasn't retreived properly</h1>
-			    </>
-	    	);
-	  	}	
-	  
-	}
+      let allPosts = this.props.threadPosts;
+      
+      if (allPosts == undefined) {
+        console.log("error, seems we're getting empty props for posts");
+      }
+      if (allPosts != undefined && allPosts.length > 0) {
+        // CREATE TOPIC TO POSTS OBJECT FUNCTUON CALL SHOULD GO HERE
+        let topicToPosts = this.createTopicToPostsObject(allPosts);
+        let topicToThreadPosts = this.createTopicToThreadPosts(topicToPosts);
+        return (
+          <>
+            <button onClick={this.testGoogleLogin}> PRINT GOOGLE TOKEN </button>
+            <button onClick={this.testGoogleLogout}> Test Google Signout </button>
+            <button onClick={this.getServerUser}> Get SErver User </button>
+            <Switch>
+              <Route exact path="/forum" render={() => <AntForumBoard />} />
+              <Route path="/forum/:threadID" render={(props) => <AntThread threadID={props.match.params.threadID} />} />
+            </Switch>
+          </>
+        );
+      }
+      else {
+        return (
+          <>
+            <h1>Data wasn't retreived properly</h1>
+          </>
+        );
+      } 
+    
+  }
 }
 
-const mapStateToProps = state => ({
-	isAuthenticated: state.forumUserAuth.token !== null,
-	testState: state.forumUserAuth.testState,
-	threadPosts: state.threadPosts.threadPosts,
-	loading: state.threadPosts.loading,
-	error: state.threadPosts.error,
-	token: state.facebookUserAuth.token,
-	forumToken: state.forumUserAuth.token
-})
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.forumUserAuth.token !== null,
+  testState: state.forumUserAuth.testState,
+  threadPosts: state.threadPosts.threadPosts,
+  loading: state.threadPosts.loading,
+  error: state.threadPosts.error,
+  forumToken: state.forumUserAuth.token,
+});
 
-const mapDispatchToProps = dispatch => {
-	return {
-		onTryAutoSignUp: () => dispatch(actions.authCheckState()),
-		getSocialToken: () => dispatch(actions.getSessionToken()),
-		setServerUser: (myarg) => dispatch(forumUserAuthActions.setUser(myarg)),
-		socialLogin: (socialProvider, accessToken) => dispatch(forumUserAuthActions.authSocialLogin(socialProvider, accessToken)),
-		dispatch
-	}
-}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setServerUser: (myarg) => dispatch(forumUserAuthActions.setUser(myarg)),
+    socialLogin: (socialProvider, accessToken) => dispatch(forumUserAuthActions.authSocialLogin(socialProvider, accessToken)),
+    loginViaLocalStorage: (token) => dispatch(forumUserAuthActions.setUser(token)),
+    dispatch,
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForumHome);
