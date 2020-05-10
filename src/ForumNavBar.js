@@ -76,8 +76,8 @@ export class ForumNavBar extends React.Component {
     return (
       <div className="nav-bar">
         {/** navigation buttons **/}
-        <Link to="/forum"><div className="nav-child">Main</div></Link>
-        <Link to="/myProfile"><div className="nav-child">My Profile</div></Link>
+          <Link to="/forum"><div className="nav-child">Main</div></Link>
+          <Link to="/myProfile"><div className="nav-child">My Profile</div></Link>
         {
           window.localStorage["token"]
           ?

@@ -61,6 +61,7 @@ test('canLoginWithFB?', async () => {
 
   // fill in user login info
   await popup.waitForSelector('input[id=email]');
+  // note that you'll need to fill our own fake credentials here!
   await popup.type('input[id=email]', 'qntvpafhpm_1588875079@tfbnw.net ');
   await popup.type('input[id=pass]', 'harryPassword1');
   await popup.keyboard.press('Enter');

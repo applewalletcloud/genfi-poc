@@ -1,0 +1,11 @@
+.signup-page-container {
+	width: 80%;
+	max-width: 750px;
+	min-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.center-items {
+	text-align: center
+}

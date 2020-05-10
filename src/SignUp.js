@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import * as actions from './redux/actions/forumUserAuthActions.js';
+import "./SignUp.css"
 
 import {
   Form,
@@ -74,7 +75,7 @@ class RegistrationForm extends React.Component {
     }
 
     return (
-      <>
+      <div class="signup-page-container">
       {this.props.error}
       <Form onSubmit={this.handleSubmit}>
 
@@ -125,18 +126,26 @@ class RegistrationForm extends React.Component {
             ],
           })(<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" onBlur={this.handleConfirmBlur} />)}
         </Form.Item>
-    }
+    
         
-		<Form.Item>
-          <Button type="primary" htmlType="submit">
-          	SignUp
-          </Button> 
-          Or
-          <NavLink to="/login/"> login </NavLink>
-        </Form.Item>
+		  <Form.Item className="center-items">
+        <Button type="primary" htmlType="submit">
+        	Submit
+        </Button> 
+      </Form.Item>
 
       </Form>
-      </>
+      <div className="center-items"> OR </div>
+            <div className="social-login-div center-items" >
+              <Button type="primary" htmlType="submit" id="facebook-login-button" onClick={() => this.facebookLogin(this.responseFacebook)}>
+                SIGN UP WITH FACEBOOK!
+            </Button>
+            <span class="divider"/>
+              <Button type="primary" htmlType="submit" id="google-login-button" onClick={() => this.googleLogin(this.responseGoogle)}>
+                SIGN UP WITH GOOGLE!
+            </Button>
+          </div>
+      </div>
     );
   }
 }
