@@ -31,7 +31,8 @@
     "redux": "^4.0.4",
     "redux-mock-store": "^1.5.4",
     "redux-thunk": "^2.3.0",
-    "sinon": "^9.0.2"
+    "sinon": "^9.0.2",
+    "ts-jest": "^25.5.1"
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",
@@ -79,11 +80,16 @@
     ],
     "transform": {
       "^.+\\.js$": "babel-jest",
-      ".+\\.(css|styl|less|sass|scss)$": "jest-transform-css"
+      "^.+\\.jsx?$": "babel-jest",
+      ".+\\.(css|styl|less|sass|scss)$": "jest-transform-css",
+      "^.+\\.ts?$": "ts-jest"
     },
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "../src/__mocks__/fileMock.js"
-    }
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!gapi-script).+\\.js$"
+    ]
   },
   "plugins": [
     [

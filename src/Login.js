@@ -53,7 +53,7 @@ export class NormalLoginForm extends React.Component {
       if (!err) {
         console.log('Need to delete: Received values of form: ', values);
       	const result = this.props.onAuth(values.username, values.password);
-      	window.top.location.href="https://localhost:3000/forum";
+      	// window.top.location.href="https://localhost:3000/forum";
       	// TODO: can try a try-catch block to see if a promise is being rejected
       	// ^ note that there's a workaround for this that's currently implemented
       } 
@@ -238,11 +238,11 @@ export class NormalLoginForm extends React.Component {
 	      </Form>
 	      <div className="center-items"> OR </div>
 	      <div className="social-login-div center-items" >
-		        <Button type="primary" htmlType="submit" id="test" onClick={() => this.facebookLogin(this.responseFacebook)}>
+		        <Button type="primary" htmlType="submit" id="facebook-login-button" onClick={() => this.facebookLogin(this.responseFacebook)}>
 			      	ENTER WITH FACEBOOK!
 			    </Button>
 			    <span class="divider"/>
-		        <Button type="primary" htmlType="submit" onClick={() => this.googleLogin(this.responseGoogle)}>
+		        <Button type="primary" htmlType="submit" id="google-login-button" onClick={() => this.googleLogin(this.responseGoogle)}>
 			      	ENTER WITH GOOGLE!
 			    </Button>
 		    </div>

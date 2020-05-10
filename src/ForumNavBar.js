@@ -1,16 +1,21 @@
 import React from 'react';
+
+// styles
 import './ForumNavBar.css';
 import Button from 'react-bootstrap/Button';
-import { connect } from 'react-redux';
-import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
-import * as forumAuthActions from './redux/actions/forumUserAuthActions';
 
+// react router
+import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
+
+// social login
 // The two lines below aren't comments, but global variables for the use of social login
 /* global FB */
 /* global gapi */
+import { loadAuth2 } from 'gapi-script';
 
-import { loadAuth2 } from 'gapi-script'
-
+// redux
+import { connect } from 'react-redux';
+import * as forumAuthActions from './redux/actions/forumUserAuthActions';
 
 // needed for jest tests
 require("regenerator-runtime/runtime"); 
@@ -50,30 +55,29 @@ export class ForumNavBar extends React.Component {
     }
 
 
-    // callback function to log the user out
-    async logoutCallback() {
-      // resets local storage and redux state
-      this.props.logout();
+  // callback function to log the user out
+  async logoutCallback() {
+    // resets local storage and redux state
+    this.props.logout();
 
-      // log out of google if the user logged in with google
-      let instance = await loadAuth2("243107404278-152ffjsf5nh5niktchl60vol4i2rg7k6.apps.googleusercontent.com", 'profile email');
-      instance.signOut();
-      
-      // logout of fb if the user logged in with facebook
-      FB.getLoginStatus(response => {
-        if (response.status === 'connected') {
-          FB.logout();
-        }
-      });
-      
-    }
+    // log out of google if the user logged in with google
+    const instance = await loadAuth2('243107404278-152ffjsf5nh5niktchl60vol4i2rg7k6.apps.googleusercontent.com', 'profile email');
+    instance.signOut();
+
+    // logout of fb if the user logged in with facebook
+    FB.getLoginStatus((response) => {
+      if (response.status === 'connected') {
+        FB.logout();
+      }
+    });
+  }
 
   render() {
     return (
       <div className="nav-bar">
-          {/** navigation buttons **/}
-          <Link to="/forum"><div className="nav-child">Main</div></Link>
-          <Link to="/myProfile"><div className="nav-child">My Profile</div></Link>
+        {/** navigation buttons **/}
+        <Link to="/forum"><div className="nav-child">Main</div></Link>
+        <Link to="/myProfile"><div className="nav-child">My Profile</div></Link>
         {
           window.localStorage["token"]
           ?
