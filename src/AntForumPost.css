@@ -1,0 +1,41 @@
+.left-margin {
+	width: 100px;
+	height: 100%;
+    display:inline-block;
+    float: left;
+}
+
+.card-holder {
+	width: 100%;
+	float:right;
+	display: inline-block;
+}
+
+.post-container {
+	width: 80%;
+	max-width: 750px;
+	min-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.avatar {
+	border-width: 20px;
+}
+
+
+.button {
+	font-weight: bold;
+}
+
+.button:hover {
+	cursor: pointer;
+}
+
+.description-text {
+	color: black;
+}
+
+.username-text {
+	color: blue;
+}

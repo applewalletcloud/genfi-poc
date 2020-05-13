@@ -18,8 +18,6 @@ import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
 import * as actions from './redux//actions/forumUserAuthActions.js';
 
-import {$, jQuery} from 'jquery';
-
 // UI imports
 import { Form, Icon, Input, Button, Spin } from 'antd';
 
@@ -31,20 +29,19 @@ export class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
-      this.responseFacebook = this.responseFacebook.bind(this);
-      this.responseGoogle = this.responseGoogle.bind(this);
+    this.responseFacebook = this.responseFacebook.bind(this);
+    this.responseGoogle = this.responseGoogle.bind(this);
     this.state = {
       user: "not yet updated",
     }
   }
 
   componentDidMount(){
-    this.testLogin = this.testLogin.bind(this);
-      this.fbLogout = this.fbLogout.bind(this);
-        this.loadFbLoginApi();
-        if (window.localStorage["token"]) {
-          this.props.loginViaLocalStorage(this.props);
-        }
+    this.fbLogout = this.fbLogout.bind(this);
+    this.loadFbLoginApi();
+    if (window.localStorage["token"]) {
+      this.props.loginViaLocalStorage(this.props);
+    }
   }
 
   handleSubmit = e => {
@@ -91,7 +88,7 @@ export class NormalLoginForm extends React.Component {
 
 
     /** 
-  Callback function for when facebook login succeeds
+      Callback function for when facebook login succeeds
     **/
     async responseFacebook(accessToken) {
       // now we want to see if we can check a django token from the backend
@@ -100,37 +97,21 @@ export class NormalLoginForm extends React.Component {
     }
 
     /** 
-  Callback function for when google login succeeds
+      Callback function for when google login succeeds
     **/
     async responseGoogle(accessToken) {
       console.log(accessToken)
-      // now we want to see if we can check a django token from the backend
+      // Log in with google via access token 
       await this.props.socialLogin("google", accessToken);
       //window.top.location.href="https://localhost:3000/forum";
     }
 
-    testLogin() {
-      console.log("WE HAVE ENTERED THE TEST LOGIN FUNCTION")
-      FB.getLoginStatus(function(response) {
-      if (response.status === 'connected') {
-          var accessToken = response.authResponse.accessToken;
-          console.log("THE ACCESS TOKEN IS HERE!!! HAVE WE FOUND IT ?!?!?! -------");
-          
 
-          console.log(accessToken);
-         
-      } else{
-      console.log("looks like there's no connection")
 
-      }
-
-    } );
-  }
-
-  /**
-  Logs user out of fb
-  **/
-  fbLogout() {
+    /**
+    Logs user out of fb
+    **/
+    fbLogout() {
       FB.logout()
     }
 

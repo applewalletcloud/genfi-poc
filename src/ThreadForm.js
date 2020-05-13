@@ -1,6 +1,8 @@
 import React from "react";
 import "./ThreadForm.css";
 import { Form } from 'react-bootstrap';
+import { Button } from 'antd';
+
 
 class ThreadForm extends React.Component{
 	constructor(props) {
@@ -41,10 +43,9 @@ class ThreadForm extends React.Component{
 		return (
 			<>
 				<div className="text-area-border">
-				<Form onSubmit={this.handleSubmit} className = "ant-table">
-				  <Form.Control as="textarea" className="text-form" placeholder="Input your thoughts here!" rows="6" onChange={this.handleChange}/>
-				  
-				  <input className="text-area-button"type="submit" value="Submit" />
+				<Form  onSubmit={this.handleSubmit} >
+				  <Form.Control as="textarea" className="text-form" placeholder="Input your thoughts here!" rows="3" onChange={this.handleChange}/>
+				  <Button className="text-area-button" onClick={this.handleSubmit}>Submit</Button>
 				  
 				</Form>
 				</div>

@@ -10,7 +10,9 @@ import { Provider } from 'react-redux';
 import store from './redux/store/store.js'
 import { Route, Link, Switch, BrowserRouter as Router } from 'react-router-dom';
 
+import ForumComments from './ForumComments.js'
 
+import AntForumPost from './AntForumPost.js';
 ReactDOM.render(
   <Provider store={store}>
     <link
@@ -25,6 +27,7 @@ ReactDOM.render(
         <Route path="/forum" component={ForumHome} />
         <Route path="/login" component={Login} />
         <Route exact path="/signup" component={SignUp} />
+        <Route exact path="/forumcomments" component={ForumComments} />
       </div>
     </Router>
   </Provider>, 

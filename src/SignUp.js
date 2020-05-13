@@ -4,6 +4,12 @@ import { NavLink } from 'react-router-dom';
 import * as actions from './redux/actions/forumUserAuthActions.js';
 import "./SignUp.css"
 
+// The two lines below aren't comments, but global variables for the use of social login
+/* global FB */
+/* global gapi */
+
+import { loadAuth2 } from 'gapi-script'
+
 import {
   Form,
   Input,
@@ -21,12 +27,126 @@ import {
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
 
-
 class RegistrationForm extends React.Component {
-  state = {
-    confirmDirty: false,
-    autoCompleteResult: [],
-  };
+  
+  constructor(props) {
+    super(props);
+    this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
+    this.responseFacebook = this.responseFacebook.bind(this);
+    this.responseGoogle = this.responseGoogle.bind(this);
+    this.state = {
+      user: "not yet updated",
+      confirmDirty: false,
+      autoCompleteResult: [],
+    }
+  }
+
+  componentDidMount(){
+    this.fbLogout = this.fbLogout.bind(this);
+    this.loadFbLoginApi();
+    if (window.localStorage["token"]) {
+      this.props.loginViaLocalStorage(this.props);
+    }
+  }
+
+  loadFbLoginApi() {
+      console.log("we re loading the fb api in the login component")
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '186492402430643', // TODO: Put your app ID here
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v6.0'
+      });
+        
+      FB.AppEvents.logPageView();   
+        
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       console.log(s);
+       console.log("get element bytag name in fb above");
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       if (fjs != undefined){
+          fjs.parentNode.insertBefore(js, fjs);
+       }
+       
+     }(document, 'script', 'facebook-jssdk'));
+    }
+
+    /**
+  Calls the FB api to create a window for social login
+    **/
+    facebookLogin(successCallback){
+
+      // call the fb login function
+      // if the user is already logged in, they will log in with the current account
+      FB.login(function(response) {
+
+        // if the user logs in via fb
+        if (response.authResponse) {
+          // sign in with social action
+          successCallback(response.authResponse["accessToken"])
+        } else {
+          // I believe the else case is covered gracefully by the api
+          console.log('User cancelled login or did not fully authorize.');
+        }
+    })
+    }
+
+    /** 
+  Callback function for when facebook login succeeds
+    **/
+    async responseFacebook(accessToken) {
+      // now we want to see if we can check a django token from the backend
+      await this.props.socialLogin("facebook", accessToken);
+      //window.top.location.href="https://localhost:3000/forum";
+    }
+
+    /**
+  Logs user out of fb
+  **/
+  fbLogout() {
+    FB.logout()
+  }
+
+
+  /**
+    Loads the google api then prompts the user to log in
+    **/
+    async googleLogin(successCallback) {
+      // load the google api to call sign in
+      // we use the await approach to avoid getting a null object for gapi 
+    let instance = await loadAuth2("243107404278-152ffjsf5nh5niktchl60vol4i2rg7k6.apps.googleusercontent.com", 'profile email');
+    
+    // opens the sign in options for the client
+    instance.signIn()
+    .then((res) => {
+      // in this case we've logged in, we want to redirect to the main forum page
+      successCallback(res["uc"]["access_token"])
+    })
+
+    // i believe the api handles the failure cases and we don't want to change webpages should the sign in fail
+            
+    }
+
+    /** 
+  Callback function for when google login succeeds
+    **/
+    async responseGoogle(accessToken) {
+      console.log(accessToken)
+      // now we want to see if we can check a django token from the backend
+      await this.props.socialLogin("google", accessToken);
+      //window.top.location.href="https://localhost:3000/forum";
+    }
+
+  // state = {
+  //   confirmDirty: false,
+  //   autoCompleteResult: [],
+  // };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -68,8 +188,8 @@ class RegistrationForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    if (this.props.token == "success"){
-      console.log("we enter our sign up page's success state and our token is: ");
+    if (this.props.token){
+      console.log("we enter here and our token is: ");
       console.log(this.props.token);
       this.props.history.push('/forum');
     }
@@ -161,7 +281,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onAuth: (username, email, password1, password2) => dispatch(actions.authSignUp(username,email,password1,password2))
+		onAuth: (username, email, password1, password2) => dispatch(actions.authSignUp(username,email,password1,password2)),
+    socialLogin: (socialProvider, accessToken) => dispatch(actions.authSocialLogin(socialProvider, accessToken)),
+    loginViaLocalStorage: (token) => dispatch(actions.setUser(token)),
 	}
 }
 
