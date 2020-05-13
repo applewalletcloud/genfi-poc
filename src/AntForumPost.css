@@ -12,7 +12,7 @@
 }
 
 .post-container {
-	width: 80%;
+	width: 100%;
 	max-width: 750px;
 	min-width: 400px;
 	margin-left: auto;
@@ -38,4 +38,10 @@
 
 .username-text {
 	color: blue;
+	font-size: 16px;
+	font-weight: 500;
+}
+
+.title {
+	font-size: 30px;
 }

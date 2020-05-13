@@ -4,8 +4,14 @@ import ReactDOM from 'react-dom';
 import './AntForumPost.css';
 import { Card, Avatar, Form, Icon, Input, Button, Spin } from 'antd';
 import ThreadForm from "./ThreadForm.js"
-const { Meta } = Card;
 
+
+// redux
+import { connect } from 'react-redux';
+import * as forumAuthActions from './redux/actions/forumUserAuthActions';
+
+
+const { Meta } = Card;
 
 class AntForumPost extends React.Component {
   constructor(props) {
@@ -18,7 +24,9 @@ class AntForumPost extends React.Component {
 
 
   componentDidMount(){
-    console.log("ant forum post component did mount");
+    if (window.localStorage["token"]) {
+      this.props.loginViaLocalStorage(window.localStorage);
+    }
   }
 
   /**
@@ -27,13 +35,58 @@ class AntForumPost extends React.Component {
   replyButtonClick() {
     this.setState({ replyClicked: !this.state.replyClicked});
   }
-
-
   render() {
-    console.log(this.props.data);
-    console.log(this.props)
-    console.log("printing props above")
-    let styleObject1 = { 
+    // instantiate variables used for the forum post
+    let descriptionObject;
+    let avatarSize;
+    let postStylePadding;
+    let title;
+    let antForumForm = ""
+    let antForumButton = ""
+
+    // change visibility of comments and buttons if the user is logged in
+    if (this.props.user) {
+      antForumForm = <ThreadForm />
+      antForumButton = <div className="button" onClick={this.replyButtonClick}>REPLY</div>
+    }
+
+    // sets attributes for the post if the post is of type "main post"
+    if (this.props.data["isMainPost"]) {
+      postStylePadding = 0// the main post isn't indented
+      avatarSize = 100;
+      descriptionObject = (
+        <div>
+          <span className="username-text">{this.props.data["username"]}</span> 
+          <br />
+          <br />
+          <span className="description-text title-text">
+          {this.props.data["comment"]}
+          </span>
+        </div>
+      );
+      title = <span className="title">{this.props.data["title"]}</span>
+    } else {
+      // sets attributes for the post if the post is of type "comment"
+      if (this.props.data["indentationLevel"] >= 3) {
+        antForumButton = ""
+      }
+      postStylePadding = 50*(this.props.data["indentationLevel"]-1)
+      avatarSize = 50;
+      descriptionObject = (
+        <div>
+          <span className="description-text">
+          {this.props.data["comment"]}
+          </span>
+          <br />
+          <br />
+          {antForumButton}
+        </div>
+      );
+      // title is the username when the card is for a comment
+      title = <span className="username-text">{this.props.data["username"]}</span> 
+    }
+    
+    let postStyle = { 
             width: "100%",
             display:"inline-block",
             "border-left": 0,
@@ -41,20 +94,6 @@ class AntForumPost extends React.Component {
             "border-bottom": 0,
             "float": "right",
           }
-    let styleObject1Padding = 50*(this.props.data["indentationLevel"]-1)
-    let username = <span className="username-text">{this.props.data["username"]}</span>
-
-    let descriptionObject = (
-      <div>
-        <span className="description-text">
-        {this.props.data["comment"]}
-        </span>      
-        <br /> 
-        <br /> 
-        <div className="button" onClick={this.replyButtonClick}>REPLY</div> 
-      </div>
-    );
-
     if (this.state.replyClicked) {
       descriptionObject = (
         <div>
@@ -68,16 +107,29 @@ class AntForumPost extends React.Component {
         </div>
       );
     }
-
-    
-
+    if (this.props.data["isMainPost"]) {
+      return (
+        <div className="post-container">
+          <div className="card-holder" style={{"padding-left": postStylePadding}}>
+            <Card style={postStyle}>
+              <Meta
+                avatar={<Avatar size={avatarSize} style={{"border": "4px solid lightblue", "border-radius": "50%"}} src={this.props.data["profilePic"]} />}
+                title={title}
+                description={descriptionObject}
+              />
+            </Card>
+          </div>
+          {antForumForm}
+        </div>
+      );
+    } else {
     return (
       <div className="post-container">
-        <div className="card-holder" style={{"padding-left": styleObject1Padding}}>
-          <Card style={styleObject1}>
+        <div className="card-holder" style={{"padding-left": postStylePadding}}>
+          <Card style={postStyle}>
             <Meta
-              avatar={<Avatar size={50} style={{"border": "4px solid lightblue", "border-radius": "50%"}} src={this.props.data["profilePic"]} />}
-              title={username}
+              avatar={<Avatar size={avatarSize} style={{"border": "4px solid lightblue", "border-radius": "50%"}} src={this.props.data["profilePic"]} />}
+              title={title}
               description={descriptionObject}
             />
           </Card>
@@ -85,8 +137,20 @@ class AntForumPost extends React.Component {
       </div>
     );
   }
-
+  }
 }
 
+// redux management below
+const mapStateToProps = state => ({
+  token: state.forumUserAuth.token,
+  user: state.forumUserAuth.user,
+});
 
-export default AntForumPost;
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(forumAuthActions.logout()),
+    loginViaLocalStorage: (token) => dispatch(forumAuthActions.setUser(token)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AntForumPost);

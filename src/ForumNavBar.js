@@ -28,6 +28,9 @@ export class ForumNavBar extends React.Component {
 
   componentDidMount() {
     this.loadFbLoginApi();
+    if (window.localStorage["token"]) {
+      this.props.loginViaLocalStorage(window.localStorage);
+    }
   }
 
   // loads the fb API for the navbar
@@ -73,11 +76,15 @@ export class ForumNavBar extends React.Component {
   }
 
   render() {
+    let myProfileLink = ""
+    if (this.props.user) {
+      myProfileLink = <Link to="/myProfile"><div className="nav-child">My Profile</div></Link>
+    }
     return (
       <div className="nav-bar">
         {/** navigation buttons **/}
           <Link to="/forum"><div className="nav-child">Main</div></Link>
-          <Link to="/myProfile"><div className="nav-child">My Profile</div></Link>
+          {myProfileLink}
         {
           window.localStorage["token"]
           ?
@@ -109,8 +116,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
+    loginViaLocalStorage: (token) => dispatch(forumAuthActions.setUser(token)),
     logout: () => dispatch(forumAuthActions.logout()),
   };
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForumNavBar);

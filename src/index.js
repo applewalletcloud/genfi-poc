@@ -9,8 +9,10 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import store from './redux/store/store.js'
 import { Route, Link, Switch, BrowserRouter as Router } from 'react-router-dom';
+import ForumBoard from './ForumBoard.js'
 
 import ForumComments from './ForumComments.js'
+import UserProfileSummary from './UserProfileSummary.js'
 
 import AntForumPost from './AntForumPost.js';
 ReactDOM.render(
@@ -28,6 +30,8 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/forumcomments" component={ForumComments} />
+        <Route exact path="/forumpage" component={ForumBoard} />
+        <Route exact path="/myProfile" component={UserProfileSummary} />
       </div>
     </Router>
   </Provider>, 

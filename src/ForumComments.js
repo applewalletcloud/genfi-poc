@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Divider, Tag } from 'antd';
-import "./AntForumBoard.css"
+import "./ForumComments.css"
 
 
 import PropTypes from 'prop-types';
@@ -37,6 +37,7 @@ class ForumComments extends React.Component {
       "profilePic": "https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png",
       "indentationLevel": 1,
       "comment": "This is all the text for the description. I can place any text I want here and it will show up below.",
+      "isMainPost": false,
       "ts": "some datetime obj here"
     }
 
@@ -45,6 +46,7 @@ class ForumComments extends React.Component {
       "profilePic": "https://i.pinimg.com/236x/77/7b/63/777b632c2c3601eca106352ddbccb07d.jpg",
       "indentationLevel": 2,
       "comment": "This is a comment that is suppose to be a reply to the one above! Let's see if it works. it should be indented since it's a reply.",
+      "isMainPost": false,
       "ts": "some datetime obj here"
     }
 
@@ -53,6 +55,7 @@ class ForumComments extends React.Component {
       "profilePic": "https://www.gstatic.com/tv/thumb/tvbanners/10964192/p10964192_b_v8_aa.jpg",
       "indentationLevel": 3,
       "comment": "This comment has an indentation level of 3, so it should be a comment of the nested comment! this doesn't look too bad so far if i say so myself.",
+      "isMainPost": false,
       "ts": "some datetime obj here"
     }
 
@@ -61,6 +64,16 @@ class ForumComments extends React.Component {
       "profilePic": "https://qph.fs.quoracdn.net/main-qimg-affdc3d2c25fe8afb9d5d9cff88d9a29",
       "indentationLevel": 2,
       "comment": "Though, I'm not sure how much sense it makes to have three levels of indents... Many places only offer a couple, like facebook.",
+      "isMainPost": false,
+      "ts": "some datetime obj here"
+    }
+
+    let myProps5 = {
+      "username": "CrazyClownMan",
+      "profilePic": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d7c99ebb-62eb-45ff-8ecf-da92d86c6d59/ddp780g-10c2a033-2863-467e-b9e8-16d0fd22c790.png/v1/fill/w_1024,h_1450,q_80,strp/hxh___hisoka_morrow_by_khalilxpirates_ddp780g-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD0xNDUwIiwicGF0aCI6IlwvZlwvZDdjOTllYmItNjJlYi00NWZmLThlY2YtZGE5MmQ4NmM2ZDU5XC9kZHA3ODBnLTEwYzJhMDMzLTI4NjMtNDY3ZS1iOWU4LTE2ZDBmZDIyYzc5MC5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19._qDuMYQrCxygXSCjKXML2mY2f6u-9Ubq0foxa0Xs1bI",
+      "comment": "This is the main post test! Let's see how this goes.",
+      "isMainPost": true,
+      "title": "This is my main post title",
       "ts": "some datetime obj here"
     }
 
@@ -69,9 +82,13 @@ class ForumComments extends React.Component {
     allPosts.push(<AntForumPost data={myProps2}/>)
     allPosts.push(<AntForumPost data={myProps3}/>)
     allPosts.push(<AntForumPost data={myProps4}/>)
+    
     return (
       <>
+      <div className="comments-container">
+      <h2>Comments</h2>
       {allPosts}
+      </div>
       </>
     );
   }
