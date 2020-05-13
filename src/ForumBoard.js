@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Divider, Tag } from 'antd';
-import "./ForumComments.css"
+import "./ForumBoard.css"
 
 
 import PropTypes from 'prop-types';
@@ -48,7 +48,9 @@ class ForumBoard extends React.Component {
 
     return (
       <>
+      <div className="main-post-container">
       <AntForumPost data={titleProps}/>
+      </div>
       <ForumComments />
       </>
     );

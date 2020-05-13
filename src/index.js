@@ -15,6 +15,7 @@ import ForumComments from './ForumComments.js'
 import UserProfileSummary from './UserProfileSummary.js'
 
 import AntForumPost from './AntForumPost.js';
+import EditProfilePage from './EditProfilePage.js'
 ReactDOM.render(
   <Provider store={store}>
     <link
@@ -31,7 +32,8 @@ ReactDOM.render(
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/forumcomments" component={ForumComments} />
         <Route exact path="/forumpage" component={ForumBoard} />
-        <Route exact path="/myProfile" component={UserProfileSummary} />
+        <Route exact path="/myProfile" component={EditProfilePage} />
+        <Route exact path="/editMyProfile" component={EditProfilePage} />
       </div>
     </Router>
   </Provider>, 
