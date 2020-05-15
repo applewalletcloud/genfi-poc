@@ -1,6 +1,7 @@
 import React from 'react';
 
 import * as forumUserAuth from './redux/actions/forumUserAuthActions.js'; 
+import * as forumUserData from './redux/actions/forumUserActions.js'
 
 import './EditProfilePage.css'
 
@@ -30,8 +31,7 @@ class EditProfileForm extends React.Component {
         console.log('Received values of form: ', values);
         console.log("we hit submit?");
         console.log(values);
-        console.log(values.username);
-        this.props.setUserData("http://localhost:8000/quizbank/postForumUserProfileData/", values)
+        this.props.setUserProfilePic("http://localhost:8000/quizbank/postForumUserProfilePic/", values, this.props.user, this.props.token)
       }
     });
   };
@@ -87,14 +87,15 @@ const WrappedEditProfileForm = Form.create({ name: 'validate_other' })(EditProfi
 const mapStateToProps = (state) => {
   return {
     user: state.forumUserAuth.user,
+    token: state.forumUserAuth.token
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    //setUserData: (url, data) => dispatch(setForumUserProfilePic(url, data)),
+    setUserProfilePic: (url, data, username, token) => dispatch(forumUserData.setForumUserProfilePic(url, data, username, token)),
     dispatch
   }
 }
 
-export default connect(mapStateToProps)(WrappedEditProfileForm);
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedEditProfileForm);
