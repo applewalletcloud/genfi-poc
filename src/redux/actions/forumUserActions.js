@@ -17,11 +17,17 @@ export function fetchForumUserDataFailure(error) {
 	return { type: FETCH_FORUM_USER_DATA_FAILURE, payload: {error}};
 }
 
-export function fetchForumUserProfilePic(api_endpoint, username){
+export function fetchForumUserProfilePic(api_endpoint, username, token){
 	return dispatch => {
 		dispatch(fetchForumUserDataBegin());
 		// REMEMBER TO CHANGE THIS URL!!! TODO
-		return fetch(api_endpoint)
+		return fetch(api_endpoint, {
+			method: 'GET',
+			headers: new Headers({
+				'Authorization': 'JWT ' + token, // editing this line from '+ token' to '+ token["token"]' this fixed it!
+				'Content-Type': 'application/json'
+			}),
+		})
 		  .then(handleErrors)
 		  .then(res => res.blob())
 		  .then(blob => {

@@ -5,7 +5,7 @@ const puppeteer = require('puppeteer');
 test('cannot sign up with already taken user info?', async () => {
 	// create a new browser instance
 	// the headless option makes it so that chrome will show what is happening as puppeteer is performing its operations
-	const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ ignoreHTTPSErrors: true, headless: true});
 	// create a page in the browser
 	const page = await browser.newPage();
 	// visit our login page

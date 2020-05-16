@@ -2,7 +2,9 @@ import React from 'react';
 
 import "./ForumHome.css";
 
+import ForumBoard from './ForumBoard.js'
 
+import AntTopicPost from './AntTopicPost.js'
 // Components for the Forum SPA
 import AntThread from './AntThread.js';
 import Thread from './Thread.js';
@@ -16,7 +18,8 @@ import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
 
 // import actions from redux states
 import { fetchThreadPosts } from "./redux/actions/threadPostActions.js";
-import * as forumUserAuthActions from './redux/actions//forumUserAuthActions.js'
+import * as threadTopicActions from './redux/actions/threadTopicActions.js'
+import * as forumUserAuthActions from './redux/actions/forumUserAuthActions.js'
 
 import AntForumBoard from './AntForumBoard.js'
 
@@ -26,17 +29,14 @@ export class ForumHome extends React.Component {
     this.getServerUser = this.getServerUser.bind(this); // PROBABLY NEED TO UNCOMMENT THIS LATER, TODO
   }
 
-  componentDidMount() {
-    if (this.props.dispatch) {
-      this.props.dispatch(fetchThreadPosts('http://localhost:8000/quizbank/api/v1/threadposts/?format=json'));
-    } else {
-      console.log("props is undefined for dispatch in ForumHome");
-    }
+  async componentDidMount() {
+    
     if (this.props.onTryAutoSignUp) {
       this.props.onTryAutoSignUp();
     } else {
       console.log("props is undefined for tryautosignup in forumhome");
     }
+
     if (this.props.getSocialToken) {
       this.props.getSocialToken();
     } else {
@@ -44,6 +44,15 @@ export class ForumHome extends React.Component {
     }
     if (window.localStorage["token"]) {
       this.props.loginViaLocalStorage(window.localStorage);
+    }
+
+    if (this.props.dispatch) {
+      console.log(this.props.token)
+      console.log("IN THE FORUM HOME. THE TOKEN WE ARE PASSING IS PRINTED ABOVE");
+      console.log("are we never reaching here?")
+      this.props.fetchThreadTopics('http://localhost:8000/quizbank/getForumMainPosts/');
+    } else {
+      console.log("props is undefined for dispatch in ForumHome");
     }
   }
 
@@ -129,7 +138,7 @@ export class ForumHome extends React.Component {
 
   render() {
     if(this.props.error) {
-        return <div>Error! {this.props.error.message}</div>;
+        return <div>Error! {this.props.error.message + " we are in forumhome errors"}</div>;
       }
     {/** TODO: replace with an image of some sort**/}
     if(this.props.loading) {
@@ -145,6 +154,7 @@ export class ForumHome extends React.Component {
         // CREATE TOPIC TO POSTS OBJECT FUNCTUON CALL SHOULD GO HERE
         let topicToPosts = this.createTopicToPostsObject(allPosts);
         let topicToThreadPosts = this.createTopicToThreadPosts(topicToPosts);
+
         return (
           <>
             <div class="horizontal-gap"></div>
@@ -156,9 +166,20 @@ export class ForumHome extends React.Component {
         );
       }
       else {
+        let forumTopics = []
+        for (const topicData of this.props.threadTopics){
+          topicData.is_main_post = false
+          forumTopics.push(<AntTopicPost data={topicData} threadID={topicData.post_id}/>)
+          console.log(topicData)
+        }
         return (
           <>
             <h1>Data wasn't retreived properly</h1>
+            {forumTopics}
+            <Switch>
+              <Route path="/forum/:threadID" render={(props) => <ForumBoard threadID={props.match.params.threadID} />} />
+            </Switch>
+            
           </>
         );
       } 
@@ -172,7 +193,8 @@ const mapStateToProps = (state) => ({
   threadPosts: state.threadPosts.threadPosts,
   loading: state.threadPosts.loading,
   error: state.threadPosts.error,
-  forumToken: state.forumUserAuth.token,
+  token: state.forumUserAuth.token,
+  threadTopics: state.threadTopics.threadTopics,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -180,6 +202,7 @@ const mapDispatchToProps = (dispatch) => {
     setServerUser: (myarg) => dispatch(forumUserAuthActions.setUser(myarg)),
     socialLogin: (socialProvider, accessToken) => dispatch(forumUserAuthActions.authSocialLogin(socialProvider, accessToken)),
     loginViaLocalStorage: (token) => dispatch(forumUserAuthActions.setUser(token)),
+    fetchThreadTopics: (api_endpoint) => dispatch(threadTopicActions.fetchThreadTopics(api_endpoint)),
     dispatch,
   };
 };

@@ -5,7 +5,7 @@ test('canLoginWithGoogle?', async () => {
 
   // create a new browser instance
   // for some reason, when a pop up is involved, we should have headless: false
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ ignoreHTTPSErrors: true, headless: false});
 
   // create a page in the browser
   const page = await browser.newPage();
@@ -43,7 +43,7 @@ test('canLoginWithFB?', async () => {
 
   // create a new browser instance
   // for some reason, when a pop up is involved, we should have headless: false
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ ignoreHTTPSErrors: true, headless: false});
 
   // create a page in the browser
   const page = await browser.newPage();
