@@ -23,7 +23,7 @@ import * as forumUserAuthActions from './redux/actions/forumUserAuthActions';
 /*
 This is the forum home page. It houses the list of forum topics that users can
 use to direct themselves to forums and the navbar. The forum topics are represented
-as AntTopicPosts
+as AntTopicPosts.
 */
 export class ForumHome extends React.Component {
   async componentDidMount() {
@@ -74,9 +74,9 @@ export class ForumHome extends React.Component {
   }
 }
 
+// take redux state and place its values into our props
 const mapStateToProps = (state) => ({
   isAuthenticated: state.forumUserAuth.token !== null,
-  testState: state.forumUserAuth.testState,
   threadPosts: state.threadPosts.threadPosts,
   loading: state.threadPosts.loading,
   error: state.threadPosts.error,
@@ -84,6 +84,7 @@ const mapStateToProps = (state) => ({
   threadTopics: state.threadTopics.threadTopics,
 });
 
+// take redux actions and place it into our props
 const mapDispatchToProps = (dispatch) => {
   return ({
     setServerUser: (myarg) => dispatch(forumUserAuthActions.setUser(myarg)),

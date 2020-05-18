@@ -29,7 +29,7 @@ class AntForumPost extends React.Component {
     // check if this.props.user's profile pic is already found. if not, add it to redux
     console.log("inside component did mount of ant forum post")
     if (!(this.props.data["creator"] in this.props.userToProfilePic)){
-      this.props.getUserProfilePic("http:localhost:8000/quizbank/getForumUserProfilePic/" + this.props.data["creator"] + "/", this.props.data["creator"], this.props.token)
+      this.props.getUserProfilePic("http:localhost:8000/quizbank/getForumUserProfilePic/" + this.props.data["creator"] + "/", this.props.data["creator"]);
     }
   }
 
@@ -180,7 +180,7 @@ const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(forumAuthActions.logout()),
     loginViaLocalStorage: (token) => dispatch(forumAuthActions.setUser(token)),
-    getUserProfilePic: (api_endpoint, username, token) => dispatch(forumUserActions.fetchForumUserProfilePic(api_endpoint, username, token)),
+    getUserProfilePic: (api_endpoint, username) => dispatch(forumUserActions.fetchForumUserProfilePic(api_endpoint, username)),
   };
 };
 
