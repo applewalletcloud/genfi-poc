@@ -1,189 +1,75 @@
 import React from 'react';
 
-import "./ForumHome.css";
+// redux: connect allows mapping between react props and redux
+import { connect } from 'react-redux';
 
-import ForumBoard from './ForumBoard.js'
+// SPA routing
+import {
+  Route, Link, BrowserRouter as Router, Switch,
+} from 'react-router-dom';
 
-import AntTopicPost from './AntTopicPost.js'
+// styles
+import './ForumHome.css';
+
 // Components for the Forum SPA
-import AntThread from './AntThread.js';
-import Thread from './Thread.js';
-import ThreadBoard from './ThreadBoard.js';
+import ForumBoard from './ForumBoard';
+import AntTopicPost from './AntTopicPost';
 
-// connect allows mapping between react props and redux
-import { connect } from "react-redux";
-
-// components for react routing
-import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
+// Ant Design Loading animation
+import { Spin } from 'antd';
 
 // import actions from redux states
-import { fetchThreadPosts } from "./redux/actions/threadPostActions.js";
-import * as threadTopicActions from './redux/actions/threadTopicActions.js'
-import * as forumUserAuthActions from './redux/actions/forumUserAuthActions.js'
+import * as threadTopicActions from './redux/actions/threadTopicActions';
+import * as forumUserAuthActions from './redux/actions/forumUserAuthActions';
 
-import AntForumBoard from './AntForumBoard.js'
-
+/*
+This is the forum home page. It houses the list of forum topics and the navbar.
+*/
 export class ForumHome extends React.Component {
-  constructor(props) {
-    super(props);
-    this.getServerUser = this.getServerUser.bind(this); // PROBABLY NEED TO UNCOMMENT THIS LATER, TODO
-  }
-
   async componentDidMount() {
-    
-    if (this.props.onTryAutoSignUp) {
-      this.props.onTryAutoSignUp();
-    } else {
-      console.log("props is undefined for tryautosignup in forumhome");
-    }
-
-    if (this.props.getSocialToken) {
-      this.props.getSocialToken();
-    } else {
-      console.log("props is undefined for getsocialtoken");
-    }
+    // refresh redux state if the user is already logged in
     if (window.localStorage["token"]) {
       this.props.loginViaLocalStorage(window.localStorage);
     }
-
-    if (this.props.dispatch) {
-      console.log(this.props.token)
-      console.log("IN THE FORUM HOME. THE TOKEN WE ARE PASSING IS PRINTED ABOVE");
-      console.log("are we never reaching here?")
-      this.props.fetchThreadTopics('http://localhost:8000/quizbank/getForumMainPosts/');
-    } else {
-      console.log("props is undefined for dispatch in ForumHome");
-    }
-  }
-
-  // TODO: DELETE AFTER DONE TESTING
-  getServerUser() {
-    console.log("getserveruser button results below!!!!!");
-    if (this.props.token !== undefined){
-      console.log("we enter since forumtoken isn't undefined");
-      console.log(this.props.token);
-      console.log("the fb jwt is above");
-      this.props.setServerUser(this.props.token);
-    } else{
-      console.log("looks like the token is undefined, so we aren't calling the action we need");
-    }
-  }
-  // TODO: DELETE AFTER DONE TESTING
-  //   testLogin() {
-  //    console.log("WE HAVE ENTERED THE TEST LOGIN FUNCTION")
-   //    FB.getLoginStatus(function(response) {
-    //  if (response.status === 'connected') {
-    //      var accessToken = response.authResponse.accessToken;
-    //      console.log("THE ACCESS TOKEN IS HERE!!! HAVE WE FOUND IT ?!?!?! -------");
-          
-
-    //      console.log(accessToken);
-         
-    //  } else{
-    //  console.log("looks like there's no connection")
-
-    //  }
-
-    // } );
-
-  //   }
-    // TODO: DELETE AFTER DONE TESTING
-    // testGoogleLogin(googleUser) {
-    //  this.setState({
-     //    googleUser: googleUser
-    //  })
-    //  console.log("printing the google user!")
-    //  console.log(this.state.googleUser);
-    //  console.log("why is it empty?");
-    //  console.log("printing gapi stuff right below");
-    //  let instance = gapi.auth2.getAuthInstance();
-    //  console.log(instance.isSignedIn.get());
-
-    // }
-
-    // testGoogleLogout(){
-    //  let instance = gapi.auth2.getAuthInstance();
-    //  instance.signOut();
-    // }
-
-    // testLogout() {
-    //  FB.logout()
-    // }
-    // TODO: DELETE AFTER DONE TESTING
- //    responseFacebook = (response) => {
-  //   console.log(response);
-  // }
-   
-  createTopicToPostsObject(allPosts) {
-    let topicToPosts = Object.create(null);
-    allPosts.forEach(function (post) {
-      topicToPosts[post["thread_topic"]] = topicToPosts[post["thread_topic"]] || [];
-      topicToPosts[post["thread_topic"]].push(post)
-    });
-    return topicToPosts;
-  }
-
-  createTopicToThreadPosts(topicToPosts) {
-    let i;
-    let topicToThreadPosts = [];
-      // TODO change this later, i don't like it appended to the end of the array :(
-      for (i=1;i<=Object.keys(topicToPosts).length;i++){
-        console.log("do we do anything here?")
-        //topicToPosts[i].push(<Thread posts={topicToPosts[i]} title={"Temp Title"}/>);
-        console.log(this.props.match.params.threadID)
-        topicToThreadPosts.push(<Thread posts={topicToPosts[i]} title={"Temp Title"} threadID={i-1}/>);
-      }
-      return topicToThreadPosts;
+    // query the database to get all of the forum topics to display
+    this.props.fetchThreadTopics('http://localhost:8000/quizbank/getForumMainPosts/');
   }
 
   render() {
-    if(this.props.error) {
-        return <div>Error! {this.props.error.message + " we are in forumhome errors"}</div>;
-      }
-    {/** TODO: replace with an image of some sort**/}
-    if(this.props.loading) {
-      return <div>Loading...</div>;
+    if (this.props.error) {
+      // we have an error with querying our threadpost data
+      return <div>"We apologize for the technical difficulties. Please try again later."</div>;
+    }
+    if (this.props.loading) {
+      // show loading spinner if we're still grabbing data
+      return (
+        <div className="center">
+          <Spin size="large" />
+        </div>
+      );
     }
 
-      let allPosts = this.props.threadPosts;
-      
-      if (allPosts == undefined) {
-        console.log("error, seems we're getting empty props for posts");
-      }
-      if (allPosts != undefined && allPosts.length > 0) {
-        // CREATE TOPIC TO POSTS OBJECT FUNCTUON CALL SHOULD GO HERE
-        let topicToPosts = this.createTopicToPostsObject(allPosts);
-        let topicToThreadPosts = this.createTopicToThreadPosts(topicToPosts);
-
-        return (
-          <>
-            <div class="horizontal-gap"></div>
-            <Switch>
-              <Route exact path="/forum" render={() => <AntForumBoard />} />
-              <Route path="/forum/:threadID" render={(props) => <AntThread threadID={props.match.params.threadID} />} />
-            </Switch>
-          </>
-        );
-      }
-      else {
-        let forumTopics = []
-        for (const topicData of this.props.threadTopics){
-          topicData.is_main_post = false
-          forumTopics.push(<AntTopicPost data={topicData} threadID={topicData.post_id}/>)
-          console.log(topicData)
-        }
-        return (
-          <>
-            <h1>Data wasn't retreived properly</h1>
-            {forumTopics}
-            <Switch>
-              <Route path="/forum/:threadID" render={(props) => <ForumBoard threadID={props.match.params.threadID} />} />
-            </Switch>
-            
-          </>
-        );
-      } 
-    
+    // generate an array holding all of the thread topic components
+    // the thread topic components are the summaries for each forum on the home page 
+    const forumTopics = [];
+    for (const topicData of this.props.threadTopics) {
+      forumTopics.push(<AntTopicPost data={ topicData } threadID={ topicData.post_id } />);
+    }
+    const forumHomePage = (
+      <>
+        <p className="forum-home-title">Discussion Topics</p>
+        {forumTopics}
+      </>
+    );
+    // we keep track of and route forums by their thread id, which is dictated in the url
+    return (
+      <>
+        <Switch>
+          <Route exact path="/forum" render={() => forumHomePage} />
+          <Route path="/forum/:threadID" render={(props) => <ForumBoard threadID={props.match.params.threadID} />} />
+        </Switch>
+      </>
+    );
   }
 }
 
@@ -198,13 +84,13 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return {
+  return ({
     setServerUser: (myarg) => dispatch(forumUserAuthActions.setUser(myarg)),
     socialLogin: (socialProvider, accessToken) => dispatch(forumUserAuthActions.authSocialLogin(socialProvider, accessToken)),
     loginViaLocalStorage: (token) => dispatch(forumUserAuthActions.setUser(token)),
-    fetchThreadTopics: (api_endpoint) => dispatch(threadTopicActions.fetchThreadTopics(api_endpoint)),
+    fetchThreadTopics: (apiEndpoint) => dispatch(threadTopicActions.fetchThreadTopics(apiEndpoint)),
     dispatch,
-  };
+  });
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForumHome);

@@ -7,7 +7,7 @@ import { Button } from 'antd';
 class ThreadForm extends React.Component{
 	constructor(props) {
 	    super(props);
-	    this.state = {textValue: '', id: props.threadID}; // need to change this to allow multiple ids
+	    this.state = {textValue: '', id: props.threadID}; 
 	    this.handleChange = this.handleChange.bind(this);
 	    this.handleSubmit = this.handleSubmit.bind(this);
   	}
@@ -18,12 +18,21 @@ class ThreadForm extends React.Component{
 
 	handleSubmit(e) {
 		e.preventDefault();
-		fetch("http://localhost:8000/quizbank/api/v1/threadposts/post/?format=json",{
+		fetch("http://localhost:8000/quizbank/forumUserPost/",{
 			method: 'POST',
 			headers: new Headers({
+				'Authorization': 'JWT ' + this.props.data["token"],
 				'Content-Type': 'application/json',
 			}),
-			body: JSON.stringify({"text": this.state.textValue, "id": this.state.id})
+			body: JSON.stringify({
+				"is_main_post": this.props.data["is_main_post"], 
+				"main_post_id": this.props.data["main_post_id"],
+				"parent_id": this.props.data["parent_id"],
+				"creator": this.props.data["creator"],
+				"post_title": this.props.data["post_title"],
+				"post_text": this.state.textValue,
+				"indentation_level": this.props.data["indentation_level"]
+			})
 		})
 		.then((response) => response.text())
 		.then((responseText) => {

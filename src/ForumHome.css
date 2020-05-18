@@ -4,3 +4,8 @@ div.horizontal-gap {
   height: 15px;
   width: 0px;
 }
+
+.forum-home-title {
+	text-align: center;
+	font-size: 25px;
+}

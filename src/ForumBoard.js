@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Divider, Tag } from 'antd';
+import { Table, Divider, Tag, Spin } from 'antd';
 import "./ForumBoard.css"
 
 
@@ -74,7 +74,6 @@ class ForumBoard extends React.Component {
       console.log("MAIN POST DATA IN FORUM BOARD IS ABOVE")
       return (
       <>
-      {myMainPostTitle}
       <div className="main-post-container">
       <AntForumPost data={this.state.mainPostData}/>
       </div>
@@ -82,7 +81,11 @@ class ForumBoard extends React.Component {
       </>
     );
     } else {
-      return (<h1>loading</h1>)
+      return (
+        <div className="center">
+          <Spin size="large" />)
+        </div>
+      )
     }
     
   }

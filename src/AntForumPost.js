@@ -51,9 +51,20 @@ class AntForumPost extends React.Component {
 
     console.log("CAN I SEE THIS PRINT STATEMENT INSIDE MY ANT FORUM POST?!")
 
+    let formPropsData = ""
     // change visibility of comments and buttons if the user is logged in
     if (this.props.user) {
-      antForumForm = <ThreadForm />
+      formPropsData = {
+        "is_main_post": false,
+        "main_post_id": this.props.data["main_post_id"],
+        "parent_id": this.props.data["post_id"],
+        "creator": this.props.user,
+        "post_title": this.props.user,
+        "indentation_level": this.props.data["indentation_level"] + 1,
+        "token": this.props.token
+      }
+
+      antForumForm = <ThreadForm data={formPropsData}/>
       antForumButton = <div className="button" onClick={this.replyButtonClick}>REPLY</div>
     }
 
@@ -110,7 +121,7 @@ class AntForumPost extends React.Component {
         <br /> 
         <br /> 
         <div className="button" onClick={this.replyButtonClick}> CANCEL REPLY</div> 
-        <ThreadForm />
+        <ThreadForm data={formPropsData}/>
         </div>
       );
     }

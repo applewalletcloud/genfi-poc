@@ -85,60 +85,7 @@ class ForumComments extends React.Component {
 
   render (){
     console.log("we enter the forum comments render")
-    /** 
-    generate data for the table from the queries
-    **/
-    // let myData = [
-    //     {
-    //     "creator": "NarutoLover44",
-    //     "profilePic": "https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png",
-    //     "indentation_level": 1,
-    //     "post_text": "This is all the text for the description. I can place any text I want here and it will show up below.",
-    //     "is_main_post": false,
-    //     "ts": "some datetime obj here",
-    //     "parent_id": 0,
-    //     "post_id": 1
-    //   },
-    //   {
-    //     "creator": "sasukeIsTheBest",
-    //     "profilePic": "https://i.pinimg.com/236x/77/7b/63/777b632c2c3601eca106352ddbccb07d.jpg",
-    //     "indentation_level": 2,
-    //     "post_text": "This is a comment that is suppose to be a reply to the one above! Let's see if it works. it should be indented since it's a reply.",
-    //     "is_main_post": false,
-    //     "ts": "some datetime obj here",
-    //     "parent_id": 1,
-    //     "post_id": 2
-    //   },
-    //   {
-    //     "creator": "GenfiWatchMoreHunterxHunter",
-    //     "profilePic": "https://www.gstatic.com/tv/thumb/tvbanners/10964192/p10964192_b_v8_aa.jpg",
-    //     "indentation_level": 3,
-    //     "post_text": "This comment has an indentation level of 3, so it should be a comment of the nested comment! this doesn't look too bad so far if i say so myself.",
-    //     "is_main_post": false,
-    //     "ts": "some datetime obj here",
-    //     "parent_id": 2,
-    //     "post_id": 3
-    //   },
-    //   {
-    //     "creator": "TheReasonableGuy72",
-    //     "profilePic": "https://qph.fs.quoracdn.net/main-qimg-affdc3d2c25fe8afb9d5d9cff88d9a29",
-    //     "indentation_level": 2,
-    //     "post_text": "Though, I'm not sure how much sense it makes to have three levels of indents... Many places only offer a couple, like facebook.",
-    //     "is_main_post": false,
-    //     "ts": "some datetime obj here",
-    //     "parent_id": 1,
-    //     "post_id": 4
-    //   }
-    // ]
-
-    // let myProps5 = {
-    //   "creator": "CrazyClownMan",
-    //   "profilePic": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d7c99ebb-62eb-45ff-8ecf-da92d86c6d59/ddp780g-10c2a033-2863-467e-b9e8-16d0fd22c790.png/v1/fill/w_1024,h_1450,q_80,strp/hxh___hisoka_morrow_by_khalilxpirates_ddp780g-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD0xNDUwIiwicGF0aCI6IlwvZlwvZDdjOTllYmItNjJlYi00NWZmLThlY2YtZGE5MmQ4NmM2ZDU5XC9kZHA3ODBnLTEwYzJhMDMzLTI4NjMtNDY3ZS1iOWU4LTE2ZDBmZDIyYzc5MC5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19._qDuMYQrCxygXSCjKXML2mY2f6u-9Ubq0foxa0Xs1bI",
-    //   "post_text": "This is the main post test! Let's see how this goes.",
-    //   "is_main_post": true,
-    //   "title": "This is my main post title",
-    //   "ts": "some datetime obj here"
-    // };
+    
     console.log("i'm very confused why i don't see this print statements")
     let allPosts = [];
     let myTree = this.buildTree(this.props.data);

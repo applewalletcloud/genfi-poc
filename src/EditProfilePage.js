@@ -1,7 +1,7 @@
 import React from 'react';
 
 import * as forumUserAuth from './redux/actions/forumUserAuthActions.js'; 
-import * as forumUserData from './redux/actions/forumUserActions.js'
+import * as forumUserActions from './redux/actions/forumUserActions.js'
 
 import './EditProfilePage.css'
 
@@ -24,6 +24,13 @@ the params in the form get passed through the values variable
 the object's keys are the field decorators (e.g. "username" and "dragger")
 **/
 class EditProfileForm extends React.Component {
+  componentDidMount(){
+    if (!(this.props.user in this.props.userToProfilePic)){
+      this.props.getUserProfilePic("http:localhost:8000/quizbank/getForumUserProfilePic/" + this.props.user + "/", this.props.user, this.props.token)
+    }
+  }
+
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -31,7 +38,9 @@ class EditProfileForm extends React.Component {
         console.log('Received values of form: ', values);
         console.log("we hit submit?");
         console.log(values);
-        this.props.setUserProfilePic("http://localhost:8000/quizbank/postForumUserProfilePic/", values, this.props.user, this.props.token)
+        this.props.setUserProfilePic("http://localhost:8000/quizbank/postForumUserProfilePic/", values, this.props.user, this.props.token).then(() => {
+          this.props.getUserProfilePic("http:localhost:8000/quizbank/getForumUserProfilePic/" + this.props.user + "/", this.props.user, this.props.token)
+        })
       }
     });
   };
@@ -51,7 +60,7 @@ class EditProfileForm extends React.Component {
       <div className="edit-profile-page-container">
       <div className="center">
       <h1>Welcome, {this.props.user}!</h1>
-      <Avatar size={100} style={{"border": "4px solid lightblue", "border-radius": "50%"}} src={"https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d7c99ebb-62eb-45ff-8ecf-da92d86c6d59/ddp780g-10c2a033-2863-467e-b9e8-16d0fd22c790.png/v1/fill/w_1024,h_1450,q_80,strp/hxh___hisoka_morrow_by_khalilxpirates_ddp780g-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD0xNDUwIiwicGF0aCI6IlwvZlwvZDdjOTllYmItNjJlYi00NWZmLThlY2YtZGE5MmQ4NmM2ZDU5XC9kZHA3ODBnLTEwYzJhMDMzLTI4NjMtNDY3ZS1iOWU4LTE2ZDBmZDIyYzc5MC5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19._qDuMYQrCxygXSCjKXML2mY2f6u-9Ubq0foxa0Xs1bI"} />
+      <Avatar size={100} style={{"border": "4px solid lightblue", "border-radius": "50%"}} src={this.props.userToProfilePic[this.props.user]} />
       </div>
       <Form onSubmit={this.handleSubmit} className="left">
 
@@ -87,13 +96,15 @@ const WrappedEditProfileForm = Form.create({ name: 'validate_other' })(EditProfi
 const mapStateToProps = (state) => {
   return {
     user: state.forumUserAuth.user,
-    token: state.forumUserAuth.token
+    token: state.forumUserAuth.token,
+    userToProfilePic: state.forumUserData.userNameToProfilePic,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    setUserProfilePic: (url, data, username, token) => dispatch(forumUserData.setForumUserProfilePic(url, data, username, token)),
+    setUserProfilePic: (url, data, username, token) => dispatch(forumUserActions.setForumUserProfilePic(url, data, username, token)),
+    getUserProfilePic: (api_endpoint, username, token) => dispatch(forumUserActions.fetchForumUserProfilePic(api_endpoint, username, token)),
     dispatch
   }
 }
