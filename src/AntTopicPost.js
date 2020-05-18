@@ -5,7 +5,6 @@ import './AntForumPost.css';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 
 import { Card, Avatar, Form, Icon, Input, Button, Spin } from 'antd';
-import ThreadForm from "./ThreadForm.js"
 
 
 // redux
@@ -22,13 +21,13 @@ class AntForumPost extends React.Component {
   }
 
 
-  componentDidMount(){
-    if (!(this.props.data["creator"] in this.props.userToProfilePic)){
-      this.props.getUserProfilePic("http:localhost:8000/quizbank/getForumUserProfilePic/" + this.props.data["creator"] + "/", this.props.data["creator"], this.props.token)
-    }
-  }
-
   render() {
+
+    if (this.props.data["creator"]) {
+      if (!(this.props.data["creator"] in this.props.userToProfilePic)){
+        this.props.getUserProfilePic("http:localhost:8000/quizbank/getForumUserProfilePic/" + this.props.data["creator"] + "/", this.props.data["creator"], this.props.token)
+      }
+    }
     // instantiate variables used for the forum post
     let descriptionObject;
     let avatarSize;

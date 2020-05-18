@@ -50,6 +50,15 @@ class AntForumPost extends React.Component {
 
     console.log("CAN I SEE THIS PRINT STATEMENT INSIDE MY ANT FORUM POST?!")
 
+    let postStyle = { 
+            width: "100%",
+            display:"inline-block",
+            "border-left": 0,
+            "border-right": 0,
+            "border-bottom": 0,
+            "float": "right",
+          }
+
     let formPropsData = ""
     // change visibility of comments and buttons if the user is logged in
     if (this.props.user) {
@@ -69,6 +78,16 @@ class AntForumPost extends React.Component {
 
     // sets attributes for the post if the post is of type "main post"
     if (this.props.data["is_main_post"]) {
+      postStyle = { 
+            width: "100%",
+            display:"inline-block",
+            "border-left": 0,
+            "border-right": 0,
+            "border-bottom": 0,
+            "border-top": 0,
+            "float": "right",
+          }
+
       postStylePadding = 0// the main post isn't indented
       avatarSize = 100;
       descriptionObject = (
@@ -103,14 +122,7 @@ class AntForumPost extends React.Component {
       title = <span className="username-text">{this.props.data["creator"]}</span> 
     }
     
-    let postStyle = { 
-            width: "100%",
-            display:"inline-block",
-            "border-left": 0,
-            "border-right": 0,
-            "border-bottom": 0,
-            "float": "right",
-          }
+    
     if (this.state.replyClicked) {
       descriptionObject = (
         <div>
