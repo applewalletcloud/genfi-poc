@@ -5,12 +5,11 @@ import './ForumNavBar.css';
 import Button from 'react-bootstrap/Button';
 
 // react router
-import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Route, Link, BrowserRouter, useLocation } from 'react-router-dom';
 
 // social login
 // The two lines below aren't comments, but global variables for the use of social login
 /* global FB */
-/* global gapi */
 import { loadAuth2 } from 'gapi-script';
 
 // redux
@@ -32,6 +31,7 @@ export class ForumNavBar extends React.Component {
       this.props.loginViaLocalStorage(window.localStorage);
     }
   }
+
 
   // loads the fb API for the navbar
   loadFbLoginApi() {

@@ -4,6 +4,8 @@ import { NavLink } from 'react-router-dom';
 import * as actions from './redux/actions/forumUserAuthActions.js';
 import "./SignUp.css"
 
+import ForumNavBar from './ForumNavBar';
+
 // The two lines below aren't comments, but global variables for the use of social login
 /* global FB */
 /* global gapi */
@@ -195,6 +197,8 @@ class RegistrationForm extends React.Component {
     }
 
     return (
+      <>
+      <ForumNavBar />
       <div class="signup-page-container">
       {this.props.error}
       <Form onSubmit={this.handleSubmit}>
@@ -266,6 +270,7 @@ class RegistrationForm extends React.Component {
             </Button>
           </div>
       </div>
+      </>
     );
   }
 }

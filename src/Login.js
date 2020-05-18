@@ -14,6 +14,9 @@ import { GoogleLogin } from 'react-google-login';
 import { GoogleAuthorize } from 'react-google-authorize';
 import FacebookLogin from 'react-facebook-login';
 
+
+import ForumNavBar from './ForumNavBar';
+
 // redux imports
 import { connect } from 'react-redux';
 import * as actions from './redux//actions/forumUserAuthActions.js';
@@ -178,6 +181,8 @@ export class NormalLoginForm extends React.Component {
       userLoginMessage = this.props.error
   }
     return (
+      <>
+      <ForumNavBar />
       <div class="login-page-container">
       {userLoginMessage}
       {
@@ -231,7 +236,7 @@ export class NormalLoginForm extends React.Component {
       }
         
    </div>
-        
+        </>
 
     );
   }

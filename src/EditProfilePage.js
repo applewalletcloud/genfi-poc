@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ForumNavBar from './ForumNavBar';
+
 import * as forumUserAuth from './redux/actions/forumUserAuthActions.js'; 
 import * as forumUserActions from './redux/actions/forumUserActions.js'
 
@@ -25,8 +27,8 @@ the object's keys are the field decorators (e.g. "username" and "dragger")
 **/
 class EditProfileForm extends React.Component {
   componentDidMount(){
-    if (!(this.props.user in this.props.userToProfilePic)){
-      this.props.getUserProfilePic("http:localhost:8000/quizbank/getForumUserProfilePic/" + this.props.user + "/", this.props.user, this.props.token)
+    if (window.localStorage["token"]) {
+      this.props.loginViaLocalStorage(window.localStorage)
     }
   }
 
@@ -56,7 +58,15 @@ class EditProfileForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
 
+    if (this.props.user) {
+      if (!(this.props.user in this.props.userToProfilePic)){
+        this.props.getUserProfilePic("http:localhost:8000/quizbank/getForumUserProfilePic/" + this.props.user + "/", this.props.user, this.props.token)
+      }
+    }
+
     return (
+      <>
+      <ForumNavBar />
       <div className="edit-profile-page-container">
       <div className="center">
       <h1>Welcome, {this.props.user}!</h1>
@@ -87,6 +97,7 @@ class EditProfileForm extends React.Component {
         </Form.Item>
       </Form>
       </div>
+      </>
     );
   }
 }
@@ -105,6 +116,7 @@ const mapDispatchToProps = dispatch => {
   return {
     setUserProfilePic: (url, data, username, token) => dispatch(forumUserActions.setForumUserProfilePic(url, data, username, token)),
     getUserProfilePic: (api_endpoint, username, token) => dispatch(forumUserActions.fetchForumUserProfilePic(api_endpoint, username, token)),
+    loginViaLocalStorage: (token) => dispatch(forumUserAuth.setUser(token)),
     dispatch
   }
 }

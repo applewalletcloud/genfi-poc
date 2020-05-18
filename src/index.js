@@ -13,17 +13,14 @@ import './index.css';
 
 // components to render
 import ForumHome from './ForumHome';
-import Login from './Login.js';
-import SignUp from './SignUp.js';
-import ForumNavBar from './ForumNavBar.js';
+import Login from './Login';
+import SignUp from './SignUp';
+import EditProfilePage from './EditProfilePage';
+
+// required precaching react stuff
 import * as serviceWorker from './serviceWorker';
 
-import ForumBoard from './ForumBoard.js'
-
-import ForumComments from './ForumComments.js'
-
-import EditProfilePage from './EditProfilePage.js'
-
+// the link is to pull in bootstrap into the webpage
 ReactDOM.render(
   <Provider store={store}>
     <link
@@ -34,7 +31,6 @@ ReactDOM.render(
     />
     <Router>
       <div>
-        <Route path="/" component={ForumNavBar} />
         <Route path="/forum" component={ForumHome} />
         <Route path="/login" component={Login} />
         <Route exact path="/signup" component={SignUp} />

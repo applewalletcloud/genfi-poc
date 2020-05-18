@@ -12,6 +12,7 @@ import './ForumHome.css';
 import { Spin } from 'antd';
 
 // Components for the Forum SPA
+import ForumNavBar from './ForumNavBar';
 import ForumBoard from './ForumBoard';
 import AntTopicPost from './AntTopicPost';
 
@@ -56,6 +57,7 @@ export class ForumHome extends React.Component {
     }
     const forumHomePage = (
       <>
+        <ForumNavBar />
         <p className="forum-home-title">Discussion Topics</p>
         {forumTopics}
       </>
