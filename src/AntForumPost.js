@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 
 import './AntForumPost.css';
 import { Card, Avatar, Form, Icon, Input, Button, Spin } from 'antd';
-import ThreadForm from "./ThreadForm.js"
-
+import ThreadForm from './ThreadForm.js';
 
 // redux
 import { connect } from 'react-redux';

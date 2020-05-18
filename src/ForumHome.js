@@ -5,25 +5,26 @@ import { connect } from 'react-redux';
 
 // SPA routing
 import {
-  Route, Link, BrowserRouter as Router, Switch,
+  Route, BrowserRouter as Switch,
 } from 'react-router-dom';
 
 // styles
 import './ForumHome.css';
+// Ant Design Loading animation
+import { Spin } from 'antd';
 
 // Components for the Forum SPA
 import ForumBoard from './ForumBoard';
 import AntTopicPost from './AntTopicPost';
-
-// Ant Design Loading animation
-import { Spin } from 'antd';
 
 // import actions from redux states
 import * as threadTopicActions from './redux/actions/threadTopicActions';
 import * as forumUserAuthActions from './redux/actions/forumUserAuthActions';
 
 /*
-This is the forum home page. It houses the list of forum topics and the navbar.
+This is the forum home page. It houses the list of forum topics that users can
+use to direct themselves to forums and the navbar. The forum topics are represented
+as AntTopicPosts
 */
 export class ForumHome extends React.Component {
   async componentDidMount() {
@@ -65,8 +66,8 @@ export class ForumHome extends React.Component {
     return (
       <>
         <Switch>
-          <Route exact path="/forum" render={() => forumHomePage} />
           <Route path="/forum/:threadID" render={(props) => <ForumBoard threadID={props.match.params.threadID} />} />
+          <Route exact path="/forum" render={() => forumHomePage} />
         </Switch>
       </>
     );

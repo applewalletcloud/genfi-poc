@@ -5,11 +5,8 @@ import "./ForumBoard.css"
 
 import PropTypes from 'prop-types';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
-import Thread from './Thread.js'
 import { fetchThreadTopics } from "./redux/actions/threadTopicActions.js";
 import { connect } from "react-redux";
-
-import AntThread from './AntThread.js';
 
 import AntForumPost from './AntForumPost.js'
 import ForumComments from './ForumComments.js'
