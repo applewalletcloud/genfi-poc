@@ -4,9 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 // SPA routing
-import {
-  Route, BrowserRouter as Switch,
-} from 'react-router-dom';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
 // styles
 import './ForumHome.css';
@@ -66,7 +64,7 @@ export class ForumHome extends React.Component {
     return (
       <>
         <Switch>
-          <Route path="/forum/:threadID" render={(props) => <ForumBoard threadID={props.match.params.threadID} />} />
+          <Route exact path="/forum/:threadID" render={(props) => <ForumBoard threadID={props.match.params.threadID} />} />
           <Route exact path="/forum" render={() => forumHomePage} />
         </Switch>
       </>
