@@ -5,7 +5,7 @@ import {
   FETCH_POSTS_FAILURE,
 } from '../actions/threadPostActions';
 
-// define defailt redux state variables
+// define default redux state variables
 const initialState = {
   threadPosts: [],
   loading: false,

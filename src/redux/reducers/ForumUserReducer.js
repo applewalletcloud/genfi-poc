@@ -5,7 +5,7 @@ import {
   FETCH_FORUM_USER_DATA_FAILURE,
 } from '../actions/forumUserActions.js';
 
-// define defailt redux state variables
+// define default redux state variables
 const initialState = {
   error: null,
   loading: false,

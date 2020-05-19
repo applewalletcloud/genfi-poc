@@ -7,7 +7,7 @@ import {
   SET_USER,
 } from '../actions/forumUserAuthActions';
 
-// define defailt redux state variables
+// define default redux state variables
 const initialState = {
   token: null,
   error: null,

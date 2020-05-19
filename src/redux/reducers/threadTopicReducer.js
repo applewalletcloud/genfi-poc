@@ -5,7 +5,7 @@ import {
   FETCH_TOPICS_FAILURE,
 } from '../actions/threadTopicActions';
 
-// define defailt redux state variables
+// define default redux state variables
 const initialState = {
   threadTopics: [],
   loading: false,
