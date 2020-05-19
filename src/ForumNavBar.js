@@ -5,7 +5,7 @@ import './ForumNavBar.css';
 import Button from 'react-bootstrap/Button';
 
 // react router
-import { Route, Link, BrowserRouter, useLocation } from 'react-router-dom';
+import { Route, Link, BrowserRouter } from 'react-router-dom';
 
 // social login
 // The two lines below aren't comments, but global variables for the use of social login
@@ -19,10 +19,15 @@ import * as forumAuthActions from './redux/actions/forumUserAuthActions';
 // needed for jest tests
 require("regenerator-runtime/runtime"); 
 
+/*
+Navigation bar for the top of the website.
+Buttons in navbar allow user to login/signup, logout, and change their profile pic.
+*/
 export class ForumNavBar extends React.Component {
   constructor(props) {
     super(props);
     this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
+    this.logoutCallback = this.logoutCallback.bind(this);
   }
 
   componentDidMount() {
@@ -45,20 +50,21 @@ export class ForumNavBar extends React.Component {
       FB.AppEvents.logPageView();
     };
     (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       console.log(s);
-       console.log("get element bytag name in fb above");
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "https://connect.facebook.net/en_US/sdk.js";
-       if (fjs != undefined){
-          fjs.parentNode.insertBefore(js, fjs);
-       }
-     }(document, 'script', 'facebook-jssdk'));
-    }
+      var js, fjs = d.getElementsByTagName(s)[0];
+      console.log(s);
+      console.log("get element bytag name in fb above");
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      if (fjs != undefined){
+         fjs.parentNode.insertBefore(js, fjs);
+      }
+    }(document, 'script', 'facebook-jssdk'));
+  }
 
 
-  // callback function to log the user out
+  // callback function to log the user out.
+  // it will log the user out of google/fb login if needed as well.
   async logoutCallback() {
     // resets local storage and redux state
     this.props.logout();
@@ -76,32 +82,38 @@ export class ForumNavBar extends React.Component {
   }
 
   render() {
-    let myProfileLink = ""
+    let myProfileLink = '';
+    // if the user is logged in, display a button that allows them to change their profile picture
     if (this.props.user) {
       myProfileLink = <Link to="/myProfile"><div className="nav-child">My Profile</div></Link>
     }
+
     return (
       <div className="nav-bar">
-        {/** navigation buttons **/}
-          <Link to="/forum"><div className="nav-child">Main</div></Link>
-          {myProfileLink}
+        {/* navigation buttons that are displayed independent of login status */}
+        <Link to="/forum"><div className="nav-child">Main</div></Link>
+        {myProfileLink}
         {
-          window.localStorage["token"]
-          ?
-          /** render logout when we have a user logged in **/
-          <>
-            <span className="push-right">
-              <Button className="LoginButton" variant="outline-primary" onClick={() => this.logoutCallback()} >{"Logout"}</Button>
-            </span>
-          </>
-          :
-          /** render login and signup buttons when we DO NOT have a user logged in **/
-          <>
-            <span className="push-right">
-              <Link to="/login"><Button className="LoginButton" variant="outline-primary" >{"Login"}</Button></Link>
-              <Link to="/signup"><Button className="LoginButton" variant="outline-primary" >{"Sign Up"}</Button></Link>
-            </span>
-          </>
+          window.localStorage['token']
+            ?
+          /* render logout when we have a user logged in */
+            (
+              <>
+                <span className="push-right">
+                  <Button className="LoginButton" variant="outline-primary" onClick={() => this.logoutCallback()}>Logout</Button>
+                </span>
+              </>
+            )
+            :
+            /* render login and signup buttons when we DO NOT have a user logged in */
+            (
+              <>
+                <span className="push-right">
+                  <Link to="/login"><Button className="LoginButton" variant="outline-primary">Login</Button></Link>
+                  <Link to="/signup"><Button className="LoginButton" variant="outline-primary">Sign Up</Button></Link>
+                </span>
+              </>
+            )
         }
       </div>
     );
@@ -109,13 +121,12 @@ export class ForumNavBar extends React.Component {
 }
 
 // redux management below
-const mapStateToProps = state => ({
-  token: state.forumUserAuth.token,
+const mapStateToProps = (state) => ({
   user: state.forumUserAuth.user,
 });
 
 // take redux actions and place it into our props
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     loginViaLocalStorage: (token) => dispatch(forumAuthActions.setUser(token)),
     logout: () => dispatch(forumAuthActions.logout()),

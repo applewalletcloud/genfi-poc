@@ -83,7 +83,7 @@ class AntForumPost extends React.Component {
       };
       // make form and button for replying to posts visible
       antForumForm = <ThreadForm data={formPropsData} />;
-      antForumButton = <div> <text className="button" onClick={this.replyButtonClick}>REPLY</text></div>;
+      antForumButton = <div> <span className="button" onClick={this.replyButtonClick}>REPLY</span></div>;
     }
 
     // sets attributes for the post if the post is of type "main post"
@@ -143,7 +143,7 @@ class AntForumPost extends React.Component {
           </span>
           <br /> 
           <br /> 
-          <div> <text className="button" onClick={this.replyButtonClick}> CANCEL REPLY </text></div> 
+          <div> <span className="button" onClick={this.replyButtonClick}> CANCEL REPLY </span></div> 
           <ThreadForm data={formPropsData}/>
         </div>
       );

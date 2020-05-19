@@ -28,6 +28,7 @@ const { Option } = Select;
 /** 
 the params in the form get passed through the values variable
 the object's keys are the field decorators (e.g. "username" and "dragger")
+note that when users are signed up, they are given a default profile pic
 **/
 class EditProfileForm extends React.Component {
   componentDidMount(){

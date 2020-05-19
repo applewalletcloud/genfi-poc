@@ -1,91 +1,84 @@
-// maybe we don't need any of this and it can all be handled with the jwt
+/*
+These set of actions are for the user to change their profile picture
+*/
 
+// variables to specify to the reducers what to do
 export const FETCH_FORUM_USER_DATA_BEGIN = 'FETCH_FORUM_USER_DATA_BEGIN';
 export const FETCH_FORUM_USER_DATA_SUCCESS = 'FETCH_FORUM_USER_DATA_SUCCESS';
 export const FETCH_FORUM_USER_DATA_FAILURE = 'FETCH_FORUM_USER_DATA_FAILURE';
 
+// action to set state to loading
 export const fetchForumUserDataBegin = () => ({
-	type: FETCH_FORUM_USER_DATA_BEGIN
+  type: FETCH_FORUM_USER_DATA_BEGIN,
 });
 
-export function fetchForumUserDataSuccess(forumUserData){
-	console.log("in the user data success action. below is the argument passed")
-	return {type: FETCH_FORUM_USER_DATA_SUCCESS, forumUserData}
+// action to update profile pic dictionary
+export function fetchForumUserDataSuccess(forumUserData) {
+  return { type: FETCH_FORUM_USER_DATA_SUCCESS, forumUserData };
 }
 
+// action to set state to failure
 export function fetchForumUserDataFailure(error) {
-	return { type: FETCH_FORUM_USER_DATA_FAILURE, payload: {error}};
+  return { type: FETCH_FORUM_USER_DATA_FAILURE, payload: { error } };
 }
 
-export function fetchForumUserProfilePic(api_endpoint, username){
-	return dispatch => {
-		dispatch(fetchForumUserDataBegin());
-		// REMEMBER TO CHANGE THIS URL!!! TODO
-		return fetch(api_endpoint)
-		  .then(handleErrors)
-		  .then(res => res.blob())
-		  .then(blob => {
-	        //dispatch(fetchForumUserDataSuccess(blob));
-	        console.log(blob)
-	        let url = URL.createObjectURL(blob)
-	        console.log("@)#$(@)#*$&(@#$&@#)$&@#*$)@##")
-	        console.log(url)
-	        let temp = {
-	        	username: username,
-	        	url: url
-	        }
-	        console.log(temp)
-	        dispatch(fetchForumUserDataSuccess(temp));
-	        return temp;
-	      })
-		  .catch(error => dispatch(fetchForumUserDataFailure(error)))
-	}
+// middleware action to fetch profile pic data from the backend
+// and update the dictionary. it calls the actions above.
+export function fetchForumUserProfilePic(apiEndpoint, username) {
+  return dispatch => {
+    // set redux state to loading
+    dispatch(fetchForumUserDataBegin());
+
+    // query the db for user profile pic
+    return fetch(apiEndpoint)
+      .then(handleErrors)
+      .then(res => res.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob)
+        const temp = {
+          username: username,
+          url: url,
+        };
+        // switch state for success and update profile pic dictionary
+        dispatch(fetchForumUserDataSuccess(temp));
+        return temp;
+      })
+      .catch(error => dispatch(fetchForumUserDataFailure(error)));
+  };
 }
 
+// middleware action to change profile pic data from the backend
+// and update the dictionary. it calls the actions above.
 export function setForumUserProfilePic(api_endpoint, data, user, token){
-	console.log("we enter set forum user profile pic in the action")
-	console.log(data)
-	//console.log(data.dragger[0])
-	console.log(api_endpoint)
-	console.log("in teh action, we are printing the data and api endpoints above")
-	let formData = new FormData();
-	//fromData.append
-
-	formData.append('user_name', user)
-	console.log(data.dragger[0].originFileObj)
-	formData.append('profile_pic', data.dragger[0].originFileObj, data.dragger[0].name)
-	
-	console.log(formData)
-	console.log("FORM DATA ABOVE")
-	return dispatch => {
-		dispatch(fetchForumUserDataBegin());
-		// REMEMBER TO CHANGE THIS URL!!! TODO
-		return fetch(api_endpoint, {
-			method: 'POST',
-			headers: new Headers({
-				'Authorization': 'JWT ' + token, // editing this line from '+ token' to '+ token["token"]' this fixed it!
-			}),
-			body: formData, // not sure if we should have json stringify
-		}
-	  )
-	  .then(handleErrors)
-	  .then(res => res.json())
-	  .then(json => {
-	    //dispatch(fetchForumUserDataSuccess(blob));
-	    console.log(json)
-	    console.log("22222222222@)#$(@)#*$&(@#$&@#)$&@#*$)@##")
-	    // probably need to change this later. shouldn't be the json variable being passed
-	    //dispatch(fetchForumUserDataSuccess(data));
-	    return json;
-	  })
-	  .catch(error => dispatch(fetchForumUserDataFailure(error)))
-	}
+  // create form data object for post request
+  const formData = new FormData();
+  formData.append('user_name', user)
+  formData.append('profile_pic', data.dragger[0].originFileObj, data.dragger[0].name)
+  
+  return dispatch => {
+    // set state to loading
+    dispatch(fetchForumUserDataBegin());
+    return fetch(api_endpoint,
+      {
+        method: 'POST',
+        headers: new Headers({
+          'Authorization': 'JWT ' + token,
+        }),
+        body: formData, 
+      },
+    )
+      .then(handleErrors)
+      .then((res) => res.json())
+      .then((json) => {
+        return json;
+      })
+      .catch(error => dispatch(fetchForumUserDataFailure(error)))
+  };
 }
 
 // Handle HTTP errors since fetch won't.
 function handleErrors(response) {
   if (!response.ok) {
-  	console.log("this error is from forumUserActions")
     throw Error(response.statusText);
   }
   return response;
