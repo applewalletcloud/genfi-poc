@@ -114,6 +114,7 @@ const mapStateToProps = state => ({
   user: state.forumUserAuth.user,
 });
 
+// take redux actions and place it into our props
 const mapDispatchToProps = dispatch => {
   return {
     loginViaLocalStorage: (token) => dispatch(forumAuthActions.setUser(token)),

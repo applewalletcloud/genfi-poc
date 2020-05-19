@@ -1,117 +1,129 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+// styles
 import './AntForumPost.css';
-import { Card, Avatar, Form, Icon, Input, Button, Spin } from 'antd';
-import ThreadForm from './ThreadForm.js';
+import { Card, Avatar } from 'antd';
 
 // redux
 import { connect } from 'react-redux';
 import * as forumAuthActions from './redux/actions/forumUserAuthActions';
-import * as forumUserActions from './redux/actions/forumUserActions.js'
+import * as forumUserActions from './redux/actions/forumUserActions';
 
+// components for user input
+import ThreadForm from './ThreadForm';
+
+// variable needed for ant design library
 const { Meta } = Card;
 
+/*
+This is the component for all of the forum posts.
+It takes in a data object via props and curates the desired UI.
+*/
 class AntForumPost extends React.Component {
   constructor(props) {
     super(props);
     this.replyButtonClick = this.replyButtonClick.bind(this);
+
+    // reply clicked keeps track of whether we show the comment form
     this.state = {
       replyClicked: false,
     };
   }
 
-
-  componentDidMount(){
+  componentDidMount() {
+    // log the user in if local storage claims they're logged in
     if (window.localStorage["token"]) {
       this.props.loginViaLocalStorage(window.localStorage);
     }
-    // check if this.props.user's profile pic is already found. if not, add it to redux
-    console.log("inside component did mount of ant forum post")
-    if (!(this.props.data["creator"] in this.props.userToProfilePic)){
-      this.props.getUserProfilePic("http:localhost:8000/quizbank/getForumUserProfilePic/" + this.props.data["creator"] + "/", this.props.data["creator"]);
+    // check if this.props.user's profile pic is already found.
+    // if not, query the db and add it to redux
+    if (!(this.props.data['creator'] in this.props.userToProfilePic)) {
+      this.props.getUserProfilePic('http:localhost:8000/quizbank/getForumUserProfilePic/' + this.props.data['creator'] + "/", this.props.data['creator']);
     }
   }
 
-  /**
-  changes the state of the comment to show the reply form
-  **/
+  /*
+  changes the state of the forum post component to show the reply form
+  */
   replyButtonClick() {
     this.setState({ replyClicked: !this.state.replyClicked});
   }
+
+
   render() {
     // instantiate variables used for the forum post
     let descriptionObject;
     let avatarSize;
     let postStylePadding;
     let title;
-    let antForumForm = ""
-    let antForumButton = ""
+    let postStyle = {
+      width: '100%',
+      display: 'inline-block',
+      'border-left': 0,
+      'border-right': 0,
+      'border-bottom': 0,
+      float: 'right',
+    };
+    // the following variables only get filled if the user is logged in
+    let antForumForm = '';
+    let antForumButton = '';
+    let formPropsData = '';
 
-    console.log("CAN I SEE THIS PRINT STATEMENT INSIDE MY ANT FORUM POST?!")
-
-    let postStyle = { 
-            width: "100%",
-            display:"inline-block",
-            "border-left": 0,
-            "border-right": 0,
-            "border-bottom": 0,
-            "float": "right",
-          }
-
-    let formPropsData = ""
     // change visibility of comments and buttons if the user is logged in
     if (this.props.user) {
       formPropsData = {
-        "is_main_post": false,
-        "main_post_id": this.props.data["main_post_id"],
-        "parent_id": this.props.data["post_id"],
-        "creator": this.props.user,
-        "post_title": this.props.user,
-        "indentation_level": this.props.data["indentation_level"] + 1,
-        "token": this.props.token
-      }
-
-      antForumForm = <ThreadForm data={formPropsData}/>
-      antForumButton = <div className="button" onClick={this.replyButtonClick}>REPLY</div>
+        is_main_post: false,
+        main_post_id: this.props.data['main_post_id'],
+        parent_id: this.props.data['post_id'],
+        creator: this.props.user,
+        post_title: this.props.user,
+        indentation_level: this.props.data['indentation_level'] + 1,
+        token: this.props.token,
+      };
+      // make form and button for replying to posts visible
+      antForumForm = <ThreadForm data={formPropsData} />;
+      antForumButton = <div> <text className="button" onClick={this.replyButtonClick}>REPLY</text></div>;
     }
 
     // sets attributes for the post if the post is of type "main post"
-    if (this.props.data["is_main_post"]) {
-      postStyle = { 
-            width: "100%",
-            display:"inline-block",
-            "border-left": 0,
-            "border-right": 0,
-            "border-bottom": 0,
-            "border-top": 0,
-            "float": "right",
-          }
-
-      postStylePadding = 0// the main post isn't indented
-      avatarSize = 100;
+    if (this.props.data['is_main_post']) {
+      postStyle = {
+        width: '100%',
+        display: 'inline-block',
+        'border-left': 0,
+        'border-right': 0,
+        'border-bottom': 0,
+        'border-top': 0,
+        float: 'right',
+      };
+      postStylePadding = 0; // the main post isn't indented
+      avatarSize = 100; // profile pic size
+      // the description object represents the "body" of the post
       descriptionObject = (
         <div>
           <span className="username-text">{this.props.data["creator"]}</span> 
           <br />
           <br />
           <span className="description-text title-text">
-          {this.props.data["post_text"]}
+            {this.props.data['post_text']}
           </span>
         </div>
       );
-      title = <span className="title">{this.props.data["post_title"]}</span>
+      title = <span className="title">{this.props.data["post_title"]}</span>;
     } else {
-      // sets attributes for the post if the post is of type "comment"
-      if (this.props.data["indentation_level"] >= 3) {
-        antForumButton = ""
+      // sets attributes for the post if the post IS NOT the main post of the forum
+      // (in other words is a comment post)
+      if (this.props.data['indentation_level'] >= 3) {
+        antForumButton = '';
       }
-      postStylePadding = 50*(this.props.data["indentation_level"]-1)
-      avatarSize = 50;
+      postStylePadding = 50 * (this.props.data['indentation_level'] - 1);
+      avatarSize = 50; // profile pic size
+      // the description object represents the "body" of the post
       descriptionObject = (
         <div>
           <span className="description-text">
-          {this.props.data["post_text"]}
+            {this.props.data['post_text']}
           </span>
           <br />
           <br />
@@ -119,30 +131,32 @@ class AntForumPost extends React.Component {
         </div>
       );
       // title is the username when the card is for a comment
-      title = <span className="username-text">{this.props.data["creator"]}</span> 
+      title = <span className="username-text">{this.props.data['creator']}</span>;
     }
-    
-    
+
+    // we edit our description object to have the text form for users to type in
     if (this.state.replyClicked) {
       descriptionObject = (
         <div>
-        <span className="description-text">
-        {this.props.data["post_text"]}
-        </span>
-        <br /> 
-        <br /> 
-        <div className="button" onClick={this.replyButtonClick}> CANCEL REPLY</div> 
-        <ThreadForm data={formPropsData}/>
+          <span className="description-text">
+            {this.props.data["post_text"]}
+          </span>
+          <br /> 
+          <br /> 
+          <div> <text className="button" onClick={this.replyButtonClick}> CANCEL REPLY </text></div> 
+          <ThreadForm data={formPropsData}/>
         </div>
       );
     }
-    if (this.props.data["is_main_post"]) {
+
+    // returns our component depending on whether it is a 'main post' or a 'comment'
+    if (this.props.data['is_main_post']) {
       return (
         <div className="post-container">
-          <div className="card-holder" style={{"padding-left": postStylePadding}}>
+          <div className="card-holder" style={{ 'padding-left': postStylePadding }}>
             <Card style={postStyle}>
               <Meta
-                avatar={<Avatar size={avatarSize} style={{"border": "4px solid lightblue", "border-radius": "50%"}} src={this.props.userToProfilePic[this.props.data["creator"]]} />}
+                avatar={<Avatar size={avatarSize} style={{ 'border': '4px solid lightblue', 'border-radius': '50%' }} src={this.props.userToProfilePic[this.props.data["creator"]]} />}
                 title={title}
                 description={descriptionObject}
               />
@@ -152,35 +166,36 @@ class AntForumPost extends React.Component {
         </div>
       );
     } else {
-    return (
-      <div className="post-container">
-        <div className="card-holder" style={{"padding-left": postStylePadding}}>
-          <Card style={postStyle}>
-            <Meta
-              avatar={<Avatar size={avatarSize} style={{"border": "4px solid lightblue", "border-radius": "50%"}} src={this.props.userToProfilePic[this.props.data["creator"]]} />}
-              title={title}
-              description={descriptionObject}
-            />
-          </Card>
+      return (
+        <div className="post-container">
+          <div className="card-holder" style={{ 'padding-left': postStylePadding }}>
+            <Card style={postStyle}>
+              <Meta
+                avatar={<Avatar size={avatarSize} style={{ 'border': '4px solid lightblue', 'border-radius': '50%' }} src={this.props.userToProfilePic[this.props.data["creator"]]} />}
+                title={title}
+                description={descriptionObject}
+              />
+            </Card>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
   }
 }
 
 // redux management below
-const mapStateToProps = state => ({
+// take redux state and place its values into our props
+const mapStateToProps = (state) => ({
   token: state.forumUserAuth.token,
   user: state.forumUserAuth.user,
   userToProfilePic: state.forumUserData.userNameToProfilePic,
 });
 
-const mapDispatchToProps = dispatch => {
+// take redux actions and place it into our props
+const mapDispatchToProps = (dispatch) => {
   return {
-    logout: () => dispatch(forumAuthActions.logout()),
     loginViaLocalStorage: (token) => dispatch(forumAuthActions.setUser(token)),
-    getUserProfilePic: (api_endpoint, username) => dispatch(forumUserActions.fetchForumUserProfilePic(api_endpoint, username)),
+    getUserProfilePic: (apiEndpoint, username) => dispatch(forumUserActions.fetchForumUserProfilePic(apiEndpoint, username)),
   };
 };
 

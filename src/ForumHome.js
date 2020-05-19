@@ -76,19 +76,14 @@ export class ForumHome extends React.Component {
 
 // take redux state and place its values into our props
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.forumUserAuth.token !== null,
-  threadPosts: state.threadPosts.threadPosts,
   loading: state.threadPosts.loading,
   error: state.threadPosts.error,
-  token: state.forumUserAuth.token,
   threadTopics: state.threadTopics.threadTopics,
 });
 
 // take redux actions and place it into our props
 const mapDispatchToProps = (dispatch) => {
   return ({
-    setServerUser: (myarg) => dispatch(forumUserAuthActions.setUser(myarg)),
-    socialLogin: (socialProvider, accessToken) => dispatch(forumUserAuthActions.authSocialLogin(socialProvider, accessToken)),
     loginViaLocalStorage: (token) => dispatch(forumUserAuthActions.setUser(token)),
     fetchThreadTopics: (apiEndpoint) => dispatch(threadTopicActions.fetchThreadTopics(apiEndpoint)),
     dispatch,
