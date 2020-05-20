@@ -35,7 +35,9 @@ class EditProfileForm extends React.Component {
     // logs the user in if details are in local storage
     if (window.localStorage["token"]) {
       this.props.loginViaLocalStorage(window.localStorage)
-    } 
+    } else {
+      window.location.href = 'https://localhost:3000/forum';
+    }
   }
 
   // takes the image that is uploaded into the dragger and pairs them on the backend

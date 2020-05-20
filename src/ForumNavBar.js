@@ -51,8 +51,6 @@ export class ForumNavBar extends React.Component {
     };
     (function(d, s, id){
       var js, fjs = d.getElementsByTagName(s)[0];
-      console.log(s);
-      console.log("get element bytag name in fb above");
       if (d.getElementById(id)) {return;}
       js = d.createElement(s); js.id = id;
       js.src = "https://connect.facebook.net/en_US/sdk.js";
@@ -79,6 +77,9 @@ export class ForumNavBar extends React.Component {
         FB.logout();
       }
     });
+
+    // redirect to home page
+    window.location.href = 'https://localhost:3000/forum';
   }
 
   render() {
