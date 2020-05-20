@@ -23,6 +23,10 @@ the main post and the comments, where logged in users can comment.
 
 We fetch all the data we need here for each forum and pass it down as props to
 the lower level components.
+
+If you want to create more forums, then you can do so by querying the endpoint
+in the ThreadForm component. ('http://localhost:8000/quizbank/forumUserPost/')
+Just be sure to make is "is_main_post" is true.
 */
 export default class ForumBoard extends React.Component {
   constructor(props) {
