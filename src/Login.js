@@ -15,7 +15,7 @@ import FacebookLogin from 'react-facebook-login';
 
 // redux imports
 import { connect } from 'react-redux';
-import * as actions from './redux//actions/forumUserAuthActions.js';
+import * as actions from './redux/actions/forumUserAuthActions.js';
 
 // nav bar import for top of page
 import ForumNavBar from './ForumNavBar';
